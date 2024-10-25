@@ -7,6 +7,7 @@ files
 openai api nativly supports combining promopts into one
 can it do it mathamaticly or programaticly??  can it do it using variables? dics? a file name insted of its content"
 probably yes, lets use as much native functions as it has, be aware of its abilites as well as syntax
+######### NO it may not combine files, but it does allow for multiple, becuase chatgpt api allows for uploading context beofre a promopt. is that just adding both to one promot, what is the difference?
 arguements are for people to use
 otherwise it uses defaults or files
 
