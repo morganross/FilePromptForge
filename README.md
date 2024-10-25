@@ -2,6 +2,12 @@ environment variables
 dictionaries
 arguements
 
+arguements are for people to use
+otherwise it uses defaults or files
+
+it uses dics to send info to other scripts
+
+
 we will use all 3?
 i would perfer to use only dics and args i think
 
