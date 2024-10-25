@@ -1,3 +1,11 @@
+environment variables
+dictionaries
+arguements
+
+we will use all 3?
+i would perfer to use only dics and args i think
+
+
 the gui calls and sends arguments to the installer
   the install_dir and the base_MD
 
