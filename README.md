@@ -21,6 +21,7 @@ the part that actully calls the api request will be seperate logic script
 we will use all 3?
 i would perfer to use only dics and args i think
 
+keep in mind it will be parallelized, so one line at a time might not work.
 
 the gui calls and sends arguments to the installer
   the install_dir and the base_MD
