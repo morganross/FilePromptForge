@@ -15,4 +15,7 @@ superduper seperate logic funtions in a logic files or reach their own
 
 text processor script runs on the response, it writes the resonse to disk
   it can trim before or after word or phrase or symbol or matched conent from other file, it can find replace, and it names the response file based on set rules,this part has regex.
+
+
+  test function installs directories and files and sets apikey and makes a promot and writes a response using defaults
   
