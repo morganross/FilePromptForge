@@ -15,6 +15,7 @@ dont use defaults just for testing. may not need deaults everywhere
 
 it uses dics to send info to other scripts?? no, use variables and files??
 
+the part that actully calls the api request will be seperate logic script
 
 we will use all 3?
 i would perfer to use only dics and args i think
