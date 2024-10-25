@@ -19,3 +19,6 @@ text processor script runs on the response, it writes the resonse to disk
 
   test function installs directories and files and sets apikey and makes a promot and writes a response using defaults
   
+perfer arguements to env variables?
+
+perfer files to argueents
