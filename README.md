@@ -74,7 +74,10 @@ perfer arguements to env variables?
 
 perfer files to argueents
 
+maybe we dont need to store the text from inside the files at all, just condier them files untill the final step. 
 
+the program should be very serialized at first
+so maybe dont need to store anything, it goes one at a time using iter?
 
 
 
@@ -90,27 +93,11 @@ While dictionaries are a versatile and popular choice, Python offers several oth
 * **Global variables:** Declare variables outside of functions to make them accessible throughout the module.
 * **Class attributes:** Store data within a class for object-oriented programming.
 
-### 2. **Lists:**
-* Store ordered collections of elements.
-* Can be used to share lists of values between scripts.
-
-### 3. **Tuples:**
-* Immutable ordered collections of elements.
-* Can be used to share fixed data structures.
-
-### 4. **Sets:**
-* Store unique elements without a specific order.
-* Can be used to represent sets of data.
-
 ### 5. **Files:**
 * Store data persistently on disk.
 * Use functions like `open()` to read from and write to files.
 * Common formats include text files, CSV files, JSON files, and more.
-
-### 6. **Databases:**
-* Store and manage large amounts of data.
-* Popular options include SQLite, PostgreSQL, MySQL, and MongoDB.
-* Use database libraries like `sqlite3` or `psycopg2` to interact with databases.
+ases.
 
 ### 7. **Configuration Files:**
 * Store key-value pairs in a structured format.
