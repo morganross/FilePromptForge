@@ -11,7 +11,7 @@ main.py accepts arguements and uses them to biuld a api request to openai, witho
 files used for prompts can be specifyed inside of a file that the script then uses to send to api
 or the prompt can be written into the arguement when running main. if writting it in, it becomes only add, and i wonder if it can do folders
 
-
+superduper seperate logic funtions in a logic files or reach their own
 
 text processor script runs on the response, it writes the resonse to disk
   it can trim before or after word or phrase or symbol or matched conent from other file, it can find replace, and it names the response file based on set rules,this part has regex.
