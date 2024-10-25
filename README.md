@@ -1,13 +1,15 @@
 environment variables
 dictionaries
 arguements
+files
+
 
 arguements are for people to use
 otherwise it uses defaults or files
 
 dont use defaults just for testing. may not need deaults everywhere
 
-it uses dics to send info to other scripts
+it uses dics to send info to other scripts?? no, use variables and files??
 
 
 we will use all 3?
