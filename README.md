@@ -3,6 +3,13 @@ dictionaries
 arguements
 files
 
+learn about how api calls are handled
+
+is context and messasges from different roles of system and user presented as text in each prompt? 
+how does chatgpt handle the differneces between system and user and context
+
+
+
 no fin tuningin v1
 
 openai api nativly supports combining promopts into one
