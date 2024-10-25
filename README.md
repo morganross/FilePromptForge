@@ -3,6 +3,7 @@ dictionaries
 arguements
 files
 
+no fin tuningin v1
 
 openai api nativly supports combining promopts into one
 can it do it mathamaticly or programaticly??  can it do it using variables? dics? a file name insted of its content"
