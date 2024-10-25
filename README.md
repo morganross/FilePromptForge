@@ -1,3 +1,22 @@
+Adds cli support for using files to send api requests, and 
+Build Prompts Programmatically From Files and Process and Write Responses to File.
+Etxtends openai api to allow for concatenation of cartesian popducts by applying math logic to a files based prompt builder and sender.
+
+Usefull in a pipeline that: sends error logs to the chatbot writing code. chatbot updates the code based on the error.
+ines for  programmatic iteration of content.
+
+all that to avoid having to properly format api requests. the benifiit is that it simplys the work of interactingwith chatgpt on the command line if you are working with many files.
+
+it will need seperate features, not just seperate logic
+
+simplys the sending and receiving of text in files to chatgpt vs the native api
+by adding concaternation
+
+parralelism is probablycomplicated, but we should do it
+hadleing errors fromm openai api
+
+
+
 environment variables
 dictionaries
 arguements
