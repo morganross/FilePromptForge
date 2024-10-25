@@ -8,7 +8,8 @@ learn about how api calls are handled
 is context and messasges from different roles of system and user presented as text in each prompt? 
 how does chatgpt handle the differneces between system and user and context
 
-
+it may be the case that we cant just pass the files to the api, reading them last minute.
+we may need to read their contents for the advanced abilityto filter them?
 
 no fin tuningin v1
 
