@@ -16,6 +16,17 @@ hadleing errors fromm openai api
 
 
 
+
+
+
+
+
+regular api cli can buildormpts programaticly with python or powershell nativly
+think of the most simplee methods
+
+
+
+
 environment variables
 dictionaries
 arguements
