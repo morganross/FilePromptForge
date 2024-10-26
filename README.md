@@ -48,7 +48,7 @@ we may need to read their contents for the advanced abilityto filter them?
 
 
 join is the python function for concatenate
-
+iter is the python function for cartesian products
 
 
 ##########################3
