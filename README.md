@@ -7,9 +7,12 @@ Second usecase examole: for  programmatic iteration of content.
 simplys the sending and receiving of text in files to chatgpt vs the native api
  avoid having to properly format api requests. the benifiit is that it simplys the work of interacting with chatgpt on the command line if you are working with many files.
 
+find is for each
+concat is join
+cartesian is iterate
 
 
-
+adds cli funcitonality to openi api 
 
 
 Seperate features
@@ -17,13 +20,7 @@ parralelism is probably complicated
 hadleing errors fromm openai api
 installing openai?
 setting up TEST function with files folders and command
-
-
-
-the api is a script? that gets called
-this software is a commandline executable
-so you dont have to properly format messages, you can send files to to exe instead and it knows how to talk api
-
+response processor is seperate logic
 
 
 
@@ -32,16 +29,26 @@ regular api can be used with scripting languges that can buildormpts programatic
 this app can do that too, but is more better at interactive strictly with the command line, does not need scipts to use. only files and a "math equation of variables or files"
 
 
+the api is a library for scripts, this provides a cli
+there already exsits cli for openai api, lets explore them now
 
+peterdemin openai-cli
+oteinone ps-gpt
 
+also there is something called 
+Semantic Kernel
 
+ok openai-cli is good, but we can add support for folders and better support for files
+yes you can script multiple file handling with the cli, but ours handles folders natively
+
+IMPORTANT DESCISIONS
+templates?
 environment variables
 dictionaries
 arguements
 files
 
 
-it may be the case that we cant just pass the files to the api, reading them last minute.
 we may need to read their contents for the advanced abilityto filter them?
 
 
@@ -57,101 +64,11 @@ or the prompt can be written into the arguement when running main. if writting i
 superduper seperate logic funtions in a logic files or reach their own
 
 text processor script runs on the response, it writes the resonse to disk
-  it can trim before or after word or phrase or symbol or matched conent from other file, it can find replace, and it names the response file based on set rules,this part has regex.
+ it can trim before or after word or phrase or symbol or matched conent from other file, it can find replace, and it names the response file based on set rules,this part has regex.
 
 
-  test function installs directories and files and sets apikey and makes a promot and writes a response using defaults
-  
-perfer arguements to env variables?
+test function installs directories and files and sets apikey and makes a prompt and writes a response using defaults
 
-perfer files to argueents
-
-maybe we dont need to store the text from inside the files at all, just condier them files untill the final step. 
-
-the program should be very serialized at first
-so maybe dont need to store anything, it goes one at a time using iter?
-
-
-
-
-we are gunna use dictionaries
-##########################3
-Yes, you can interact with the ChatGPT API directly from the command line by using a tool like `curl`, which allows you to make HTTP requests. This way, you don’t have to write a script; instead, you can pass your prompt as an argument. Here’s how you might do it:
-
-### Step 1: Get Your API Key
-Ensure you have an OpenAI API key. If not, sign up on [OpenAI’s website](https://platform.openai.com/) to get one.
-
-### Step 2: Use `curl` to Send a Prompt
-You can use the following `curl` command in the terminal, where `<YOUR_API_KEY>` should be replaced by your actual API key:
-
-```bash
-curl https://api.openai.com/v1/chat/completions \
--H "Content-Type: application/json" \
--H "Authorization: Bearer <YOUR_API_KEY>" \
--d '{
-  "model": "gpt-3.5-turbo",
-  "messages": [{"role": "user", "content": "Your message content here"}]
-}'
-```
-
-### Explanation of the Command
-1. `-H "Content-Type: application/json"`: Sets the content type to JSON.
-2. `-H "Authorization: Bearer <YOUR_API_KEY>"`: Passes your API key for authorization.
-3. `-d '{ ... }'`: Specifies the JSON payload, where you can customize the model and include your prompt in the `"content"` field.
-
-### Example Command
-Suppose you want to send the message "What’s the weather like today?" The command would look like this:
-
-```bash
-curl https://api.openai.com/v1/chat/completions \
--H "Content-Type: application/json" \
--H "Authorization: Bearer <YOUR_API_KEY>" \
--d '{
-  "model": "gpt-3.5-turbo",
-  "messages": [{"role": "user", "content": "What’s the weather like today?"}]
-}'
-```
-
-
-
-This will send a request and output the response directly in your terminal.
-
-#############3
-import openai
-
-# Set your OpenAI API key
-openai.api_key = 'your-api-key-here'  # Replace with your actual API key
-
-# Variables
-user_name = "Alice"
-user_interest = "data science"
-
-# Construct the prompt using f-strings
-prompt = f"Hello, {user_name}! I see you're interested in {user_interest}. Can you suggest some beginner resources for her?"
-
-# Create the message list for the Chat API
-messages = [
-    {
-        "role": "system",
-        "content": "You are a helpful assistant."
-    },
-    {
-        "role": "user",
-        "content": prompt
-    }
-]
-
-# Make the API request
-response = openai.ChatCompletion.create(
-    model="gpt-4",  # You can use "gpt-3.5-turbo" if you don't have access to GPT-4
-    messages=messages,
-    max_tokens=150,  # Adjust as needed
-    temperature=0.7  # Adjust for creativity
-)
-
-# Extract and print the assistant's reply
-assistant_reply = response['choices'][0]['message']['content']
-print(assistant_reply)
 
 
 #############
@@ -246,14 +163,13 @@ While **system**, **user**, and **assistant** prompts are part of the same conve
 
 
 
-dont use defaults just for testing. may not need deaults everywhere
 
-it uses dics to send info to other scripts?? no, use variables and files??
+
+
 
 the part that actully calls the api request will be seperate logic script
 
-we will use all 3?
-i would perfer to use only dics and args i think
+
 
 keep in mind it will be parallelized, so one line at a time might not work.
 
