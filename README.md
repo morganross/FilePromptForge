@@ -75,7 +75,9 @@ text processor script runs on the response, it writes the resonse to disk
 
 
 test function installs directories and files and sets apikey and makes a prompt and writes a response using defaults
+#######
 
+FUNCTION TO FIND EACH FILE IN FOLDER AND FOR EACH 
 
 find /path/to/folder -type f -exec sh -c 'cat "{}" | openai-cli complete > "/path/to/output/$(basename "{}")_response.txt"' \;
 
