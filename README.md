@@ -35,11 +35,14 @@ there already exsits cli for openai api, lets explore them now
 peterdemin openai-cli
 oteinone ps-gpt
 
+
 also there is something called 
 Semantic Kernel
 
 ok openai-cli is good, but we can add support for folders and better support for files
 yes you can script multiple file handling with the cli, but ours handles folders natively
+find /path/to/folder -type f -exec sh -c 'cat "{}" | openai-cli complete > "/path/to/output/$(basename "{}")_response.txt"' \;
+ALSO I DONT THINK THAT CLI KNOWS ABOUT SYSTEM VS USER PROMPTS, WHICH MAY BE DIFFERENT THAN JUST .join
 
 IMPORTANT DESCISIONS
 templates?
@@ -61,15 +64,19 @@ iter is the python function for cartesian products
 files used for prompts can be specifyed inside of a file that the script then uses to send to api
 or the prompt can be written into the arguement when running main. if writting it in, it becomes only add, and i wonder if it can do folders
 
-superduper seperate logic funtions in a logic files or reach their own
+seperate logic funtions in serpate files
 
 text processor script runs on the response, it writes the resonse to disk
  it can trim before or after word or phrase or symbol or matched conent from other file, it can find replace, and it names the response file based on set rules,this part has regex.
+ it can clone folder structe or place outputs next to inputs in origanl folders
+ it can trigger loop
+ *it can extract code blocks
 
 
 test function installs directories and files and sets apikey and makes a prompt and writes a response using defaults
 
 
+find /path/to/folder -type f -exec sh -c 'cat "{}" | openai-cli complete > "/path/to/output/$(basename "{}")_response.txt"' \;
 
 #############
 
