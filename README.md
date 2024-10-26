@@ -10,7 +10,9 @@ simplys the sending and receiving of text in files to chatgpt vs the native api
 find is for each
 concat is join
 cartesian is iterate
-
+find is the python function for "for each file in folder"
+join is the python function for concatenate
+iter is the python function for cartesian products
 
 adds cli funcitonality to openi api 
 
@@ -22,7 +24,8 @@ installing openai?
 setting up TEST function with files folders and command
 response processor is seperate logic
 
-
+***********
+maybe we can work with not just files, but all types of arrays.......i think that is built in actlly, lets not disable it?
 
 regular api can be used with scripting languges that can buildormpts programaticly with python or powershell nativly
 
@@ -57,8 +60,6 @@ we may need to read their contents for the advanced abilityto filter them?
 
 
 
-join is the python function for concatenate
-iter is the python function for cartesian products
 
  main.py can build a promot from arugements using prompt_build_logic, or from a file
 files used for prompts can be specifyed inside of a file that the script then uses to send to api
