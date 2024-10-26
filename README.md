@@ -79,13 +79,20 @@ test function installs directories and files and sets apikey and makes a prompt 
 
 find /path/to/folder -type f -exec sh -c 'cat "{}" | openai-cli complete > "/path/to/output/$(basename "{}")_response.txt"' \;
 
+**
+
 ##LOOP
+
 while true; do cat file1 file2 file3 | openai-cli complete > file2; sleep 5; done
 
-#LOOP TO DEBUG
-**cat file1 file2 file3 | openai-cli complete > file2 && bash file2 > file3**
+#DEBUG
 
+cat file1 file2 file3 | openai-cli complete > file2 && bash file2 > file3*
 
+##LOOP TO DEBUG
+while true; do cat file1 file2 file3 | openai-cli complete > file2 && bash file2 > file3; sleep 5; done
+
+**
 
 
 #############
