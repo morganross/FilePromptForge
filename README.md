@@ -46,6 +46,7 @@ ok openai-cli is good, but we can add support for folders and better support for
 yes you can script multiple file handling with the cli, but ours handles folders natively
 find /path/to/folder -type f -exec sh -c 'cat "{}" | openai-cli complete > "/path/to/output/$(basename "{}")_response.txt"' \;
 ALSO I DONT THINK THAT CLI KNOWS ABOUT SYSTEM VS USER PROMPTS, WHICH MAY BE DIFFERENT THAN JUST .join
+maybe we just extend the existing cli instead of making new from scratch
 
 IMPORTANT DESCISIONS
 templates?
