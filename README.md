@@ -1,18 +1,22 @@
 
-Etxtends openai api cli to allow for concatenation of cartesian popducts by applying math logic to Build Prompts Programmatically From Files and Process and Write Responses to File.
+One usecase example: Etxtends openai api cli to allow for concatenation of cartesian popducts by applying math logic to Build Prompts Programmatically From Files and Process Responses.
 
-Usefull  for  programmatic iteration of content.
+Second usecase examole: for  programmatic iteration of content.
 
+
+simplys the sending and receiving of text in files to chatgpt vs the native api
  avoid having to properly format api requests. the benifiit is that it simplys the work of interacting with chatgpt on the command line if you are working with many files.
 
 
 
-simplys the sending and receiving of text in files to chatgpt vs the native api
-by adding concaternation
+
+
 
 Seperate features
-parralelism is probably complicated, but we should do it
+parralelism is probably complicated
 hadleing errors fromm openai api
+installing openai?
+setting up TEST function with files folders and command
 
 
 
@@ -23,8 +27,10 @@ so you dont have to properly format messages, you can send files to to exe inste
 
 
 
-regular api cli can buildormpts programaticly with python or powershell nativly
-think of the most simplee methods
+regular api can be used with scripting languges that can buildormpts programaticly with python or powershell nativly
+
+this app can do that too, but is more better at interactive strictly with the command line, does not need scipts to use. only files and a "math equation of variables or files"
+
 
 
 
@@ -34,27 +40,59 @@ dictionaries
 arguements
 files
 
-learn about how api calls are handled
-
-is context and messasges from different roles of system and user presented as text in each prompt? 
-how does chatgpt handle the differneces between system and user and context
 
 it may be the case that we cant just pass the files to the api, reading them last minute.
 we may need to read their contents for the advanced abilityto filter them?
 
-no fin tuningin v1
-
-openai api nativly supports combining promopts into one
-can it do it mathamaticly or programaticly??  can it do it using variables? dics? a file name insted of its content"
-probably yes, lets use as much native functions as it has, be aware of its abilites as well as syntax
-######### NO it may not combine files, but it does allow for multiple, becuase chatgpt api allows for uploading context beofre a promopt. is that just adding both to one promot, what is the difference?
-arguements are for people to use
-otherwise it uses defaults or files
 
 
 
 
-##
+
+
+
+##########################3
+Yes, you can interact with the ChatGPT API directly from the command line by using a tool like `curl`, which allows you to make HTTP requests. This way, you don’t have to write a script; instead, you can pass your prompt as an argument. Here’s how you might do it:
+
+### Step 1: Get Your API Key
+Ensure you have an OpenAI API key. If not, sign up on [OpenAI’s website](https://platform.openai.com/) to get one.
+
+### Step 2: Use `curl` to Send a Prompt
+You can use the following `curl` command in the terminal, where `<YOUR_API_KEY>` should be replaced by your actual API key:
+
+```bash
+curl https://api.openai.com/v1/chat/completions \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer <YOUR_API_KEY>" \
+-d '{
+  "model": "gpt-3.5-turbo",
+  "messages": [{"role": "user", "content": "Your message content here"}]
+}'
+```
+
+### Explanation of the Command
+1. `-H "Content-Type: application/json"`: Sets the content type to JSON.
+2. `-H "Authorization: Bearer <YOUR_API_KEY>"`: Passes your API key for authorization.
+3. `-d '{ ... }'`: Specifies the JSON payload, where you can customize the model and include your prompt in the `"content"` field.
+
+### Example Command
+Suppose you want to send the message "What’s the weather like today?" The command would look like this:
+
+```bash
+curl https://api.openai.com/v1/chat/completions \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer <YOUR_API_KEY>" \
+-d '{
+  "model": "gpt-3.5-turbo",
+  "messages": [{"role": "user", "content": "What’s the weather like today?"}]
+}'
+```
+
+### Notes
+- Replace `gpt-3.5-turbo` with `gpt-4` if you’re using the GPT-4 model.
+- For longer prompts, you can wrap the JSON data in a file and use `-d @filename.json` to keep it cleaner.
+
+This will send a request and output the response directly in your terminal.
 
 #############3
 import openai
