@@ -16,7 +16,9 @@ hadleing errors fromm openai api
 
 
 
-
+the api is a script? that gets called
+this software is a commandline executable
+so you dont have to properly format messages, you can send files to to exe instead and it knows how to talk api
 
 
 
@@ -50,29 +52,9 @@ arguements are for people to use
 otherwise it uses defaults or files
 
 
-Certainly! Understanding the distinctions between **context**, **system prompts**, and **user prompts** is essential for effectively leveraging the OpenAI API, especially when working with conversational models like ChatGPT. Here's a comprehensive breakdown of each component and how they interact within the OpenAI API:
-
----
-
-## **1. Overview of OpenAI's Chat API Structure**
-
-The OpenAI Chat API utilizes a **message-based** approach, where interactions are structured as a sequence of messages. Each message has a designated **role** that informs the model how to interpret and respond to it. The primary roles are:
-
-- **System**
-- **User**
-- **Assistant**
-
-This structure allows for more nuanced and context-aware conversations compared to the traditional single-prompt Completion API.
-
----
 
 
-
-
-
-
-
-
+##
 
 #############3
 import openai
@@ -232,130 +214,26 @@ While **system**, **user**, and **assistant** prompts are part of the same conve
 - **Role Awareness:**  
   The model uses the role information to determine how to interpret each message. For example, it treats system messages as instructions, user messages as prompts to respond to, and assistant messages as past responses.
 
-**Illustrative Example:**
-
-```json
-[
-  {
-    "role": "system",
-    "content": "You are a helpful assistant that translates English to Spanish."
-  },
-  {
-    "role": "user",
-    "content": "Hello, how are you?"
-  },
-  {
-    "role": "assistant",
-    "content": "Hola, ¿cómo estás?"
-  },
-  {
-    "role": "user",
-    "content": "I would like to book a flight to Madrid."
-  }
-]
-```
-
-In this example:
-
-- The system prompt sets the assistant's role.
-- The user provides inputs/questions.
-- The assistant responds accordingly.
-- Each message retains its role, allowing the model to maintain context and generate appropriate responses.
-
----
 
 ## **5. Technical Details: How the API Processes These Messages**
 
 - **Message List Submission:**  
   When making an API call, you provide the entire message list. The model uses all prior messages to understand the context and generate the next response.
 
-  ```python
-  import openai
 
-  response = openai.ChatCompletion.create(
-      model="gpt-4",
-      messages=[
-          {"role": "system", "content": "You are a helpful assistant."},
-          {"role": "user", "content": "What's the weather like today?"}
-      ]
-  )
-
-  print(response['choices'][0]['message']['content'])
-  ```
-
-- **Token Calculation:**  
-  Each message contributes to the total token count, which affects both the cost and the response generation. It's essential to manage the length and number of messages to stay within the model's token limits.
 
 - **State Preservation:**  
   The model maintains the state of the conversation based on the entire message history provided. This allows for coherent and contextually relevant responses.
 
 ---
 
-## **6. Practical Considerations and Best Practices**
-
-### **a. Managing Conversation Length**
-
-- **Token Limits:**  
-  Each model has a maximum token limit (e.g., GPT-4 has a higher limit than GPT-3.5). Exceeding this limit requires truncating or summarizing older messages.
-
-- **Trimming History:**  
-  For long conversations, consider summarizing or removing less relevant parts of the history to conserve tokens.
-
-### **b. Using System Prompts Effectively**
-
-- **Clarity and Specificity:**  
-  Be clear and specific in system prompts to guide the assistant effectively.
-
-  ```json
-  {
-    "role": "system",
-    "content": "You are a concise and factual assistant specializing in providing quick answers to general knowledge questions."
-  }
-  ```
-
-- **Avoid Overloading:**  
-  Limit the number of system prompts to maintain focus and reduce confusion.
-
-### **c. Structuring User Inputs**
-
-- **Clear Instructions:**  
-  Formulate user prompts clearly to elicit precise responses.
-
-  ```json
-  {
+#
     "role": "user",
     "content": "Explain the Pythagorean theorem with an example."
   }
   ```
 
-- **Contextual Continuity:**  
-  Maintain context by referencing previous messages when necessary.
 
-  ```json
-  {
-    "role": "user",
-    "content": "Can you also explain how it applies in real life?"
-  }
-  ```
-
-### **d. Leveraging Assistant Messages**
-
-- **Referencing Past Responses:**  
-  Use assistant messages to build upon previous answers, enhancing the depth of the conversation.
-
-  ```json
-  {
-    "role": "user",
-    "content": "Can you elaborate on that point?"
-  }
-  ```
-
-### **e. Security and Privacy**
-
-- **Sensitive Information:**  
-  Avoid including sensitive or personal information in prompts, especially in system messages that could potentially be exposed to unintended contexts.
-
----
 
 ## **7. Advanced Techniques: Variables, Dictionaries, and File References**
 
@@ -388,19 +266,6 @@ In this example:
   print(response['choices'][0]['message']['content'])
   ```
 
-### **b. Referencing Filenames Instead of Content**
-
-- **Metadata-Based Prompts:**  
-  Reference filenames and associated metadata instead of embedding large file contents directly into prompts.
-
-  ```python
-  file_info = {
-      "filename": "report.pdf",
-      "task": "summarize the key points"
-  }
-
-  prompt = f"File: {file_info['filename']}\nTask: {file_info['task']}"
-  ```
 
 - **On-Demand Content Retrieval:**  
   Implement a system where the application retrieves and processes file content as needed, ensuring that prompts remain concise.
@@ -441,116 +306,11 @@ In this example:
 
 ---
 
-## **8. Summary Table: Context vs. System vs. User Prompts**
 
-To encapsulate the differences and interactions between context, system prompts, and user prompts, here's a refined comparison table:
-
-| **Component**        | **Role**                                                                                         | **Purpose**                                                                                     | **Visibility**               | **Usage**                                                                                                   |
-|----------------------|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|------------------------------|-------------------------------------------------------------------------------------------------------------|
-| **Context**          | The entire conversation history, including system, user, and assistant messages.                | Provides the model with the background needed to generate coherent and relevant responses.       | Internal to the API          | Automatically maintained by the API; used to maintain continuity and relevance in responses.               |
-| **System Prompt**    | A special message that sets the behavior and guidelines for the assistant.                      | Defines the assistant's role, behavior, and overarching instructions for the conversation.      | Not visible to end-users     | Included once at the start of the conversation to establish the assistant's persona and capabilities.      |
-| **User Prompt**      | Messages sent by the user as inputs or questions to the assistant.                              | Drives the conversation by posing questions, requests, or commands to the assistant.            | Visible to end-users         | Multiple per conversation; each prompt requires a corresponding assistant response.                        |
-| **Assistant Prompt** | Responses generated by the assistant based on the context, system prompt, and user prompts.     | Provides answers, explanations, or performs tasks as requested by the user.                     | Visible to end-users         | Generated after each user prompt; maintains the flow and context of the conversation.                      |
-
-**Key Points:**
-
-- **Context** encompasses all messages (system, user, assistant) and serves as the foundation for generating responses.
-- **System Prompts** are foundational instructions that guide the assistant's behavior throughout the conversation.
-- **User Prompts** are the active inputs that drive the interaction, requiring the assistant to respond appropriately.
-- Messages are **processed in sequence**, maintaining the flow and ensuring coherence in responses.
 
 ---
 
-## **9. Practical Example: Combining All Components**
-
-Here's a practical example illustrating how context, system prompts, and user prompts work together in the OpenAI Chat API:
-
-```python
-import openai
-
-# Define the message history with system and user prompts
-messages = [
-    {
-        "role": "system",
-        "content": "You are an expert in Python programming. Provide clear and concise explanations."
-    },
-    {
-        "role": "user",
-        "content": "How do I create a virtual environment in Python?"
-    },
-    {
-        "role": "assistant",
-        "content": "You can create a virtual environment in Python using the `venv` module. Here's how:\n\n1. Open your terminal or command prompt.\n2. Navigate to your project directory.\n3. Run the command `python -m venv env` (where `env` is the name of the virtual environment).\n4. Activate the virtual environment:\n   - **Windows:** `env\\Scripts\\activate`\n   - **macOS/Linux:** `source env/bin/activate`\n\nThis will create and activate a virtual environment named `env`."
-    },
-    {
-        "role": "user",
-        "content": "How do I install packages within this virtual environment?"
-    }
-]
-
-# Make the API call
-response = openai.ChatCompletion.create(
-    model="gpt-4",
-    messages=messages
-)
-
-# Extract and print the assistant's response
-assistant_reply = response['choices'][0]['message']['content']
-print(assistant_reply)
-```
-
-**Explanation:**
-
-1. **System Prompt:**  
-   - Sets the assistant as an expert in Python programming with an emphasis on clear explanations.
-
-2. **User Prompt 1:**  
-   - Asks about creating a virtual environment in Python.
-
-3. **Assistant Prompt 1:**  
-   - Provides a step-by-step guide on creating and activating a virtual environment.
-
-4. **User Prompt 2:**  
-   - Follows up with a question about installing packages within the virtual environment.
-
-5. **API Call:**  
-   - Sends the entire message list to the API, which considers all prior messages (context) to generate a coherent response.
-
-6. **Assistant Response:**  
-   - The model generates a response based on the system prompt and the context of the conversation.
-
----
-
-## **10. Key Takeaways**
-
-- **Structured Roles Enhance Clarity:** Assigning clear roles (`system`, `user`, `assistant`) helps the model understand the purpose and context of each message, leading to more accurate and relevant responses.
-
-- **Sequential Processing Maintains Context:** The model processes messages in the order they are provided, ensuring that each response builds upon the previous ones.
-
-- **System Prompts Are Foundational:** Properly crafted system prompts are crucial as they define the assistant's overall behavior and capabilities throughout the conversation.
-
-- **User Prompts Drive Interaction:** User messages are the active drivers of the conversation, eliciting responses and guiding the assistant on what information or actions are needed.
-
-- **Context is Essential for Coherence:** Maintaining a complete and relevant message history ensures that the assistant's responses remain coherent and contextually appropriate.
-
-- **Managing Token Limits is Important:** Be mindful of the total token count (sum of all messages) to stay within the model's limits, optimizing prompt length and message history accordingly.
-
----
-
-## **11. Additional Resources**
-
-- **OpenAI's Official Documentation:**  
-  [Chat API Overview](https://platform.openai.com/docs/guides/chat)
-
-- **Role-Based Messaging Guide:**  
-  [Using Roles in Chat Completions](https://platform.openai.com/docs/guides/chat/introduction#roles)
-
-- **Best Practices for Prompt Engineering:**  
-  [OpenAI Cookbook](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_format_inputs_to_ChatGPT_models.ipynb)
-
----
-
-If you have further questions or need more detailed examples on specific aspects of the OpenAI API's prompt handling, feel free to ask!
+#
 
 
 dont use defaults just for testing. may not need deaults everywhere
@@ -578,18 +338,14 @@ main.py accepts arguements and uses them to biuld a api request to openai, witho
 **Understanding the Process:**
 
 1. **Cartesian Product:** For two sets A and B, the Cartesian product A × B is the set of all ordered pairs (a, b)
-2. **Element-wise Addition:** For each pair (a, b) in A × B, perform the operation a + b.
+
 
 **Logical Description:**
 
 * For every element in the first set:
   * For every element in the second set:
-    * Add the current elements from both sets.
-    * Store the result.
 
-## Programming Libraries for Cartesian Product and Addition
 
-Many programming languages have libraries or built-in functions that can efficiently handle Cartesian products and element-wise operations. Here are a few examples:
 
 ### Python:
 * **itertools.product():** This function generates Cartesian products of iterable objects. You can then use a list comprehension or a generator expression to perform the addition.
@@ -936,11 +692,7 @@ OpenAI offers several features and best practices to enhance prompt management:
   prompt = f"{system_message}\n\n{user_message}"
   ```
 
-- **Token Optimization:**
-  Optimize the use of tokens by removing unnecessary parts of prompts and focusing on essential instructions to stay within token limits.
 
-- **Contextual Prompts:**
-  Maintain context by including relevant previous interactions or data within the prompt, especially when using models that support conversational context.
 
 ---
 
@@ -953,16 +705,9 @@ The OpenAI API is highly adaptable and allows for sophisticated prompt construct
 - **Dictionaries:** Organize and manage complex prompt components efficiently.
 - **File References:** Reference filenames and manage content separately to handle large or sensitive data effectively.
 
-By combining these methods, you can create robust, dynamic, and maintainable prompts tailored to your specific needs. Remember to adhere to best practices such as maintaining clarity, managing prompt length, and leveraging templates to optimize your interactions with the OpenAI API.
 
-If you have specific scenarios or need further assistance with implementing these techniques, feel free to ask!
 ##################################################3
-* **Input:** Two sets of numbers.
-* **Output:** A new set containing the sum of every combination of elements from the input sets.
-* **Logic:** Create the Cartesian product of the two sets and then add the corresponding elements of each pair.
-* **Efficiency:** If performance is critical, discuss the choice of algorithm and data structures.
 
-By providing this information, the programmer should be able to effectively implement the function using the appropriate language and libraries.
 
   ########################################
  main.py can build a promot from arugements using prompt_build_logic, or from a file
@@ -1006,27 +751,12 @@ While dictionaries are a versatile and popular choice, Python offers several oth
 * Common formats include text files, CSV files, JSON files, and more.
 ases.
 
-### 7. **Configuration Files:**
-* Store key-value pairs in a structured format.
-* Common formats include YAML, JSON, and INI.
-* Use libraries like `yaml`, `json`, or `configparser` to parse and manipulate configuration files.
 
 ### 8. **Environment Variables:**
 * Store system-wide settings that can be accessed by applications.
 * Use the `os` module to access and modify environment variables.
 
-**Choosing the best method depends on various factors, including:**
 
-* **Data structure:** The type of data you need to store (e.g., key-value pairs, ordered lists, unique elements).
-* **Persistence:** Whether you need to store data beyond the execution of a script.
-* **Access:** How other parts of your application or system should access the data.
-* **Performance:** The efficiency requirements for storing and retrieving data.
-
-By understanding these options, you can select the most appropriate method for your specific use case and effectively manage data sharing in your Python projects.
-
-Certainly! Let's delve into how the OpenAI API handles multiple user messages, specifically addressing whether they are combined and sent as one prompt or treated individually within the conversation context.
-
----
 
 ## **Understanding OpenAI's Message Handling**
 
