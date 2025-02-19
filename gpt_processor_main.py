@@ -4,7 +4,7 @@ GPT Processor Main Application
 
 Features:
 - Combine multiple prompt files into a single system prompt.
-- Process multiple input files.
+- Process multiple input files concurrently.
 - Save AI-generated responses to output directory.
 - Comprehensive logging to console and optional log file.
 """
