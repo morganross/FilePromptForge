@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox, filedialog
+from tkinter import messagebox, filedialog, ttk
 import subprocess
 import logging
 import os
@@ -73,7 +73,7 @@ def create_default_prompts(install_dir, logger):
     create_default_prompt_file(default_prompt_path_prompts, logger)
     create_default_prompt_file(default_prompt_path_input, logger)
 
-def create_default_config_file(config_file_path, install_dir, api_key, logger):
+def create_default_config_file(config_file_path, install_dir, api_key, model, logger):
     """Create a default YAML configuration file."""
     default_config = {
         'prompts_dir': os.path.join(install_dir, 'prompts'),
@@ -81,7 +81,7 @@ def create_default_config_file(config_file_path, install_dir, api_key, logger):
         'output_dir': os.path.join(install_dir, 'output'),
         'openai': {
             'api_key': api_key,
-            'model': 'gpt-4',
+            'model': model,
             'temperature': 0.7,
             'max_tokens': 1500
         }
@@ -140,7 +140,8 @@ def add_to_system_path_unix(directory, shell, logger):
         logger.error(f"Failed to add '{directory}' to the system PATH: {e}")
         sys.exit(1)
 
-def run_test(install_dir, executable_path):
+def run_test(base_dir, executable_path):
+    install_dir = os.path.join(base_dir, 'filepromptforge')
     logger.debug(f"Starting run_test with install_dir={install_dir}, executable_path={executable_path}")
     input_dir = os.path.join(install_dir, 'input')
     output_dir = os.path.join(install_dir, 'output')
@@ -198,6 +199,29 @@ def select_executable_path(entry):
         entry.delete(0, tk.END)
         entry.insert(0, file_path)
 
+def update_config_file(config_file_path, model, logger):
+    """Update the model in an existing config file."""
+    try:
+        if not os.path.exists(config_file_path):
+            raise FileNotFoundError(f"Config file not found at '{config_file_path}'")
+            
+        # Read existing config
+        with open(config_file_path, 'r', encoding='utf-8') as file:
+            config = yaml.safe_load(file)
+        
+        # Update model
+        config['openai']['model'] = model
+        
+        # Write updated config
+        with open(config_file_path, 'w', encoding='utf-8') as file:
+            yaml.dump(config, file)
+            
+        logger.info(f"Updated config file at '{config_file_path}' with model '{model}'")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to update config file: {e}")
+        return False
+
 def create_gui():
     root = tk.Tk()
     root.title("GPT Processor Installer")
@@ -216,10 +240,44 @@ def create_gui():
     api_key_entry = tk.Entry(root, width=50, show="*")  # Mask the API key
     api_key_entry.grid(row=2, column=1, padx=10, pady=5)
 
+    # Add model selection dropdown
+    tk.Label(root, text="Model:").grid(row=3, column=0, sticky=tk.W)
+    model_var = tk.StringVar(value="gpt-4")  # Default model
+    model_dropdown = ttk.Combobox(root, textvariable=model_var, width=47, state="readonly")
+    models = [
+        "gpt-4o-mini-audio-preview-2024-12-17", "dall-e-3", "gpt-4-turbo-2024-04-09", "dall-e-2",
+        "gpt-4o-audio-preview-2024-10-01", "gpt-4o-audio-preview", "o1-mini-2024-09-12",
+        "gpt-4o-mini-realtime-preview-2024-12-17", "o1-preview-2024-09-12", "o1-mini", "o1-preview",
+        "gpt-4o-mini-realtime-preview", "whisper-1", "gpt-4-turbo", "gpt-4o-mini-audio-preview",
+        "gpt-4o-realtime-preview-2024-10-01", "babbage-002", "tts-1-hd-1106", "gpt-4o-audio-preview-2024-12-17",
+        "gpt-4o", "gpt-4o-2024-08-06", "tts-1-hd", "chatgpt-4o-latest", "text-embedding-3-large",
+        "tts-1", "tts-1-1106", "gpt-4o-2024-11-20", "davinci-002", "gpt-3.5-turbo-1106",
+        "omni-moderation-2024-09-26", "gpt-3.5-turbo-instruct", "gpt-3.5-turbo-instruct-0914",
+        "gpt-3.5-turbo-0125", "gpt-4o-realtime-preview-2024-12-17", "gpt-3.5-turbo",
+        "gpt-4o-realtime-preview", "gpt-3.5-turbo-16k", "gpt-4o-mini-2024-07-18",
+        "text-embedding-3-small", "gpt-4", "gpt-4o-mini", "text-embedding-ada-002",
+        "gpt-4-1106-preview", "omni-moderation-latest", "gpt-4-0613", "gpt-4o-2024-05-13",
+        "gpt-4-turbo-preview", "gpt-4-0125-preview"
+    ]
+    model_dropdown['values'] = models
+    model_dropdown.grid(row=3, column=1, padx=10, pady=5)
 
+    def update_config():
+        base_dir = install_dir_entry.get()
+        if not base_dir:
+            messagebox.showerror("Error", "Please select an installation directory")
+            return
+            
+        install_dir = os.path.join(base_dir, 'filepromptforge')
+        config_file_path = os.path.join(install_dir, 'default_config.yaml')
+        if update_config_file(config_file_path, model_var.get(), logger):
+            messagebox.showinfo("Success", "Config file updated successfully")
+        else:
+            messagebox.showerror("Error", "Failed to update config file")
 
     def install_with_api_key():
-        install_dir = install_dir_entry.get()
+        base_dir = install_dir_entry.get()
+        install_dir = os.path.join(base_dir, 'filepromptforge')
         
         # Create installation directory if it doesn't exist
         try:
@@ -242,7 +300,7 @@ def create_gui():
         # Create default config file
         config_file_path = os.path.join(install_dir, 'default_config.yaml')
         api_key = api_key_entry.get()
-        create_default_config_file(config_file_path, install_dir, api_key, logger)
+        create_default_config_file(config_file_path, install_dir, api_key, model_var.get(), logger)
 
         # Copy main executable
         main_executable_source = os.path.abspath(executable_path_entry.get())
@@ -259,10 +317,15 @@ def create_gui():
         else:
             logger.warning("Could not determine shell to update PATH.")
         
-        logger.info("GPT Processor installation completed successfully.")
+        logger.info(f"GPT Processor installation completed successfully in {install_dir}")
 
-    tk.Button(root, text="Install", command=install_with_api_key).grid(row=4, column=1, pady=10)
-    tk.Button(root, text="Test", command=lambda: run_test(install_dir_entry.get(), executable_path_entry.get())).grid(row=5, column=2, pady=10)
+    # Add buttons
+    button_frame = tk.Frame(root)
+    button_frame.grid(row=4, column=1, columnspan=2, pady=10)
+    
+    tk.Button(button_frame, text="Install", command=install_with_api_key).pack(side=tk.LEFT, padx=5)
+    tk.Button(button_frame, text="Update Config", command=update_config).pack(side=tk.LEFT, padx=5)
+    tk.Button(button_frame, text="Test", command=lambda: run_test(install_dir_entry.get(), executable_path_entry.get())).pack(side=tk.LEFT, padx=5)
 
     root.mainloop()
 
