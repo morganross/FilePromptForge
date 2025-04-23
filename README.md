@@ -1,4 +1,6 @@
+Cycle through API key
 
+add prepend folder, write output to pretend folder check box
 
 
 
