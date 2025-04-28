@@ -3,6 +3,9 @@ todo
 Cycle through API key
 
 add prepend folder, write output to pretend folder check box
+(instructed to make list of reivisions, reads files, outputs list to prepend. intructions to carryout those revisons, reads prepend file then reads file again, outputs to output
+
+need not be a prepend folder, could do more robust inout handling, define behaviour for adding multiple folders to single run
 
 erse completed input files (good for stopping mid way)
 
