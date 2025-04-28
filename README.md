@@ -4,6 +4,8 @@ Cycle through API key
 
 add prepend folder, write output to pretend folder check box
 
+erse completed input files (good for stopping mid way)
+
 
 
 
