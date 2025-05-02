@@ -7,6 +7,7 @@ from datetime import datetime
 import yaml
 import shutil
 import sys
+import threading
 
 
 # Set up logging
@@ -143,7 +144,9 @@ def add_to_system_path_unix(directory, shell, logger):
 def run_test(base_dir, executable_path):
     install_dir = os.path.join(base_dir, 'filepromptforge')
     logger.debug(f"Starting run_test with install_dir={install_dir}, executable_path={executable_path}")
+    logger.debug(f"Install directory exists: {os.path.exists(install_dir)}")
     input_dir = os.path.join(install_dir, 'input')
+    logger.debug(f"Input directory path: {input_dir}, exists: {os.path.exists(input_dir)}")
     output_dir = os.path.join(install_dir, 'output')
     prompt_file = os.path.join(install_dir, 'prompts', 'standard_prompt.txt')
     try:
@@ -163,21 +166,35 @@ def run_test(base_dir, executable_path):
         messagebox.showerror("Unexpected Error", f"An unexpected error occurred: {e}")
 
     try:
+        # Ensure openai dependency is installed for the test
+        try:
+            dep = subprocess.run([sys.executable, '-m', 'pip', 'install', 'openai'], capture_output=True, text=True)
+            logger.debug(f"Test dependency install stdout: {dep.stdout}")
+            logger.debug(f"Test dependency install stderr: {dep.stderr}")
+            dep.check_returncode()
+            logger.info("OpenAI package installed for test.")
+        except Exception as e_dep:
+            logger.error(f"Failed to install openai for test: {e_dep}")
+            messagebox.showerror("Dependency Installation Error", f"Failed to install openai package for test: {e_dep}")
+            return
+
         # Change working directory to the installation directory
-        os.chdir(install_dir)
+        # No global cwd change; run subprocess in install_dir instead
 
         command = [
-            'python', executable_path,
+            sys.executable, executable_path,
+            '--verbose',
             '--prompt', prompt_file,
             '--input_dir', input_dir,
             '--output_dir', output_dir
         ]
         logger.debug(f"Running command: {command}")
-        result = subprocess.run(command, capture_output=True, text=True)
+        result = subprocess.run(command, capture_output=True, text=True, cwd=install_dir)
         logger.debug(f"Command output: {result.stdout}")
         logger.debug(f"Command error: {result.stderr}")
         result.check_returncode()
         logger.info("Test completed successfully.")
+        messagebox.showinfo("Test Completed", "Test completed successfully.")
     except subprocess.CalledProcessError as e:
         logger.error(f"Subprocess error: {e}")
         logger.error(f"Command output: {e.output}")
@@ -230,11 +247,15 @@ def create_gui():
     install_dir_entry = tk.Entry(root, width=50)
     install_dir_entry.grid(row=0, column=1, padx=10, pady=5)
     tk.Button(root, text="Browse...", command=lambda: select_install_dir(install_dir_entry)).grid(row=0, column=2, padx=10, pady=5)
+    # Default install directory to current working directory
+    install_dir_entry.insert(0, os.getcwd())
 
     tk.Label(root, text="Executable Path:").grid(row=1, column=0, sticky=tk.W)
     executable_path_entry = tk.Entry(root, width=50)
     executable_path_entry.grid(row=1, column=1, padx=10, pady=5)
     tk.Button(root, text="Browse...", command=lambda: select_executable_path(executable_path_entry)).grid(row=1, column=2, padx=10, pady=5)
+    # Default executable path to gpt_processor_main.py in workspace
+    executable_path_entry.insert(0, os.path.join(os.getcwd(), 'gpt_processor_main.py'))
 
     tk.Label(root, text="OpenAI API Key:").grid(row=2, column=0, sticky=tk.W)
     api_key_entry = tk.Entry(root, width=50, show="*")  # Mask the API key
@@ -266,7 +287,7 @@ def create_gui():
         base_dir = install_dir_entry.get()
         if not base_dir:
             messagebox.showerror("Error", "Please select an installation directory")
-            return
+            returns.path.joi
             
         install_dir = os.path.join(base_dir, 'filepromptforge')
         config_file_path = os.path.join(install_dir, 'default_config.yaml')
@@ -317,6 +338,17 @@ def create_gui():
         else:
             logger.warning("Could not determine shell to update PATH.")
         
+# Install openai dependency
+        try:
+            result = subprocess.run([sys.executable, '-m', 'pip', 'install', 'openai'], capture_output=True, text=True)
+            logger.debug(f"Dependency install stdout: {result.stdout}")
+            logger.debug(f"Dependency install stderr: {result.stderr}")
+            result.check_returncode()
+            logger.info("Installed openai package successfully.")
+        except Exception as e:
+            logger.error(f"Failed to install openai package: {e}")
+            messagebox.showerror("Dependency Installation Error", f"Failed to install openai package: {e}")
+            return
         logger.info(f"GPT Processor installation completed successfully in {install_dir}")
 
     # Add buttons
@@ -325,7 +357,7 @@ def create_gui():
     
     tk.Button(button_frame, text="Install", command=install_with_api_key).pack(side=tk.LEFT, padx=5)
     tk.Button(button_frame, text="Update Config", command=update_config).pack(side=tk.LEFT, padx=5)
-    tk.Button(button_frame, text="Test", command=lambda: run_test(install_dir_entry.get(), executable_path_entry.get())).pack(side=tk.LEFT, padx=5)
+    tk.Button(button_frame, text="Test", command=lambda: threading.Thread(target=run_test, args=(install_dir_entry.get(), executable_path_entry.get()), daemon=True).start()).pack(side=tk.LEFT, padx=5)
 
     root.mainloop()
 

@@ -8,15 +8,16 @@ Features:
 - Save AI-generated responses to output directory.
 - Comprehensive logging to console and optional log file.
 """
-
 import os
 import argparse
 import logging
 import sys
+import subprocess
+# Ensure required dependencies are installed
+subprocess.run([sys.executable, '-m', 'pip', 'install', 'openai', 'PyYAML', 'python-dotenv'], capture_output=True, text=True)
 import time
 from concurrent.futures import ThreadPoolExecutor
-import openai
-from openai.error import OpenAIError, RateLimitError
+from openai import OpenAI
 from datetime import datetime
 
 # Attempt to import required packages and handle missing dependencies
@@ -34,7 +35,7 @@ except ImportError as e:
 def setup_logger(log_level=logging.INFO, log_file=None):
     logger = logging.getLogger('gpt_processor')
     logger.setLevel(log_level)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(funcName)s:%(lineno)d - %(message)s')
 
     # Console handler
     ch = logging.StreamHandler()
@@ -105,12 +106,12 @@ class PromptManager:
         prompts = []
         for prompt_file in prompt_files:
             try:
-                # Ensure full path is used
                 full_path = os.path.join(self.prompts_dir, prompt_file)
                 with open(full_path, 'r', encoding='utf-8') as file:
-                    prompts.append(file.read())
-            except Exception as e:
-                logger.error(f"Error reading prompt file '{prompt_file}': {e}")
+                    content = file.read()
+                    prompts.append(content)
+            except Exception:
+                logger.exception(f"Error reading prompt file '{prompt_file}'")
         return "\n".join(prompts)
 
 # FileHandler class
@@ -122,24 +123,29 @@ class FileHandler:
     def list_input_files(self):
         try:
             return [f for f in os.listdir(self.input_dir) if os.path.isfile(os.path.join(self.input_dir, f))]
-        except Exception as e:
-            logger.error(f"Error listing input files in directory '{self.input_dir}': {e}")
+        except Exception:
+            logger.exception(f"Error listing input files in directory '{self.input_dir}'")
             return []
 
     def read_file(self, file_path):
         try:
+            logger.debug(f"Reading file '{file_path}'")
             with open(file_path, 'r', encoding='utf-8') as file:
-                return file.read()
-        except Exception as e:
-            logger.error(f"Error reading file '{file_path}': {e}")
+                content = file.read()
+            logger.debug(f"Read file '{file_path}', length {len(content)}")
+            return content
+        except Exception:
+            logger.exception(f"Error reading file '{file_path}'")
             return ""
 
     def write_file(self, file_path, content):
         try:
+            logger.debug(f"Writing file '{file_path}' with content length {len(content)}")
             with open(file_path, 'w', encoding='utf-8') as file:
                 file.write(content)
-        except Exception as e:
-            logger.error(f"Error writing to file '{file_path}': {e}")
+            logger.debug(f"Wrote file '{file_path}', length {len(content)}")
+        except Exception:
+            logger.exception(f"Error writing to file '{file_path}'")
 
 # APIClient class
 class APIClient:
@@ -152,26 +158,30 @@ class APIClient:
         self.backoff_factor = backoff_factor
 
     def send_prompt(self, system_prompt, user_prompt, logger):
-        # If no API key is provided, generate a mock response
         if not self.api_key or self.api_key == 'DUMMY_API_KEY':
             logger.warning("No valid API key. Generating mock response.")
             return f"Mock response to: {user_prompt}"
-        
+
+        client = OpenAI(api_key=self.api_key)
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
+        logger.debug(f"API request payload: model={self.model}, temperature={self.temperature}, max_tokens={self.max_tokens}, messages={messages}")
         try:
-            openai.api_key = self.api_key
-            messages = [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ]
-            response = openai.ChatCompletion.create(
+            response = client.chat.completions.create(
                 model=self.model,
                 messages=messages,
                 temperature=self.temperature,
                 max_tokens=self.max_tokens
             )
-            return response.choices[0].message['content'].strip()
+            logger.debug(f"API raw response: {response}")
+            result = response.choices[0].message.content.strip()
+            logger.debug(f"API response content: {result}")
+            logger.debug(f"API response: {result}")
+            return result
         except Exception as e:
-            logger.error(f"OpenAI API error: {e}")
+            logger.exception(f"OpenAI API error: {e}")
             logger.warning("Generating mock response due to API error.")
             return f"Mock response to: {user_prompt}"
 
@@ -186,12 +196,14 @@ def create_default_prompt(prompts_dir):
         try:
             with open(default_prompt_path, 'w', encoding='utf-8') as file:
                 file.write(default_prompt)
-        except Exception as e:
-            logger.error(f"Error creating default prompt file '{default_prompt_path}': {e}")
+        except Exception:
+            logger.exception(f"Error creating default prompt file '{default_prompt_path}'")
 
 def main():
-    parser = argparse.ArgumentParser(description='GPT Processor Main Application')
-
+    parser = argparse.ArgumentParser(
+        description='GPT Processor Main Application',
+        epilog='Enable --verbose for debug logs.'
+    )
     parser.add_argument('--config', type=str, help='Path to configuration file.')
     parser.add_argument('--log_file', type=str, help='Path to log file.')
     parser.add_argument('--verbose', action='store_true', help='Enable verbose logging.')
@@ -218,85 +230,86 @@ def main():
     log_file_path = os.path.join(log_dir, 'gpt_processor.log')
 
     # Setup logger
+    global logger
     logger = setup_logger(log_level=log_level, log_file=log_file_path)
+    logger.debug(f"Parsed CLI args: {vars(args)}")
 
-    # Load configuration
-    # Try to load configuration, but don't fail if config file doesn't exist
-    # First, check if a config file was explicitly provided
-    if args.config:
-        config_file = args.config
-    else:
-        # Determine input directory first
-        input_dir = args.input_dir if args.input_dir else None
-        
-        # Check for config in the installation directory (input_dir's parent)
-        potential_config_paths = [
-            os.path.join(exec_dir, 'default_config.yaml'),  # script directory
-        ]
-        
-        # If input_dir is provided, add its parent directory to potential config paths
-        if input_dir:
-            potential_config_paths.append(os.path.join(os.path.dirname(input_dir), 'default_config.yaml'))
-        
-        config_file = None
-        for path in potential_config_paths:
-            if os.path.isfile(path):
-                config_file = path
-                break
-    
     try:
-        if config_file:
-            config = Config(config_file, base_dir=exec_dir)
-            logger.debug(f"Configuration loaded from {config_file}: {config.__dict__}")
+        # Load configuration
+        if args.config:
+            config_file = args.config
         else:
-            logger.warning("No configuration file found. Using default configuration.")
+            input_dir = args.input_dir if args.input_dir else None
+            potential_config_paths = [os.path.join(exec_dir, 'default_config.yaml')]
+            if input_dir:
+                potential_config_paths.append(os.path.join(os.path.dirname(input_dir), 'default_config.yaml'))
+            config_file = None
+            for path in potential_config_paths:
+                if os.path.isfile(path):
+                    config_file = path
+                    break
+
+        try:
+            if config_file:
+                config = Config(config_file, base_dir=exec_dir)
+                logger.debug(f"Configuration loaded from {config_file}: {config.__dict__}")
+            else:
+                logger.warning("No configuration file found. Using default configuration.")
+                config = Config(base_dir=exec_dir)
+                logger.debug(f"Default configuration: {config.__dict__}")
+        except Exception:
+            logger.exception("Error loading configuration")
             config = Config(base_dir=exec_dir)
-    except Exception as e:
-        logger.error(f"Error loading configuration: {e}")
-        config = Config(base_dir=exec_dir)
 
-    # Override config with CLI arguments if provided
-    prompt_files = args.prompt if args.prompt else os.listdir(config.prompts_dir)
-    input_dir = args.input_dir if args.input_dir else config.input_dir
-    output_dir = args.output_dir if args.output_dir else config.output_dir
-    model = args.model if args.model else config.openai.model
-    temperature = args.temperature if args.temperature else config.openai.temperature
-    max_tokens = args.max_tokens if args.max_tokens else config.openai.max_tokens
+        # Override config with CLI arguments if provided
+        prompt_files = args.prompt if args.prompt else os.listdir(config.prompts_dir)
+        input_dir = args.input_dir if args.input_dir else config.input_dir
+        output_dir = args.output_dir if args.output_dir else config.output_dir
+        model = args.model if args.model else config.openai.model
+        temperature = args.temperature if args.temperature else config.openai.temperature
+        max_tokens = args.max_tokens if args.max_tokens else config.openai.max_tokens
 
-    # Log paths and check if they exist
-    logger.debug(f"Prompt files: {prompt_files}")
-    logger.debug(f"Input directory: {input_dir}")
-    logger.debug(f"Output directory: {output_dir}")
-    for path in [input_dir, output_dir] + prompt_files:
-        if not os.path.exists(path):
-            logger.error(f"Path does not exist: {path}")
+        # Log paths
+        logger.debug(f"Prompt files: {prompt_files}")
+        logger.debug(f"Input directory: {input_dir}")
+        logger.debug(f"Output directory: {output_dir}")
+        for path in [input_dir, output_dir] + prompt_files:
+            if not os.path.exists(path):
+                logger.error(f"Path does not exist: {path}")
 
-    # Ensure necessary directories exist
-    ensure_directory(input_dir)
-    ensure_directory(output_dir)
+        # Ensure necessary directories exist
+        ensure_directory(input_dir)
+        ensure_directory(output_dir)
 
-    # Load and combine prompts
-    prompt_manager = PromptManager(config.prompts_dir)
-    system_prompt = prompt_manager.load_prompts(prompt_files)
+        # Load and combine prompts
+        prompt_manager = PromptManager(config.prompts_dir)
+        system_prompt = prompt_manager.load_prompts(prompt_files)
+        logger.debug(f"System prompt content:\n{system_prompt}")
 
-    # Initialize file handler and API client
-    file_handler = FileHandler(input_dir, output_dir)
-    api_client = APIClient(config.openai.api_key, model, temperature, max_tokens)
+        # Initialize file handler and API client
+        file_handler = FileHandler(input_dir, output_dir)
+        api_client = APIClient(config.openai.api_key, model, temperature, max_tokens)
 
-    # List input files
-    input_files = file_handler.list_input_files()
-    logger.debug(f"Input files: {input_files}")
-    if not input_files:
-        logger.info("No input files found. Exiting.")
-        sys.exit(0)
+        # List input files
+        input_files = file_handler.list_input_files()
+        logger.debug(f"Input files: {input_files}")
+        if not input_files:
+            logger.info("No input files found. Exiting.")
+            sys.exit(0)
 
-    # Process files sequentially with a delay
-    for input_file in input_files:
-        process_file(os.path.join(input_dir, input_file), file_handler, api_client, system_prompt, logger)
-        time.sleep(60)  # Delay to ensure only one file is processed per minute
+        # Process files sequentially
+        for input_file in input_files:
+            process_file(os.path.join(input_dir, input_file), file_handler, api_client, system_prompt, logger)
+            time.sleep(60)
+
+    except Exception:
+        logger.exception("Unhandled exception in main")
+        sys.exit(1)
 
 def process_file(input_file, file_handler, api_client, system_prompt, logger):
+    logger.debug(f"Processing file: {input_file}")
     user_prompt = file_handler.read_file(input_file)
+    logger.debug(f"User prompt length for '{input_file}': {len(user_prompt)}")
     if not user_prompt:
         logger.error(f"User prompt is empty for file '{input_file}'")
         return
@@ -304,10 +317,9 @@ def process_file(input_file, file_handler, api_client, system_prompt, logger):
         response = api_client.send_prompt(system_prompt, user_prompt, logger)
         output_file = os.path.join(file_handler.output_dir, f"response_{os.path.basename(input_file)}")
         file_handler.write_file(output_file, response)
-    except Exception as e:
-        logger.error(f"Error processing file '{input_file}': {e}")
+    except Exception:
+        logger.exception(f"Error processing file '{input_file}'")
     finally:
-        # Delay to ensure only one file is processed per minute
         time.sleep(60)
 
 if __name__ == "__main__":
