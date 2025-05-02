@@ -1,0 +1,3 @@
+2025-05-02 12:08:51,802 - gpt_processor_installer_gui - INFO - Successfully fetched and filtered 324 text models from OpenRouter.
+2025-05-02 12:09:11,939 - gpt_processor_installer_gui - ERROR - Failed to update config file: Config file not found at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\default_config.yaml'
+2025-05-02 12:09:15,105 - gpt_processor_installer_gui - ERROR - Failed to update config file: Config file not found at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\default_config.yaml'

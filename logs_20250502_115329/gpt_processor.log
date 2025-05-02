@@ -1,0 +1,89 @@
+2025-05-02 11:53:29,402 - gpt_processor - DEBUG - gpt_processor_main.py:main:259 - Parsed CLI args: {'config': None, 'log_file': None, 'verbose': True, 'prompt': ['C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt'], 'input_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', 'output_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output', 'model': None, 'temperature': None, 'max_tokens': None}
+2025-05-02 11:53:29,417 - gpt_processor - DEBUG - gpt_processor_main.py:main:279 - Configuration loaded from C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\default_config.yaml: {'prompts_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts', 'input_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', 'output_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output', 'provider': 'openrouter', 'openai': <__main__.Config.ProviderConfig object at 0x0000018889347470>, 'openrouter': <__main__.Config.ProviderConfig object at 0x0000018888EC36E0>}
+2025-05-02 11:53:29,417 - gpt_processor - DEBUG - gpt_processor_main.py:main:308 - Prompt files: ['C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt']
+2025-05-02 11:53:29,417 - gpt_processor - DEBUG - gpt_processor_main.py:main:309 - Input directory: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input
+2025-05-02 11:53:29,417 - gpt_processor - DEBUG - gpt_processor_main.py:main:310 - Output directory: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output
+2025-05-02 11:53:29,417 - gpt_processor - DEBUG - gpt_processor_main.py:main:322 - System prompt content:
+You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries.
+2025-05-02 11:53:29,417 - gpt_processor - DEBUG - gpt_processor_main.py:main:331 - Input files: ['standard_prompt.txt']
+2025-05-02 11:53:29,417 - gpt_processor - DEBUG - gpt_processor_main.py:process_file:346 - Processing file: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt
+2025-05-02 11:53:29,422 - gpt_processor - DEBUG - gpt_processor_main.py:read_file:143 - Reading file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt'
+2025-05-02 11:53:29,422 - gpt_processor - DEBUG - gpt_processor_main.py:read_file:146 - Read file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt', length 115
+2025-05-02 11:53:29,422 - gpt_processor - DEBUG - gpt_processor_main.py:process_file:348 - User prompt length for 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt': 115
+2025-05-02 11:53:29,856 - gpt_processor - DEBUG - gpt_processor_main.py:send_prompt:195 - API request payload (openrouter): model=, temperature=0.7, max_tokens=1500, messages=[{'role': 'system', 'content': "You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries."}, {'role': 'user', 'content': "You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries."}]
+2025-05-02 11:53:31,585 - gpt_processor - ERROR - gpt_processor_main.py:send_prompt:208 - openrouter API error: Connection error.
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\connection_pool.py", line 216, in handle_request
+    raise exc from None
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\connection_pool.py", line 196, in handle_request
+    response = connection.handle_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\connection.py", line 101, in handle_request
+    return self._connection.handle_request(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\http11.py", line 143, in handle_request
+    raise exc
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\http11.py", line 93, in handle_request
+    self._send_request_headers(**kwargs)
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\http11.py", line 151, in _send_request_headers
+    with map_exceptions({h11.LocalProtocolError: LocalProtocolError}):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.LocalProtocolError: Illegal header value b'Bearer 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\n'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 969, in request
+    response = self._client.send(
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 914, in send
+    response = self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.LocalProtocolError: Illegal header value b'Bearer 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\n'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 197, in send_prompt
+    response = client.chat.completions.create(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_utils\_utils.py", line 287, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\resources\chat\completions\completions.py", line 925, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1239, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1001, in request
+    raise APIConnectionError(request=request) from err
+openai.APIConnectionError: Connection error.
+2025-05-02 11:53:31,590 - gpt_processor - WARNING - gpt_processor_main.py:send_prompt:209 - Generating mock response due to openrouter API error.
+2025-05-02 11:53:31,590 - gpt_processor - DEBUG - gpt_processor_main.py:write_file:154 - Writing file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output\response_standard_prompt.txt' with content length 133
+2025-05-02 11:53:31,590 - gpt_processor - DEBUG - gpt_processor_main.py:write_file:157 - Wrote file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output\response_standard_prompt.txt', length 133

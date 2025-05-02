@@ -1,0 +1,41 @@
+2025-05-01 22:38:09,784 - gpt_processor_installer_gui - DEBUG - Starting the installer GUI script
+2025-05-01 22:39:46,371 - gpt_processor_installer_gui - INFO - Ensured input directory exists at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input'
+2025-05-01 22:39:46,371 - gpt_processor_installer_gui - INFO - Ensured output directory exists at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output'
+2025-05-01 22:39:46,371 - gpt_processor_installer_gui - INFO - Created default prompt file at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\prompts\standard_prompt.txt'.
+2025-05-01 22:39:46,376 - gpt_processor_installer_gui - INFO - Created default prompt file at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt'.
+2025-05-01 22:39:46,376 - gpt_processor_installer_gui - INFO - Created default config file at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\default_config.yaml'.
+2025-05-01 22:39:46,380 - gpt_processor_installer_gui - INFO - Copied main executable to 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge'.
+2025-05-01 22:39:46,380 - gpt_processor_installer_gui - INFO - Added 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge' to the system PATH.
+2025-05-01 22:39:46,381 - gpt_processor_installer_gui - INFO - GPT Processor installation completed successfully in C:/researcher3rd/test4fpf/filepromptforge\filepromptforge
+2025-05-01 22:40:10,363 - gpt_processor_installer_gui - DEBUG - Starting run_test with install_dir=C:/researcher3rd/test4fpf/filepromptforge\filepromptforge, executable_path=C:/researcher3rd/fpf/gpt_processor_main.py
+2025-05-01 22:40:10,363 - gpt_processor_installer_gui - DEBUG - Input directory contents: ['standard_prompt.txt']
+2025-05-01 22:40:10,363 - gpt_processor_installer_gui - DEBUG - Running command: ['python', 'C:/researcher3rd/fpf/gpt_processor_main.py', '--prompt', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt', '--input_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', '--output_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output']
+2025-05-01 22:40:12,041 - gpt_processor_installer_gui - DEBUG - Command output: 
+2025-05-01 22:40:12,041 - gpt_processor_installer_gui - DEBUG - Command error: Traceback (most recent call last):
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 19, in <module>
+    from openai.error import OpenAIError, RateLimitError
+ModuleNotFoundError: No module named 'openai.error'
+
+2025-05-01 22:40:12,041 - gpt_processor_installer_gui - ERROR - Subprocess error: Command '['python', 'C:/researcher3rd/fpf/gpt_processor_main.py', '--prompt', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt', '--input_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', '--output_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output']' returned non-zero exit status 1.
+2025-05-01 22:40:12,041 - gpt_processor_installer_gui - ERROR - Command output: 
+2025-05-01 22:40:12,046 - gpt_processor_installer_gui - ERROR - Command stderr: Traceback (most recent call last):
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 19, in <module>
+    from openai.error import OpenAIError, RateLimitError
+ModuleNotFoundError: No module named 'openai.error'
+
+2025-05-01 22:41:11,577 - gpt_processor_installer_gui - DEBUG - Starting run_test with install_dir=C:/researcher3rd/test4fpf/filepromptforge\filepromptforge, executable_path=C:/researcher3rd/fpf/gpt_processor_main.py
+2025-05-01 22:41:11,581 - gpt_processor_installer_gui - DEBUG - Input directory contents: ['standard_prompt.txt']
+2025-05-01 22:41:11,581 - gpt_processor_installer_gui - DEBUG - Running command: ['python', 'C:/researcher3rd/fpf/gpt_processor_main.py', '--prompt', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt', '--input_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', '--output_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output']
+2025-05-01 22:41:13,043 - gpt_processor_installer_gui - DEBUG - Command output: 
+2025-05-01 22:41:13,043 - gpt_processor_installer_gui - DEBUG - Command error: Traceback (most recent call last):
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 19, in <module>
+    from openai.error import OpenAIError, RateLimitError
+ModuleNotFoundError: No module named 'openai.error'
+
+2025-05-01 22:41:13,043 - gpt_processor_installer_gui - ERROR - Subprocess error: Command '['python', 'C:/researcher3rd/fpf/gpt_processor_main.py', '--prompt', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt', '--input_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', '--output_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output']' returned non-zero exit status 1.
+2025-05-01 22:41:13,048 - gpt_processor_installer_gui - ERROR - Command output: 
+2025-05-01 22:41:13,048 - gpt_processor_installer_gui - ERROR - Command stderr: Traceback (most recent call last):
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 19, in <module>
+    from openai.error import OpenAIError, RateLimitError
+ModuleNotFoundError: No module named 'openai.error'
+

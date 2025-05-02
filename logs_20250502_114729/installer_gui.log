@@ -1,0 +1,464 @@
+2025-05-02 11:47:47,449 - gpt_processor_installer_gui - INFO - Successfully fetched and filtered 324 text models from OpenRouter.
+2025-05-02 11:48:03,946 - gpt_processor_installer_gui - INFO - Created default prompt file at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\prompts\standard_prompt.txt'.
+2025-05-02 11:48:03,946 - gpt_processor_installer_gui - INFO - Created default prompt file at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt'.
+2025-05-02 11:48:03,951 - gpt_processor_installer_gui - INFO - Created default config file at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\default_config.yaml'.
+2025-05-02 11:48:03,971 - gpt_processor_installer_gui - INFO - Copied main executable to 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge'.
+2025-05-02 11:48:03,971 - gpt_processor_installer_gui - INFO - Added 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge' to the system PATH.
+2025-05-02 11:48:11,983 - gpt_processor_installer_gui - DEBUG - Starting run_test with install_dir=C:/researcher3rd/test4fpf/filepromptforge\filepromptforge, executable_path=C:\researcher3rd\fpf\gpt_processor_main.py
+2025-05-02 11:48:11,988 - gpt_processor_installer_gui - DEBUG - Install directory exists: True
+2025-05-02 11:48:11,988 - gpt_processor_installer_gui - DEBUG - Input directory path: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input, exists: True
+2025-05-02 11:48:11,988 - gpt_processor_installer_gui - DEBUG - Input directory contents: ['standard_prompt.txt']
+2025-05-02 11:48:14,223 - gpt_processor_installer_gui - DEBUG - Test dependency install stdout: Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: openai in c:\users\administrator\appdata\roaming\python\python312\site-packages (1.76.0)
+Requirement already satisfied: anyio<5,>=3.5.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (4.6.2.post1)
+Requirement already satisfied: distro<2,>=1.7.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (1.9.0)
+Requirement already satisfied: httpx<1,>=0.23.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (0.28.1)
+Requirement already satisfied: jiter<1,>=0.4.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (0.6.1)
+Requirement already satisfied: pydantic<3,>=1.9.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (2.11.3)
+Requirement already satisfied: sniffio in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (1.3.1)
+Requirement already satisfied: tqdm>4 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (4.66.5)
+Requirement already satisfied: typing-extensions<5,>=4.11 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (4.12.2)
+Requirement already satisfied: idna>=2.8 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from anyio<5,>=3.5.0->openai) (3.10)
+Requirement already satisfied: certifi in c:\users\administrator\appdata\roaming\python\python312\site-packages (from httpx<1,>=0.23.0->openai) (2025.4.26)
+Requirement already satisfied: httpcore==1.* in c:\users\administrator\appdata\roaming\python\python312\site-packages (from httpx<1,>=0.23.0->openai) (1.0.6)
+Requirement already satisfied: h11<0.15,>=0.13 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from httpcore==1.*->httpx<1,>=0.23.0->openai) (0.14.0)
+Requirement already satisfied: annotated-types>=0.6.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from pydantic<3,>=1.9.0->openai) (0.7.0)
+Requirement already satisfied: pydantic-core==2.33.1 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from pydantic<3,>=1.9.0->openai) (2.33.1)
+Requirement already satisfied: typing-inspection>=0.4.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from pydantic<3,>=1.9.0->openai) (0.4.0)
+Requirement already satisfied: colorama in c:\users\administrator\appdata\roaming\python\python312\site-packages (from tqdm>4->openai) (0.4.6)
+
+2025-05-02 11:48:14,228 - gpt_processor_installer_gui - DEBUG - Test dependency install stderr: 
+[notice] A new release of pip is available: 24.3.1 -> 25.1
+[notice] To update, run: python.exe -m pip install --upgrade pip
+
+2025-05-02 11:48:14,228 - gpt_processor_installer_gui - INFO - OpenAI package installed for test.
+2025-05-02 11:48:14,228 - gpt_processor_installer_gui - DEBUG - Running command: ['C:\\Python312\\python.exe', 'C:\\researcher3rd\\fpf\\gpt_processor_main.py', '--verbose', '--prompt', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt', '--input_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', '--output_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output']
+2025-05-02 11:50:12,170 - gpt_processor_installer_gui - DEBUG - Starting run_test with install_dir=C:/researcher3rd/test4fpf/filepromptforge\filepromptforge, executable_path=C:\researcher3rd\fpf\gpt_processor_main.py
+2025-05-02 11:50:12,170 - gpt_processor_installer_gui - DEBUG - Install directory exists: True
+2025-05-02 11:50:12,170 - gpt_processor_installer_gui - DEBUG - Input directory path: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input, exists: True
+2025-05-02 11:50:12,170 - gpt_processor_installer_gui - DEBUG - Input directory contents: ['standard_prompt.txt']
+2025-05-02 11:50:19,463 - gpt_processor_installer_gui - DEBUG - Test dependency install stdout: Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: openai in c:\users\administrator\appdata\roaming\python\python312\site-packages (1.76.0)
+Requirement already satisfied: anyio<5,>=3.5.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (4.6.2.post1)
+Requirement already satisfied: distro<2,>=1.7.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (1.9.0)
+Requirement already satisfied: httpx<1,>=0.23.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (0.28.1)
+Requirement already satisfied: jiter<1,>=0.4.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (0.6.1)
+Requirement already satisfied: pydantic<3,>=1.9.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (2.11.3)
+Requirement already satisfied: sniffio in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (1.3.1)
+Requirement already satisfied: tqdm>4 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (4.66.5)
+Requirement already satisfied: typing-extensions<5,>=4.11 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (4.12.2)
+Requirement already satisfied: idna>=2.8 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from anyio<5,>=3.5.0->openai) (3.10)
+Requirement already satisfied: certifi in c:\users\administrator\appdata\roaming\python\python312\site-packages (from httpx<1,>=0.23.0->openai) (2025.4.26)
+Requirement already satisfied: httpcore==1.* in c:\users\administrator\appdata\roaming\python\python312\site-packages (from httpx<1,>=0.23.0->openai) (1.0.6)
+Requirement already satisfied: h11<0.15,>=0.13 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from httpcore==1.*->httpx<1,>=0.23.0->openai) (0.14.0)
+Requirement already satisfied: annotated-types>=0.6.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from pydantic<3,>=1.9.0->openai) (0.7.0)
+Requirement already satisfied: pydantic-core==2.33.1 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from pydantic<3,>=1.9.0->openai) (2.33.1)
+Requirement already satisfied: typing-inspection>=0.4.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from pydantic<3,>=1.9.0->openai) (0.4.0)
+Requirement already satisfied: colorama in c:\users\administrator\appdata\roaming\python\python312\site-packages (from tqdm>4->openai) (0.4.6)
+
+2025-05-02 11:50:19,463 - gpt_processor_installer_gui - DEBUG - Test dependency install stderr: 
+[notice] A new release of pip is available: 24.3.1 -> 25.1
+[notice] To update, run: python.exe -m pip install --upgrade pip
+
+2025-05-02 11:50:19,463 - gpt_processor_installer_gui - INFO - OpenAI package installed for test.
+2025-05-02 11:50:19,468 - gpt_processor_installer_gui - DEBUG - Running command: ['C:\\Python312\\python.exe', 'C:\\researcher3rd\\fpf\\gpt_processor_main.py', '--verbose', '--prompt', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt', '--input_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', '--output_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output']
+2025-05-02 11:50:20,295 - gpt_processor_installer_gui - DEBUG - Command output: 
+2025-05-02 11:50:20,297 - gpt_processor_installer_gui - DEBUG - Command error: 2025-05-02 11:48:17,929 - gpt_processor - DEBUG - gpt_processor_main.py:main:259 - Parsed CLI args: {'config': None, 'log_file': None, 'verbose': True, 'prompt': ['C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt'], 'input_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', 'output_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output', 'model': None, 'temperature': None, 'max_tokens': None}
+2025-05-02 11:48:17,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:279 - Configuration loaded from C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\default_config.yaml: {'prompts_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts', 'input_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', 'output_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output', 'provider': 'openrouter', 'openai': <__main__.Config.ProviderConfig object at 0x000001D4A20CA6F0>, 'openrouter': <__main__.Config.ProviderConfig object at 0x000001D4A275C170>}
+2025-05-02 11:48:17,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:308 - Prompt files: ['C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt']
+2025-05-02 11:48:17,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:309 - Input directory: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input
+2025-05-02 11:48:17,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:310 - Output directory: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output
+2025-05-02 11:48:17,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:322 - System prompt content:
+You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries.
+2025-05-02 11:48:17,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:331 - Input files: ['standard_prompt.txt']
+2025-05-02 11:48:17,944 - gpt_processor - DEBUG - gpt_processor_main.py:process_file:346 - Processing file: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt
+2025-05-02 11:48:17,944 - gpt_processor - DEBUG - gpt_processor_main.py:read_file:143 - Reading file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt'
+2025-05-02 11:48:17,949 - gpt_processor - DEBUG - gpt_processor_main.py:read_file:146 - Read file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt', length 115
+2025-05-02 11:48:17,949 - gpt_processor - DEBUG - gpt_processor_main.py:process_file:348 - User prompt length for 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt': 115
+2025-05-02 11:48:18,326 - gpt_processor - DEBUG - gpt_processor_main.py:send_prompt:195 - API request payload (openrouter): model=, temperature=0.7, max_tokens=1500, messages=[{'role': 'system', 'content': "You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries."}, {'role': 'user', 'content': "You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries."}]
+2025-05-02 11:48:20,013 - gpt_processor - ERROR - gpt_processor_main.py:send_prompt:208 - openrouter API error: Connection error.
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\connection_pool.py", line 216, in handle_request
+    raise exc from None
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\connection_pool.py", line 196, in handle_request
+    response = connection.handle_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\connection.py", line 101, in handle_request
+    return self._connection.handle_request(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\http11.py", line 143, in handle_request
+    raise exc
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\http11.py", line 93, in handle_request
+    self._send_request_headers(**kwargs)
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\http11.py", line 151, in _send_request_headers
+    with map_exceptions({h11.LocalProtocolError: LocalProtocolError}):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.LocalProtocolError: Illegal header value b'Bearer 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\n'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 969, in request
+    response = self._client.send(
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 914, in send
+    response = self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.LocalProtocolError: Illegal header value b'Bearer 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\n'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 197, in send_prompt
+    response = client.chat.completions.create(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_utils\_utils.py", line 287, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\resources\chat\completions\completions.py", line 925, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1239, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1001, in request
+    raise APIConnectionError(request=request) from err
+openai.APIConnectionError: Connection error.
+2025-05-02 11:48:20,109 - gpt_processor - WARNING - gpt_processor_main.py:send_prompt:209 - Generating mock response due to openrouter API error.
+2025-05-02 11:48:20,109 - gpt_processor - DEBUG - gpt_processor_main.py:write_file:154 - Writing file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output\response_standard_prompt.txt' with content length 133
+2025-05-02 11:48:20,109 - gpt_processor - DEBUG - gpt_processor_main.py:write_file:157 - Wrote file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output\response_standard_prompt.txt', length 133
+
+2025-05-02 11:50:20,307 - gpt_processor_installer_gui - INFO - Test completed successfully.
+2025-05-02 11:50:54,058 - gpt_processor_installer_gui - INFO - Updated config file at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\default_config.yaml' with provider 'OpenRouter' and model 'google/gemini-2.5-flash-preview'
+2025-05-02 11:51:03,084 - gpt_processor_installer_gui - DEBUG - Starting run_test with install_dir=C:/researcher3rd/test4fpf/filepromptforge\filepromptforge, executable_path=C:\researcher3rd\fpf\gpt_processor_main.py
+2025-05-02 11:51:03,084 - gpt_processor_installer_gui - DEBUG - Install directory exists: True
+2025-05-02 11:51:03,084 - gpt_processor_installer_gui - DEBUG - Input directory path: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input, exists: True
+2025-05-02 11:51:03,084 - gpt_processor_installer_gui - DEBUG - Input directory contents: ['standard_prompt.txt']
+2025-05-02 11:51:05,319 - gpt_processor_installer_gui - DEBUG - Test dependency install stdout: Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: openai in c:\users\administrator\appdata\roaming\python\python312\site-packages (1.76.0)
+Requirement already satisfied: anyio<5,>=3.5.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (4.6.2.post1)
+Requirement already satisfied: distro<2,>=1.7.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (1.9.0)
+Requirement already satisfied: httpx<1,>=0.23.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (0.28.1)
+Requirement already satisfied: jiter<1,>=0.4.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (0.6.1)
+Requirement already satisfied: pydantic<3,>=1.9.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (2.11.3)
+Requirement already satisfied: sniffio in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (1.3.1)
+Requirement already satisfied: tqdm>4 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (4.66.5)
+Requirement already satisfied: typing-extensions<5,>=4.11 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from openai) (4.12.2)
+Requirement already satisfied: idna>=2.8 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from anyio<5,>=3.5.0->openai) (3.10)
+Requirement already satisfied: certifi in c:\users\administrator\appdata\roaming\python\python312\site-packages (from httpx<1,>=0.23.0->openai) (2025.4.26)
+Requirement already satisfied: httpcore==1.* in c:\users\administrator\appdata\roaming\python\python312\site-packages (from httpx<1,>=0.23.0->openai) (1.0.6)
+Requirement already satisfied: h11<0.15,>=0.13 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from httpcore==1.*->httpx<1,>=0.23.0->openai) (0.14.0)
+Requirement already satisfied: annotated-types>=0.6.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from pydantic<3,>=1.9.0->openai) (0.7.0)
+Requirement already satisfied: pydantic-core==2.33.1 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from pydantic<3,>=1.9.0->openai) (2.33.1)
+Requirement already satisfied: typing-inspection>=0.4.0 in c:\users\administrator\appdata\roaming\python\python312\site-packages (from pydantic<3,>=1.9.0->openai) (0.4.0)
+Requirement already satisfied: colorama in c:\users\administrator\appdata\roaming\python\python312\site-packages (from tqdm>4->openai) (0.4.6)
+
+2025-05-02 11:51:05,324 - gpt_processor_installer_gui - DEBUG - Test dependency install stderr: 
+[notice] A new release of pip is available: 24.3.1 -> 25.1
+[notice] To update, run: python.exe -m pip install --upgrade pip
+
+2025-05-02 11:51:05,324 - gpt_processor_installer_gui - INFO - OpenAI package installed for test.
+2025-05-02 11:51:05,326 - gpt_processor_installer_gui - DEBUG - Running command: ['C:\\Python312\\python.exe', 'C:\\researcher3rd\\fpf\\gpt_processor_main.py', '--verbose', '--prompt', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt', '--input_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', '--output_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output']
+2025-05-02 11:52:26,142 - gpt_processor_installer_gui - DEBUG - Command output: 
+2025-05-02 11:52:26,142 - gpt_processor_installer_gui - DEBUG - Command output: 
+2025-05-02 11:52:26,142 - gpt_processor_installer_gui - DEBUG - Command error: 2025-05-02 11:51:08,941 - gpt_processor - DEBUG - gpt_processor_main.py:main:259 - Parsed CLI args: {'config': None, 'log_file': None, 'verbose': True, 'prompt': ['C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt'], 'input_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', 'output_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output', 'model': None, 'temperature': None, 'max_tokens': None}
+2025-05-02 11:51:08,943 - gpt_processor - DEBUG - gpt_processor_main.py:main:279 - Configuration loaded from C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\default_config.yaml: {'prompts_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts', 'input_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', 'output_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output', 'provider': 'openrouter', 'openai': <__main__.Config.ProviderConfig object at 0x000001DE46C822A0>, 'openrouter': <__main__.Config.ProviderConfig object at 0x000001DE46CC0290>}
+2025-05-02 11:51:08,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:308 - Prompt files: ['C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt']
+2025-05-02 11:51:08,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:309 - Input directory: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input
+2025-05-02 11:51:08,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:310 - Output directory: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output
+2025-05-02 11:51:08,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:322 - System prompt content:
+You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries.
+2025-05-02 11:51:08,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:331 - Input files: ['standard_prompt.txt']
+2025-05-02 11:51:08,944 - gpt_processor - DEBUG - gpt_processor_main.py:process_file:346 - Processing file: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt
+2025-05-02 11:51:08,944 - gpt_processor - DEBUG - gpt_processor_main.py:read_file:143 - Reading file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt'
+2025-05-02 11:51:08,945 - gpt_processor - DEBUG - gpt_processor_main.py:read_file:146 - Read file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt', length 115
+2025-05-02 11:51:08,945 - gpt_processor - DEBUG - gpt_processor_main.py:process_file:348 - User prompt length for 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt': 115
+2025-05-02 11:51:09,346 - gpt_processor - DEBUG - gpt_processor_main.py:send_prompt:195 - API request payload (openrouter): model=google/gemini-2.5-flash-preview, temperature=0.7, max_tokens=1500, messages=[{'role': 'system', 'content': "You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries."}, {'role': 'user', 'content': "You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries."}]
+2025-05-02 11:51:12,990 - gpt_processor - ERROR - gpt_processor_main.py:send_prompt:208 - openrouter API error: Connection error.
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\connection_pool.py", line 216, in handle_request
+    raise exc from None
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\connection_pool.py", line 196, in handle_request
+    response = connection.handle_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\connection.py", line 101, in handle_request
+    return self._connection.handle_request(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\http11.py", line 143, in handle_request
+    raise exc
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\http11.py", line 93, in handle_request
+    self._send_request_headers(**kwargs)
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\http11.py", line 151, in _send_request_headers
+    with map_exceptions({h11.LocalProtocolError: LocalProtocolError}):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.LocalProtocolError: Illegal header value b'Bearer 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\n'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 969, in request
+    response = self._client.send(
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 914, in send
+    response = self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.LocalProtocolError: Illegal header value b'Bearer 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\n'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 197, in send_prompt
+    response = client.chat.completions.create(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_utils\_utils.py", line 287, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\resources\chat\completions\completions.py", line 925, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1239, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1001, in request
+    raise APIConnectionError(request=request) from err
+openai.APIConnectionError: Connection error.
+2025-05-02 11:51:13,106 - gpt_processor - WARNING - gpt_processor_main.py:send_prompt:209 - Generating mock response due to openrouter API error.
+2025-05-02 11:51:13,106 - gpt_processor - DEBUG - gpt_processor_main.py:write_file:154 - Writing file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output\response_standard_prompt.txt' with content length 133
+2025-05-02 11:51:13,106 - gpt_processor - DEBUG - gpt_processor_main.py:write_file:157 - Wrote file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output\response_standard_prompt.txt', length 133
+Traceback (most recent call last):
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 362, in <module>
+    main()
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 339, in main
+    time.sleep(60)
+KeyboardInterrupt
+
+2025-05-02 11:52:26,142 - gpt_processor_installer_gui - DEBUG - Command error: 2025-05-02 11:50:25,574 - gpt_processor - DEBUG - gpt_processor_main.py:main:259 - Parsed CLI args: {'config': None, 'log_file': None, 'verbose': True, 'prompt': ['C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt'], 'input_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', 'output_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output', 'model': None, 'temperature': None, 'max_tokens': None}
+2025-05-02 11:50:25,599 - gpt_processor - DEBUG - gpt_processor_main.py:main:279 - Configuration loaded from C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\default_config.yaml: {'prompts_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts', 'input_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', 'output_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output', 'provider': 'openrouter', 'openai': <__main__.Config.ProviderConfig object at 0x000001BFBD0E3770>, 'openrouter': <__main__.Config.ProviderConfig object at 0x000001BFBD0E0A70>}
+2025-05-02 11:50:25,599 - gpt_processor - DEBUG - gpt_processor_main.py:main:308 - Prompt files: ['C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt']
+2025-05-02 11:50:25,599 - gpt_processor - DEBUG - gpt_processor_main.py:main:309 - Input directory: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input
+2025-05-02 11:50:25,599 - gpt_processor - DEBUG - gpt_processor_main.py:main:310 - Output directory: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output
+2025-05-02 11:50:25,614 - gpt_processor - DEBUG - gpt_processor_main.py:main:322 - System prompt content:
+You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries.
+2025-05-02 11:50:25,614 - gpt_processor - DEBUG - gpt_processor_main.py:main:331 - Input files: ['standard_prompt.txt']
+2025-05-02 11:50:25,614 - gpt_processor - DEBUG - gpt_processor_main.py:process_file:346 - Processing file: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt
+2025-05-02 11:50:25,614 - gpt_processor - DEBUG - gpt_processor_main.py:read_file:143 - Reading file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt'
+2025-05-02 11:50:25,614 - gpt_processor - DEBUG - gpt_processor_main.py:read_file:146 - Read file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt', length 115
+2025-05-02 11:50:25,619 - gpt_processor - DEBUG - gpt_processor_main.py:process_file:348 - User prompt length for 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt': 115
+2025-05-02 11:50:26,203 - gpt_processor - DEBUG - gpt_processor_main.py:send_prompt:195 - API request payload (openrouter): model=, temperature=0.7, max_tokens=1500, messages=[{'role': 'system', 'content': "You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries."}, {'role': 'user', 'content': "You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries."}]
+2025-05-02 11:50:31,330 - gpt_processor - ERROR - gpt_processor_main.py:send_prompt:208 - openrouter API error: Error code: 400 - {'error': {'message': 'No models provided', 'code': 400}, 'user_id': 'user_2nlT1S5wIPbSHvedWRsMkWS8ezF'}
+Traceback (most recent call last):
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 197, in send_prompt
+    response = client.chat.completions.create(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_utils\_utils.py", line 287, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\resources\chat\completions\completions.py", line 925, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1239, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1034, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.BadRequestError: Error code: 400 - {'error': {'message': 'No models provided', 'code': 400}, 'user_id': 'user_2nlT1S5wIPbSHvedWRsMkWS8ezF'}
+2025-05-02 11:50:31,385 - gpt_processor - WARNING - gpt_processor_main.py:send_prompt:209 - Generating mock response due to openrouter API error.
+2025-05-02 11:50:31,385 - gpt_processor - DEBUG - gpt_processor_main.py:write_file:154 - Writing file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output\response_standard_prompt.txt' with content length 133
+2025-05-02 11:50:31,385 - gpt_processor - DEBUG - gpt_processor_main.py:write_file:157 - Wrote file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output\response_standard_prompt.txt', length 133
+Traceback (most recent call last):
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 362, in <module>
+    main()
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 339, in main
+    time.sleep(60)
+KeyboardInterrupt
+
+2025-05-02 11:52:26,150 - gpt_processor_installer_gui - ERROR - Subprocess error: Command '['C:\\Python312\\python.exe', 'C:\\researcher3rd\\fpf\\gpt_processor_main.py', '--verbose', '--prompt', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt', '--input_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', '--output_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output']' returned non-zero exit status 3221225786.
+2025-05-02 11:52:26,156 - gpt_processor_installer_gui - ERROR - Subprocess error: Command '['C:\\Python312\\python.exe', 'C:\\researcher3rd\\fpf\\gpt_processor_main.py', '--verbose', '--prompt', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt', '--input_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', '--output_dir', 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output']' returned non-zero exit status 3221225786.
+2025-05-02 11:52:26,156 - gpt_processor_installer_gui - ERROR - Command output: 
+2025-05-02 11:52:26,156 - gpt_processor_installer_gui - ERROR - Command output: 
+2025-05-02 11:52:26,156 - gpt_processor_installer_gui - ERROR - Command stderr: 2025-05-02 11:51:08,941 - gpt_processor - DEBUG - gpt_processor_main.py:main:259 - Parsed CLI args: {'config': None, 'log_file': None, 'verbose': True, 'prompt': ['C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt'], 'input_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', 'output_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output', 'model': None, 'temperature': None, 'max_tokens': None}
+2025-05-02 11:51:08,943 - gpt_processor - DEBUG - gpt_processor_main.py:main:279 - Configuration loaded from C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\default_config.yaml: {'prompts_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts', 'input_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', 'output_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output', 'provider': 'openrouter', 'openai': <__main__.Config.ProviderConfig object at 0x000001DE46C822A0>, 'openrouter': <__main__.Config.ProviderConfig object at 0x000001DE46CC0290>}
+2025-05-02 11:51:08,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:308 - Prompt files: ['C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt']
+2025-05-02 11:51:08,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:309 - Input directory: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input
+2025-05-02 11:51:08,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:310 - Output directory: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output
+2025-05-02 11:51:08,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:322 - System prompt content:
+You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries.
+2025-05-02 11:51:08,944 - gpt_processor - DEBUG - gpt_processor_main.py:main:331 - Input files: ['standard_prompt.txt']
+2025-05-02 11:51:08,944 - gpt_processor - DEBUG - gpt_processor_main.py:process_file:346 - Processing file: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt
+2025-05-02 11:51:08,944 - gpt_processor - DEBUG - gpt_processor_main.py:read_file:143 - Reading file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt'
+2025-05-02 11:51:08,945 - gpt_processor - DEBUG - gpt_processor_main.py:read_file:146 - Read file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt', length 115
+2025-05-02 11:51:08,945 - gpt_processor - DEBUG - gpt_processor_main.py:process_file:348 - User prompt length for 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt': 115
+2025-05-02 11:51:09,346 - gpt_processor - DEBUG - gpt_processor_main.py:send_prompt:195 - API request payload (openrouter): model=google/gemini-2.5-flash-preview, temperature=0.7, max_tokens=1500, messages=[{'role': 'system', 'content': "You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries."}, {'role': 'user', 'content': "You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries."}]
+2025-05-02 11:51:12,990 - gpt_processor - ERROR - gpt_processor_main.py:send_prompt:208 - openrouter API error: Connection error.
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\connection_pool.py", line 216, in handle_request
+    raise exc from None
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\connection_pool.py", line 196, in handle_request
+    response = connection.handle_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\connection.py", line 101, in handle_request
+    return self._connection.handle_request(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\http11.py", line 143, in handle_request
+    raise exc
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\http11.py", line 93, in handle_request
+    self._send_request_headers(**kwargs)
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_sync\http11.py", line 151, in _send_request_headers
+    with map_exceptions({h11.LocalProtocolError: LocalProtocolError}):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.LocalProtocolError: Illegal header value b'Bearer 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\n'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 969, in request
+    response = self._client.send(
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 914, in send
+    response = self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.LocalProtocolError: Illegal header value b'Bearer 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\n'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 197, in send_prompt
+    response = client.chat.completions.create(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_utils\_utils.py", line 287, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\resources\chat\completions\completions.py", line 925, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1239, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1001, in request
+    raise APIConnectionError(request=request) from err
+openai.APIConnectionError: Connection error.
+2025-05-02 11:51:13,106 - gpt_processor - WARNING - gpt_processor_main.py:send_prompt:209 - Generating mock response due to openrouter API error.
+2025-05-02 11:51:13,106 - gpt_processor - DEBUG - gpt_processor_main.py:write_file:154 - Writing file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output\response_standard_prompt.txt' with content length 133
+2025-05-02 11:51:13,106 - gpt_processor - DEBUG - gpt_processor_main.py:write_file:157 - Wrote file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output\response_standard_prompt.txt', length 133
+Traceback (most recent call last):
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 362, in <module>
+    main()
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 339, in main
+    time.sleep(60)
+KeyboardInterrupt
+
+2025-05-02 11:52:26,156 - gpt_processor_installer_gui - ERROR - Command stderr: 2025-05-02 11:50:25,574 - gpt_processor - DEBUG - gpt_processor_main.py:main:259 - Parsed CLI args: {'config': None, 'log_file': None, 'verbose': True, 'prompt': ['C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt'], 'input_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', 'output_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output', 'model': None, 'temperature': None, 'max_tokens': None}
+2025-05-02 11:50:25,599 - gpt_processor - DEBUG - gpt_processor_main.py:main:279 - Configuration loaded from C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\default_config.yaml: {'prompts_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts', 'input_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\input', 'output_dir': 'C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\output', 'provider': 'openrouter', 'openai': <__main__.Config.ProviderConfig object at 0x000001BFBD0E3770>, 'openrouter': <__main__.Config.ProviderConfig object at 0x000001BFBD0E0A70>}
+2025-05-02 11:50:25,599 - gpt_processor - DEBUG - gpt_processor_main.py:main:308 - Prompt files: ['C:/researcher3rd/test4fpf/filepromptforge\\filepromptforge\\prompts\\standard_prompt.txt']
+2025-05-02 11:50:25,599 - gpt_processor - DEBUG - gpt_processor_main.py:main:309 - Input directory: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input
+2025-05-02 11:50:25,599 - gpt_processor - DEBUG - gpt_processor_main.py:main:310 - Output directory: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output
+2025-05-02 11:50:25,614 - gpt_processor - DEBUG - gpt_processor_main.py:main:322 - System prompt content:
+You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries.
+2025-05-02 11:50:25,614 - gpt_processor - DEBUG - gpt_processor_main.py:main:331 - Input files: ['standard_prompt.txt']
+2025-05-02 11:50:25,614 - gpt_processor - DEBUG - gpt_processor_main.py:process_file:346 - Processing file: C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt
+2025-05-02 11:50:25,614 - gpt_processor - DEBUG - gpt_processor_main.py:read_file:143 - Reading file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt'
+2025-05-02 11:50:25,614 - gpt_processor - DEBUG - gpt_processor_main.py:read_file:146 - Read file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt', length 115
+2025-05-02 11:50:25,619 - gpt_processor - DEBUG - gpt_processor_main.py:process_file:348 - User prompt length for 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt': 115
+2025-05-02 11:50:26,203 - gpt_processor - DEBUG - gpt_processor_main.py:send_prompt:195 - API request payload (openrouter): model=, temperature=0.7, max_tokens=1500, messages=[{'role': 'system', 'content': "You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries."}, {'role': 'user', 'content': "You are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries."}]
+2025-05-02 11:50:31,330 - gpt_processor - ERROR - gpt_processor_main.py:send_prompt:208 - openrouter API error: Error code: 400 - {'error': {'message': 'No models provided', 'code': 400}, 'user_id': 'user_2nlT1S5wIPbSHvedWRsMkWS8ezF'}
+Traceback (most recent call last):
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 197, in send_prompt
+    response = client.chat.completions.create(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_utils\_utils.py", line 287, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\resources\chat\completions\completions.py", line 925, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1239, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Roaming\Python\Python312\site-packages\openai\_base_client.py", line 1034, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.BadRequestError: Error code: 400 - {'error': {'message': 'No models provided', 'code': 400}, 'user_id': 'user_2nlT1S5wIPbSHvedWRsMkWS8ezF'}
+2025-05-02 11:50:31,385 - gpt_processor - WARNING - gpt_processor_main.py:send_prompt:209 - Generating mock response due to openrouter API error.
+2025-05-02 11:50:31,385 - gpt_processor - DEBUG - gpt_processor_main.py:write_file:154 - Writing file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output\response_standard_prompt.txt' with content length 133
+2025-05-02 11:50:31,385 - gpt_processor - DEBUG - gpt_processor_main.py:write_file:157 - Wrote file 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\output\response_standard_prompt.txt', length 133
+Traceback (most recent call last):
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 362, in <module>
+    main()
+  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 339, in main
+    time.sleep(60)
+KeyboardInterrupt
+
