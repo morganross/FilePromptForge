@@ -1,7 +1,0 @@
-2025-05-02 11:54:59,096 - gpt_processor - WARNING - gpt_processor_main.py:main:283 - No configuration file found. Using default configuration.
-2025-05-02 11:54:59,097 - gpt_processor - ERROR - gpt_processor_main.py:main:344 - Unhandled exception in main
-Traceback (most recent call last):
-  File "C:\researcher3rd\fpf\gpt_processor_main.py", line 291, in main
-    prompt_files = args.prompt if args.prompt else os.listdir(config.prompts_dir)
-                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\researcher3rd\\fpf\\prompts'
