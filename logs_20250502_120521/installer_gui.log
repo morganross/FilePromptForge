@@ -1,0 +1,12 @@
+2025-05-02 12:05:37,180 - gpt_processor_installer_gui - INFO - Successfully fetched and filtered 324 text models from OpenRouter.
+2025-05-02 12:05:56,523 - gpt_processor_installer_gui - INFO - Created default prompt file at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\prompts\standard_prompt.txt'.
+2025-05-02 12:05:56,527 - gpt_processor_installer_gui - INFO - Created default prompt file at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt'.
+2025-05-02 12:05:56,527 - gpt_processor_installer_gui - INFO - Created default config file at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\default_config.yaml'.
+2025-05-02 12:05:56,532 - gpt_processor_installer_gui - INFO - Copied main executable to 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge'.
+2025-05-02 12:05:56,532 - gpt_processor_installer_gui - INFO - Added 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge' to the system PATH.
+2025-05-02 12:06:16,841 - gpt_processor_installer_gui - INFO - Created default prompt file at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\prompts\standard_prompt.txt'.
+2025-05-02 12:06:16,844 - gpt_processor_installer_gui - INFO - Created default prompt file at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\input\standard_prompt.txt'.
+2025-05-02 12:06:16,844 - gpt_processor_installer_gui - INFO - Created default config file at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\default_config.yaml'.
+2025-05-02 12:06:16,849 - gpt_processor_installer_gui - INFO - Copied main executable to 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge'.
+2025-05-02 12:06:16,850 - gpt_processor_installer_gui - INFO - 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge' is already in the system PATH.
+2025-05-02 12:06:23,873 - gpt_processor_installer_gui - INFO - Updated config file at 'C:/researcher3rd/test4fpf/filepromptforge\filepromptforge\default_config.yaml' with provider 'OpenRouter' and model 'google/gemini-2.5-flash-preview'

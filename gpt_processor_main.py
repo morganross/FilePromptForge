@@ -67,9 +67,18 @@ class Config:
             'prompts_dir': os.path.join(base_dir, 'prompts'),
             'input_dir': os.path.join(base_dir, 'input'),
             'output_dir': os.path.join(base_dir, 'output'),
+            'provider': 'OpenAI', # Default provider
             'openai': {
                 'api_key': os.getenv('OPENAI_API_KEY'),
                 'model': 'gpt-4',
+                'temperature': 0.7,
+                'max_tokens': 1500
+            },
+            'openrouter': {
+                'api_key': os.getenv('OPENROUTER_API_KEY', '').strip(),
+                # Temporary print for verification
+                'raw_api_key': os.getenv('OPENROUTER_API_KEY', ''),
+                'model': '', # OpenRouter models can be specified in the prompt
                 'temperature': 0.7,
                 'max_tokens': 1500
             }
@@ -83,17 +92,21 @@ class Config:
             self.prompts_dir = os.path.join(base_dir, user_config.get('prompts_dir', 'prompts'))
             self.input_dir = os.path.join(base_dir, user_config.get('input_dir', 'input'))
             self.output_dir = os.path.join(base_dir, user_config.get('output_dir', 'output'))
-            self.openai = self.OpenAI(user_config.get('openai', {}))
+            self.provider = user_config.get('provider', 'OpenAI')
+            self.openai = self.ProviderConfig(user_config.get('openai', {}))
+            self.openrouter = self.ProviderConfig(user_config.get('openrouter', {}))
         else:
             self.prompts_dir = default_config['prompts_dir']
             self.input_dir = default_config['input_dir']
             self.output_dir = default_config['output_dir']
-            self.openai = self.OpenAI(default_config['openai'])
+            self.provider = default_config['provider']
+            self.openai = self.ProviderConfig(default_config['openai'])
+            self.openrouter = self.ProviderConfig(default_config['openrouter'])
 
-    class OpenAI:
+    class ProviderConfig:
         def __init__(self, config):
-            self.api_key = config.get('api_key', 'DUMMY_API_KEY')
-            self.model = config.get('model', 'gpt-4')
+            self.api_key = config.get('api_key', 'DUMMY_API_KEY').strip()
+            self.model = config.get('model', '')
             self.temperature = config.get('temperature', 0.7)
             self.max_tokens = config.get('max_tokens', 1500)
 
@@ -149,40 +162,53 @@ class FileHandler:
 
 # APIClient class
 class APIClient:
-    def __init__(self, api_key, model, temperature, max_tokens, max_retries=3, backoff_factor=2):
-        self.api_key = api_key
-        self.model = model
-        self.temperature = temperature
-        self.max_tokens = max_tokens
+    def __init__(self, config, max_retries=3, backoff_factor=2):
+        self.config = config
         self.max_retries = max_retries
         self.backoff_factor = backoff_factor
 
     def send_prompt(self, system_prompt, user_prompt, logger):
-        if not self.api_key or self.api_key == 'DUMMY_API_KEY':
-            logger.warning("No valid API key. Generating mock response.")
+        provider = self.config.provider
+        if provider.lower() == "openai":
+            api_key = self.config.openai.api_key
+            model = self.config.openai.model
+            temperature = self.config.openai.temperature
+            max_tokens = self.config.openai.max_tokens
+            api_base = None # Use default OpenAI API base
+        elif provider.lower() == "openrouter":
+            api_key = self.config.openrouter.api_key
+            model = self.config.openrouter.model
+            temperature = self.config.openrouter.temperature
+            max_tokens = self.config.openrouter.max_tokens
+            api_base = "https://openrouter.ai/api/v1"
+        else:
+            logger.error(f"Unknown API provider: {provider}. Generating mock response.")
             return f"Mock response to: {user_prompt}"
 
-        client = OpenAI(api_key=self.api_key)
+        if not api_key or api_key == 'DUMMY_API_KEY':
+            logger.warning(f"No valid API key for {provider}. Generating mock response.")
+            return f"Mock response to: {user_prompt}"
+
+        client = OpenAI(api_key=api_key, base_url=api_base)
         messages = [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
         ]
-        logger.debug(f"API request payload: model={self.model}, temperature={self.temperature}, max_tokens={self.max_tokens}, messages={messages}")
+        logger.debug(f"API request payload ({provider}): model={model}, temperature={temperature}, max_tokens={max_tokens}, messages={messages}")
         try:
             response = client.chat.completions.create(
-                model=self.model,
+                model=model,
                 messages=messages,
-                temperature=self.temperature,
-                max_tokens=self.max_tokens
+                temperature=temperature,
+                max_tokens=max_tokens
             )
-            logger.debug(f"API raw response: {response}")
+            logger.debug(f"API raw response ({provider}): {response}")
             result = response.choices[0].message.content.strip()
-            logger.debug(f"API response content: {result}")
-            logger.debug(f"API response: {result}")
+            logger.debug(f"API response content ({provider}): {result}")
             return result
         except Exception as e:
-            logger.exception(f"OpenAI API error: {e}")
-            logger.warning("Generating mock response due to API error.")
+            logger.exception(f"{provider} API error: {e}")
+            logger.warning(f"Generating mock response due to {provider} API error.")
             return f"Mock response to: {user_prompt}"
 
 # Function to create default prompt file if not exists
@@ -265,9 +291,20 @@ def main():
         prompt_files = args.prompt if args.prompt else os.listdir(config.prompts_dir)
         input_dir = args.input_dir if args.input_dir else config.input_dir
         output_dir = args.output_dir if args.output_dir else config.output_dir
-        model = args.model if args.model else config.openai.model
-        temperature = args.temperature if args.temperature else config.openai.temperature
-        max_tokens = args.max_tokens if args.max_tokens else config.openai.max_tokens
+        
+        # Determine model based on provider from config, overridden by CLI arg
+        if args.model:
+            model = args.model
+        elif config.provider == "OpenAI":
+            model = config.openai.model
+        elif config.provider == "OpenRouter":
+            model = config.openrouter.model
+        else:
+            model = "gpt-4" # Default model if provider is unknown or not set
+
+        temperature = args.temperature if args.temperature else config.openai.temperature # Assuming temperature is same for both for now
+        max_tokens = args.max_tokens if args.max_tokens else config.openai.max_tokens # Assuming max_tokens is same for both for now
+
 
         # Log paths
         logger.debug(f"Prompt files: {prompt_files}")
@@ -288,7 +325,8 @@ def main():
 
         # Initialize file handler and API client
         file_handler = FileHandler(input_dir, output_dir)
-        api_client = APIClient(config.openai.api_key, model, temperature, max_tokens)
+        api_client = APIClient(config, max_retries=3, backoff_factor=2)
+
 
         # List input files
         input_files = file_handler.list_input_files()
