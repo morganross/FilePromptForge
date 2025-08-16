@@ -49,9 +49,9 @@ In this context, deep research = the model autonomously plans multi‑step web q
 - **OpenAI — o4‑mini‑deep‑research**
 - **Perplexity — sonar‑deep‑research**
 
-## Deep research as a flag does not exist
+Deep research as a flag does not exist
 
-  ### OpenRouter — Web Search (API)
+### OpenRouter — Web Search (API)
 
 OpenRouter provides a first‑party *Web Search* capability you can attach to **any** model via its **web** plugin or by appending `:online` to the model slug. It also exposes “non‑plugin” web search controls for models with native browsing.
 
