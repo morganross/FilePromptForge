@@ -41,7 +41,7 @@
 
 ## Deep Research (API‑only)
 
-**What we mean by “deep research.”** In this context, deep research = the model autonomously plans multi‑step web queries, fetches/reads many sources, tracks what’s been covered, and synthesizes a long, cited write‑up — all from a single API call (you don’t wire separate steps yourself).
+In this context, deep research = the model autonomously plans multi‑step web queries, fetches/reads many sources, tracks what’s been covered, and synthesizes a long, cited write‑up — all from a single API call (Behind the scenes DR is multi agent on the server side, but they present as one-shot to the api user).
 
 ### Models that are *natively* deep‑research (choose the model; no extra flag)
 
@@ -49,13 +49,11 @@
 - **OpenAI — o4‑mini‑deep‑research**
 - **Perplexity — sonar‑deep‑research**
 
-These models run a built‑in multi‑step research pipeline (iterative search → read → analyze → cite → synthesize). Use them when you want comprehensive, multi‑source reports with citations from one request.
-
 ## Deep research as a flag does not exist
 
   ### OpenRouter — Web Search (API)
 
-**Short answer:** Yes. OpenRouter provides a first‑party *Web Search* capability you can attach to **any** model via its **web** plugin or by appending `:online` to the model slug. It also exposes “non‑plugin” web search controls for models with native browsing.
+OpenRouter provides a first‑party *Web Search* capability you can attach to **any** model via its **web** plugin or by appending `:online` to the model slug. It also exposes “non‑plugin” web search controls for models with native browsing.
 
 **Two ways to add web search**
 
@@ -88,9 +86,7 @@ These models run a built‑in multi‑step research pipeline (iterative search �
 }
 ```
 
-**Citations / parsing:** OpenRouter standardizes source citations in responses via `annotations` with `type: "url_citation"`, so you can render links consistently.
 
-> You can also wire your own search via standard tool/function calling, but the plugin / `:online` path is the simplest provider‑hosted option. 
 
 ## Daily Free API Usage — OpenRouter Models
 
