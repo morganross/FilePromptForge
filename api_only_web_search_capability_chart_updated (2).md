@@ -3,7 +3,7 @@
 **Legend**\
 **Native Web Search** = model itself fetches live web pages via the provider’s API.\
 **API‑based Web Search** = provider offers a first‑party search/browsing tool/connector you can enable in API calls.\
-THIS CHART IS NOT FOR AGENTS, ONLY ONE SHOT, so no tavily, brower, or mcp. Most models are trained on tool calling now, and that is outside the scope of this project.
+
 
 | Provider        | Model(s)                                                      | Native Web Search? | API‑based Web Search? (provider tool) | Notes                                                                                                                                                  |
 | --------------- | ------------------------------------------------------------- | ------------------ | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
