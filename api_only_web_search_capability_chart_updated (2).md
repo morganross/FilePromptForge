@@ -51,18 +51,7 @@
 
 These models run a built‑in multi‑step research pipeline (iterative search → read → analyze → cite → synthesize). Use them when you want comprehensive, multi‑source reports with citations from one request.
 
-### “Deep research as a flag” (do any models expose a dedicated switch?)
-
-- **No explicit, provider‑defined ****\`\`**** flag** exists for the other models in this chart as of now. Instead, they expose **first‑party web‑search tools** (e.g., OpenAI web\_search, Anthropic web search, Google Search Grounding, xAI Live Search, Mistral/Cohere/Zhipu/Baidu/Tencent/Moonshot/iFLYTEK search tools).
-- You can *approximate* deeper runs by tuning each provider’s knobs (examples):
-  - **xAI**: `search_parameters.mode` (`auto`/`on`) and limits like `max_search_results`; optional citations.
-  - **OpenAI / Anthropic / Google**: enable the provider search tool and prompt for breadth/iterations; these perform search‑augmented answers but are **not** the same pipeline as the native deep‑research models above.
-
-### Practical guidance
-
-- Pick a **native deep‑research model** for long, multi‑source briefs or due‑diligence‑style reports (less glue code; built‑in citations and coverage tracking).
-- Use a **provider web‑search tool** on non‑DR models when you want fast, search‑grounded answers without the full multi‑step research loop. \
-  \
+## Deep research as a flag does not exist
 
   ### OpenRouter — Web Search (API)
 
