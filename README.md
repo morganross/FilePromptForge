@@ -1,305 +1,87 @@
-<<<<<<< HEAD
-todo
+# FilePromptForge — GPT Processor
 
-Cycle through API key
+Overview
+--------
+FilePromptForge is a small toolkit for batch-processing text files with an LLM. It includes:
+- A GUI installer (Tkinter) to create install folders, write defaults, copy the main executable, and run a quick test.
+- A main processing script that combines prompt files, reads input files, sends prompts to an LLM provider (OpenAI or OpenRouter), and writes responses to an output directory.
+- Documentation and helper files for configuration and usage.
 
-add prepend folder, write output to pretend folder check box
-(instructed to make list of reivisions, reads files, outputs list to prepend. intructions to carryout those revisons, reads prepend file then reads file again, outputs to output
+Features
+--------
+- Prompt management: combine multiple prompt files into a single system prompt.
+- File processing: process multiple input files sequentially and write model responses to the output directory.
+- Configurable provider: supports OpenAI and OpenRouter via configuration or environment variables.
+- Logging: configurable logging to console and to timestamped log files.
+- Installer GUI: creates required directories, default prompts and config, and can copy the main executable into the install directory.
 
-need not be a prepend folder, could do more robust inout handling, define behaviour for adding multiple folders to single run
+Important notes
+---------------
+- Some files in earlier versions contained unresolved Git merge markers. This README is the consolidated, cleaned version.
+- The GUI (gpt_processor_installer_gui.py) was intentionally not edited; it may still contain alternate sections depending on your repository history. Do not run or modify the GUI until you review it if you have a custom setup.
+- The main processor script no longer installs packages at import/runtime. Install dependencies with requirements.txt or pip before running.
 
-erse completed input files (good for stopping mid way)
+Installation
+------------
+1. Create a virtual environment (recommended) and activate it:
+   - Windows:
+       python -m venv .venv
+       .venv\Scripts\activate
+   - macOS / Linux:
+       python3 -m venv .venv
+       source .venv/bin/activate
 
+2. Install dependencies:
+   pip install -r requirements.txt
+   (If you don't have a requirements.txt, install at least: openai PyYAML python-dotenv)
 
+Usage
+-----
+1. Prepare directories (the installer GUI can create these):
+   - prompts/  (place one or more prompt files, e.g. standard_prompt.txt)
+   - input/    (place files you want processed)
+   - output/   (responses will be written here)
 
+2. Run the main processor:
+   python gpt_processor_main.py [options]
 
+CLI options supported:
+- --config <path>       Path to configuration YAML file
+- --prompt <files...>   One or more prompt filenames (from prompts/ directory)
+- --input_dir <path>    Directory containing input files
+- --output_dir <path>   Directory where responses will be saved
+- --model <model>       Model id to use (overrides config)
+- --temperature <val>   Temperature for the model
+- --max_tokens <int>    Max tokens for completions
+- --verbose             Enable verbose (debug) logging
+- --log_file <path>     Path to a specific log file
 
+Behavioral details
+------------------
+- If no config file is provided, the script looks for `default_config.yaml` next to the script and then falls back to environment variables (.env) and sensible defaults.
+- If no prompt files are passed on the CLI, the script loads all files in the `prompts/` directory.
+- If no API key is configured, the script will generate mock responses rather than calling the remote API.
+- The script processes input files sequentially and writes each response to `response_<original_filename>` in the output directory.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
---config: Path to the configuration file.
-
-Usage: --config <path_to_config_file>
-Example: --config config.yaml
---prompt: List of prompt files.
-
-Usage: --prompt <prompt_file1> <prompt_file2> ...
-Example: --prompt prompt1.txt prompt2.txt
---input_dir: Directory for input files.
-
-Usage: --input_dir <path_to_input_directory>
-Example: --input_dir ./input
---output_dir: Directory for output files.
-
-Usage: --output_dir <path_to_output_directory>
-Example: --output_dir ./output
---model: OpenAI model to use.
-
-Usage: --model <model_name>
-Example: --model gpt-4
---temperature: Temperature setting for the OpenAI model.
-
-Usage: --temperature <temperature_value>
-Example: --temperature 0.7
---max_tokens: Maximum number of tokens for the OpenAI model.
-
-Usage: --max_tokens <max_tokens_value>
-Example: --max_tokens 1500
---verbose: Enable verbose logging.
-
-Usage: --verbose
-Example: --verbose
---log_file: Path to log file.
-
-Usage: --log_file <path_to_log_file>
-Example: --log_file gpt_processor.log# FilePromtForge01
-# GPT Processor Application
-
-## Overview
-
-This repository contains scripts for installing and running a GPT processor application. The application processes input files by sending prompts to the OpenAI API and stores the responses in the output directory.
-
-## Features
-
-### GPT Processor Installer
-
-- **Directory Creation**: Creates necessary directories (`prompts/`, `input/`, `output/`).
-- **Executable Copying**: Copies the main application executable to the installation directory.
-- **Default Prompt File**: Creates a default prompt file if it doesn't exist.
-- **System PATH**: Optionally adds the installation directory to the system PATH.
-- **Logging**: Provides user-friendly logging and error handling.
-
-### GPT Processor Main Application
-
-- **Prompt Management**: Combines multiple prompt files into a single system prompt.
-- **File Processing**: Processes multiple input files concurrently and saves AI-generated responses to the output directory.
-- **Logging**: Comprehensive logging to console and optional log file.
-- **Concurrency**: Utilizes `ThreadPoolExecutor` for concurrent processing of input files.
-
-## Installation
-
-1. **Clone the Repository**:
-    ```sh
-    git clone https://github.com/morganross/FilePromtForge01.git
-    cd FilePromtForge01
-    ```
-
-2. **Install Dependencies**:
-    ```sh
-    pip install -r requirements.txt
-    ```
-
-3. **Run the Installer**:
-    ```sh
-    python gpt_processor_installer.py --main_executable path/to/gpt_processor.exe
-    ```
-    Options:
-    - `--install_dir`: Directory to install GPT Processor.
-    - `--add_to_path`: Add the installation directory to the system PATH.
-    - `--log_file`: Path to the log file.
-    - `--verbose`: Enable verbose logging.
-
-## Usage
-
-1. **Prepare Input Files**: Place the files you want to process in the `input` directory.
-
-2. **Run the Processor**:
-    ```sh
-    python gpt_processor_main.py
-    ```
-    Options:
-    - `--prompt`: Specify one or more prompt files to use.
-    - `--input_dir`: Specify input directory.
-    - `--output_dir`: Specify output directory.
-    - `--model`: Specify the OpenAI model to use.
-    - `--temperature`: Set the temperature for the API.
-    - `--max_tokens`: Set the maximum tokens for the API.
-    - `--config`: Path to configuration file.
-    - `--log_file`: Path to the log file.
-    - `--verbose`: Enable verbose logging.
-
-## Configuration
-
-The application can be configured using a YAML configuration file or environment variables. Example configuration:
-
-```yaml
+Configuration example (YAML)
+---------------------------
 openai:
   api_key: your_openai_api_key
   model: gpt-4
   temperature: 0.7
   max_tokens: 1500
-# FilePromptForge01
 
-=======
-todo
+prompts_dir: prompts
+input_dir: input
+output_dir: output
+provider: OpenAI
 
-Cycle through API key
+Recommendations & next steps
+---------------------------
+- Resolve any remaining merge conflicts in the repository history and remove duplicate files if desired.
+- Add or update a `requirements.txt` with the required packages for predictable installs.
+- Review the GUI file (gpt_processor_installer_gui.py) manually before running; it contains GUI logic and network calls (fetching OpenRouter models).
 
-add prepend folder, write output to pretend folder check box
-(instructed to make list of reivisions, reads files, outputs list to prepend. intructions to carryout those revisons, reads prepend file then reads file again, outputs to output
-
-need not be a prepend folder, could do more robust inout handling, define behaviour for adding multiple folders to single run
-
-erse completed input files (good for stopping mid way)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
---config: Path to the configuration file.
-
-Usage: --config <path_to_config_file>
-Example: --config config.yaml
---prompt: List of prompt files.
-
-Usage: --prompt <prompt_file1> <prompt_file2> ...
-Example: --prompt prompt1.txt prompt2.txt
---input_dir: Directory for input files.
-
-Usage: --input_dir <path_to_input_directory>
-Example: --input_dir ./input
---output_dir: Directory for output files.
-
-Usage: --output_dir <path_to_output_directory>
-Example: --output_dir ./output
---model: OpenAI model to use.
-
-Usage: --model <model_name>
-Example: --model gpt-4
---temperature: Temperature setting for the OpenAI model.
-
-Usage: --temperature <temperature_value>
-Example: --temperature 0.7
---max_tokens: Maximum number of tokens for the OpenAI model.
-
-Usage: --max_tokens <max_tokens_value>
-Example: --max_tokens 1500
---verbose: Enable verbose logging.
-
-Usage: --verbose
-Example: --verbose
---log_file: Path to log file.
-
-Usage: --log_file <path_to_log_file>
-Example: --log_file gpt_processor.log# FilePromtForge01
-# GPT Processor Application
-
-## Overview
-
-This repository contains scripts for installing and running a GPT processor application. The application processes input files by sending prompts to the OpenAI API and stores the responses in the output directory.
-
-## Features
-
-### GPT Processor Installer
-
-- **Directory Creation**: Creates necessary directories (`prompts/`, `input/`, `output/`).
-- **Executable Copying**: Copies the main application executable to the installation directory.
-- **Default Prompt File**: Creates a default prompt file if it doesn't exist.
-- **System PATH**: Optionally adds the installation directory to the system PATH.
-- **Logging**: Provides user-friendly logging and error handling.
-
-### GPT Processor Main Application
-
-- **Prompt Management**: Combines multiple prompt files into a single system prompt.
-- **File Processing**: Processes multiple input files concurrently and saves AI-generated responses to the output directory.
-- **Logging**: Comprehensive logging to console and optional log file.
-- **Concurrency**: Utilizes `ThreadPoolExecutor` for concurrent processing of input files.
-
-## Installation
-
-1. **Clone the Repository**:
-    ```sh
-    git clone https://github.com/morganross/FilePromtForge01.git
-    cd FilePromtForge01
-    ```
-
-2. **Install Dependencies**:
-    ```sh
-    pip install -r requirements.txt
-    ```
-
-3. **Run the Installer**:
-    ```sh
-    python gpt_processor_installer.py --main_executable path/to/gpt_processor.exe
-    ```
-    Options:
-    - `--install_dir`: Directory to install GPT Processor.
-    - `--add_to_path`: Add the installation directory to the system PATH.
-    - `--log_file`: Path to the log file.
-    - `--verbose`: Enable verbose logging.
-
-## Usage
-
-1. **Prepare Input Files**: Place the files you want to process in the `input` directory.
-
-2. **Run the Processor**:
-    ```sh
-    python gpt_processor_main.py
-    ```
-    Options:
-    - `--prompt`: Specify one or more prompt files to use.
-    - `--input_dir`: Specify input directory.
-    - `--output_dir`: Specify output directory.
-    - `--model`: Specify the OpenAI model to use.
-    - `--temperature`: Set the temperature for the API.
-    - `--max_tokens`: Set the maximum tokens for the API.
-    - `--config`: Path to configuration file.
-    - `--log_file`: Path to the log file.
-    - `--verbose`: Enable verbose logging.
-
-## Configuration
-
-The application can be configured using a YAML configuration file or environment variables. Example configuration:
-
-```yaml
-openai:
-  api_key: your_openai_api_key
-  model: gpt-4
-  temperature: 0.7
-  max_tokens: 1500
-# FilePromptForge01
-
->>>>>>> acc112db4374d5326abd1ce3afe92be787a88010
+License & author
+----------------
+Check repository metadata for license and author information (not included here).
