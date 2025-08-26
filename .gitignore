@@ -6,3 +6,7 @@ logs/*
 # Ignore Python compiled files
 __pycache__/
 *.py[cod]
+
+# Ignore environment files (may contain secrets / API keys)
+.env
+.env.*
