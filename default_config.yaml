@@ -1,7 +1,7 @@
 input_dir: test/input
 openai:
   max_tokens: 1500
-  model: gpt-4
+  model: gpt-4.1
   temperature: 0.7
 openrouter:
   max_tokens: 1500
@@ -10,3 +10,10 @@ openrouter:
 output_dir: test/output
 prompts_dir: test/prompts
 provider: openai
+grounding:
+  enabled: true
+  provider: openai
+  max_results: 5
+  search_prompt: "Incorporate and cite these sources:"
+  allow_external_fallback: false
+  approve_tool_calls: false

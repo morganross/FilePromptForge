@@ -15,6 +15,7 @@ import sys
 import time
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
+from grounding.grounder import Grounder
 
 # External dependencies (do NOT install at import time).
 # Ensure these are installed (see requirements.txt) before running the script:
@@ -95,6 +96,14 @@ class Config:
                 'model': '',
                 'temperature': 0.7,
                 'max_tokens': 1500
+            },
+            'grounding': {
+                'enabled': False,
+                'provider': 'openai',
+                'max_results': 3,
+                'search_prompt': 'Incorporate and cite these sources:',
+                'allow_external_fallback': False,
+                'approve_tool_calls': False
             }
         }
         if config_file:
@@ -109,6 +118,7 @@ class Config:
             self.provider = user_config.get('provider', 'OpenAI')
             self.openai = self.ProviderConfig(user_config.get('openai', {}), 'openai')
             self.openrouter = self.ProviderConfig(user_config.get('openrouter', {}), 'openrouter')
+            self.grounding = self.GroundingConfig(user_config.get('grounding', default_config.get('grounding', {})))
         else:
             self.prompts_dir = default_config['prompts_dir']
             self.input_dir = default_config['input_dir']
@@ -116,6 +126,7 @@ class Config:
             self.provider = default_config['provider']
             self.openai = self.ProviderConfig(default_config['openai'], 'openai')
             self.openrouter = self.ProviderConfig(default_config['openrouter'], 'openrouter')
+            self.grounding = self.GroundingConfig(default_config.get('grounding', {}))
 
     class ProviderConfig:
         def __init__(self, config, provider_name=None):
@@ -129,6 +140,17 @@ class Config:
             self.model = config.get('model', '')
             self.temperature = config.get('temperature', 0.7)
             self.max_tokens = config.get('max_tokens', 1500)
+
+    class GroundingConfig:
+        def __init__(self, config):
+            # config is expected to be a dict-like mapping
+            cfg = config or {}
+            self.enabled = cfg.get('enabled', False)
+            self.provider = cfg.get('provider', 'openai')
+            self.max_results = cfg.get('max_results', 3)
+            self.search_prompt = cfg.get('search_prompt', 'Incorporate and cite these sources:')
+            self.allow_external_fallback = cfg.get('allow_external_fallback', False)
+            self.approve_tool_calls = cfg.get('approve_tool_calls', False)
 
 
 # PromptManager class
@@ -208,7 +230,15 @@ class APIClient:
         self.logger = logger
 
     def send_prompt(self, system_prompt, user_prompt):
+        """
+        Send the prompt to the configured provider. If grounding is enabled in the
+        configuration and the selected model supports provider-side grounding, attempt
+        a provider-side grounding call via the Grounder. If grounding is unavailable
+        and external fallback is permitted by configuration/options, fall back to the
+        standard chat completion call.
+        """
         provider = self.config.provider
+        # Resolve provider-specific credentials and defaults
         if provider.lower() == "openai":
             api_key = self.config.openai.api_key
             model = self.config.openai.model
@@ -231,6 +261,40 @@ class APIClient:
                 self.logger.error(f"No valid API key for {provider}.")
             raise RuntimeError(f"No valid API key configured for {provider}. Please set the API key in configuration or environment variables.")
 
+        # Attempt provider-side grounding if configured
+        grounding_cfg = getattr(self.config, 'grounding', None)
+        grounder = Grounder(self.config, logger=self.logger)
+        if grounding_cfg and getattr(grounding_cfg, 'enabled', False):
+            if self.logger:
+                self.logger.info("Grounding enabled in configuration; attempting provider-side grounding.")
+            grounding_options = {
+                "max_results": getattr(grounding_cfg, 'max_results', None),
+                "search_prompt": getattr(grounding_cfg, 'search_prompt', None),
+                "allow_external_fallback": getattr(grounding_cfg, 'allow_external_fallback', False)
+            }
+            try:
+                grounding_result = grounder.run(system_prompt, user_prompt, grounding_options=grounding_options)
+                if grounding_result and grounding_result.get("method") == "provider-tool" and grounding_result.get("text"):
+                    if self.logger:
+                        self.logger.debug("Provider-side grounding succeeded; returning grounded text.")
+                    return grounding_result.get("text")
+                # If grounding returned method none with allow_external_fallback true, fall through to normal call
+                allow_fallback = grounding_result.get("tool_details", {}).get("allow_external_fallback", False) if isinstance(grounding_result, dict) else False
+                if grounding_result.get("tool_details", {}).get("error") == "provider_grounding_unavailable" and not allow_fallback:
+                    # Grounding unavailable and fallback not allowed — surface error or proceed without grounding
+                    if self.logger:
+                        self.logger.warning("Provider-side grounding unavailable and external fallback not permitted. Proceeding without grounding.")
+                    # Continue to normal API call below (no grounding)
+                else:
+                    # If grounding_result indicates an exception, log and continue to normal API call
+                    if grounding_result.get("tool_details", {}).get("error"):
+                        if self.logger:
+                            self.logger.warning(f"Grounding tool returned error: {grounding_result.get('tool_details')}. Falling back to standard API call.")
+            except Exception as e:
+                if self.logger:
+                    self.logger.exception(f"Exception while attempting provider-side grounding: {e}. Falling back to standard API call.")
+
+        # Standard (non-grounded) API call (chat completion)
         client = OpenAI(api_key=api_key, base_url=api_base)
         messages = [
             {"role": "system", "content": system_prompt},

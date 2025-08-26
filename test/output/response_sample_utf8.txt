@@ -1,19 +1,11 @@
-1. Why don't programmers like nature? It has too many bugs.
+Yes, the Texas Democrats have returned to the state. In early August 2025, over 50 Democratic lawmakers left Texas to prevent a quorum in the House, aiming to block a Republican-backed redistricting plan that would add five GOP-leaning congressional seats ahead of the 2026 midterms. They traveled to states like Illinois and New York to stall the vote and advocate for federal intervention. ([texastribune.org](https://www.texastribune.org/2025/08/18/texas-democrats-return-redistricting-map-illinois/?utm_source=openai))
 
-2. How do you comfort a JavaScript bug? You console it.
+Upon their return, the Texas House regained the quorum necessary to proceed with legislative business. The Democrats' absence had temporarily halted the redistricting plan, but their return allowed the process to resume. Republican leaders, including Governor Greg Abbott, responded by issuing civil arrest warrants and threatening fines to compel the Democrats' attendance. However, legal jurisdiction issues limited enforcement actions against those who had left the state. ([pbs.org](https://www.pbs.org/newshour/politics/texas-governor-threatens-to-remove-democrats-who-left-state-over-trump-backed-redistricting?utm_source=openai))
 
-3. Why did the programmer go broke? Because he used up all his cache.
+The Democrats' strategy drew national attention, with support from Democratic governors like J.B. Pritzker of Illinois and Kathy Hochul of New York, who criticized the redistricting efforts as gerrymandering. Despite the Democrats' efforts, the redistricting plan ultimately moved forward upon their return. ([texastribune.org](https://www.texastribune.org/2025/08/18/texas-democrats-return-redistricting-map-illinois/?utm_source=openai))
 
-4. Why do programmers always mix up Christmas and Halloween? Because Oct 31 == Dec 25.
 
-5. Why did the programmer quit his job? Because he didn't get arrays.
-
-6. Why do programmers prefer iOS development? Because on iOS, there are no Windows or Gates.
-
-7. Why do programmers always get Christmas and New Year's mixed up? Because they can't distinguish between 1 Jan and Jan 1.
-
-8. Why did the programmer go to the psychiatrist? Because he had too many problems to "debug".
-
-9. How do you tell an introverted programmer from an extroverted programmer? An extroverted programmer looks at your shoes when he's talking to you instead of his own.
-
-10. Why did the programmer bring a ladder to work? He heard it was good for climbing the corporate "stack".
+## Texas Democrats' Walkout and Return:
+- [Texas Democrats who left state prevent vote, for now, on Trump's efforts to add GOP House seats](https://apnews.com/article/136cfeddc717f9fc69337bd3d39b1819?utm_source=openai)
+- [38-day Texas House standoff ends after Democrats' return](https://www.axios.com/2021/08/20/texas-house-democrats-holdout-voting-rights?utm_source=openai)
+- [Texas Democrats Faced Criticism for Fleeing to D.C.-But These Lawmakers See Their Gamble as a Deeply Personal Battle for the Future of Their State](https://time.com/6083223/texas-democrats-washington-voting-rights/?utm_source=openai)
