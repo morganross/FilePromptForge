@@ -1,0 +1,19 @@
+1. Why don't programmers like nature? It has too many bugs.
+
+2. How do you comfort a JavaScript bug? You console it.
+
+3. Why did the programmer go broke? Because he used up all his cache.
+
+4. Why do programmers always mix up Christmas and Halloween? Because Oct 31 == Dec 25.
+
+5. Why did the programmer quit his job? Because he didn't get arrays.
+
+6. Why do programmers prefer iOS development? Because on iOS, there are no Windows or Gates.
+
+7. Why do programmers always get Christmas and New Year's mixed up? Because they can't distinguish between 1 Jan and Jan 1.
+
+8. Why did the programmer go to the psychiatrist? Because he had too many problems to "debug".
+
+9. How do you tell an introverted programmer from an extroverted programmer? An extroverted programmer looks at your shoes when he's talking to you instead of his own.
+
+10. Why did the programmer bring a ladder to work? He heard it was good for climbing the corporate "stack".

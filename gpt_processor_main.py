@@ -80,9 +80,9 @@ class Config:
             base_dir = os.path.dirname(os.path.abspath(__file__))
         load_dotenv()  # Load environment variables from .env if present
         default_config = {
-            'prompts_dir': os.path.join(base_dir, 'prompts'),
-            'input_dir': os.path.join(base_dir, 'input'),
-            'output_dir': os.path.join(base_dir, 'output'),
+            'prompts_dir': os.path.join(base_dir, 'test', 'prompts'),
+            'input_dir': os.path.join(base_dir, 'test', 'input'),
+            'output_dir': os.path.join(base_dir, 'test', 'output'),
             'provider': 'OpenAI',  # Default provider
             'openai': {
                 'api_key': os.getenv('OPENAI_API_KEY'),
@@ -107,19 +107,25 @@ class Config:
             self.input_dir = os.path.join(base_dir, user_config.get('input_dir', 'input'))
             self.output_dir = os.path.join(base_dir, user_config.get('output_dir', 'output'))
             self.provider = user_config.get('provider', 'OpenAI')
-            self.openai = self.ProviderConfig(user_config.get('openai', {}))
-            self.openrouter = self.ProviderConfig(user_config.get('openrouter', {}))
+            self.openai = self.ProviderConfig(user_config.get('openai', {}), 'openai')
+            self.openrouter = self.ProviderConfig(user_config.get('openrouter', {}), 'openrouter')
         else:
             self.prompts_dir = default_config['prompts_dir']
             self.input_dir = default_config['input_dir']
             self.output_dir = default_config['output_dir']
             self.provider = default_config['provider']
-            self.openai = self.ProviderConfig(default_config['openai'])
-            self.openrouter = self.ProviderConfig(default_config['openrouter'])
+            self.openai = self.ProviderConfig(default_config['openai'], 'openai')
+            self.openrouter = self.ProviderConfig(default_config['openrouter'], 'openrouter')
 
     class ProviderConfig:
-        def __init__(self, config):
-            self.api_key = (config.get('api_key') or 'DUMMY_API_KEY').strip()
+        def __init__(self, config, provider_name=None):
+            # Read API keys exclusively from environment variables for safety.
+            if provider_name == 'openai':
+                self.api_key = os.getenv('OPENAI_API_KEY', '').strip()
+            elif provider_name == 'openrouter':
+                self.api_key = os.getenv('OPENROUTER_API_KEY', '').strip()
+            else:
+                self.api_key = ''.strip()
             self.model = config.get('model', '')
             self.temperature = config.get('temperature', 0.7)
             self.max_tokens = config.get('max_tokens', 1500)
@@ -417,6 +423,10 @@ def process_file(input_file, file_handler, api_client, system_prompt, logger):
         return
     try:
         response = api_client.send_prompt(system_prompt, user_prompt)
+        # Log request and response to console
+        logger.info(f"System prompt for '{os.path.basename(input_file)}':\n{system_prompt}")
+        logger.info(f"User prompt for '{os.path.basename(input_file)}':\n{user_prompt}")
+        logger.info(f"Response for '{os.path.basename(input_file)}':\n{response}")
         # Compute relative path from input_dir to preserve folder structure in output_dir
         rel = os.path.relpath(input_file, file_handler.input_dir)
         out_subdir = os.path.dirname(rel)
