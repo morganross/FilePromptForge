@@ -97,6 +97,12 @@ class Config:
                 'temperature': 0.7,
                 'max_tokens': 1500
             },
+            'google': {
+                'api_key': os.getenv('GOOGLE_API_KEY', '').strip(),
+                'model': '',
+                'temperature': 0.7,
+                'max_tokens': 1500
+            },
             'grounding': {
                 'enabled': False,
                 'provider': 'openai',
@@ -118,6 +124,7 @@ class Config:
             self.provider = user_config.get('provider', 'OpenAI')
             self.openai = self.ProviderConfig(user_config.get('openai', {}), 'openai')
             self.openrouter = self.ProviderConfig(user_config.get('openrouter', {}), 'openrouter')
+            self.google = self.ProviderConfig(user_config.get('google', {}), 'google')
             self.grounding = self.GroundingConfig(user_config.get('grounding', default_config.get('grounding', {})))
         else:
             self.prompts_dir = default_config['prompts_dir']
@@ -126,6 +133,7 @@ class Config:
             self.provider = default_config['provider']
             self.openai = self.ProviderConfig(default_config['openai'], 'openai')
             self.openrouter = self.ProviderConfig(default_config['openrouter'], 'openrouter')
+            self.google = self.ProviderConfig(default_config['google'], 'google')
             self.grounding = self.GroundingConfig(default_config.get('grounding', {}))
 
     class ProviderConfig:
@@ -135,6 +143,9 @@ class Config:
                 self.api_key = os.getenv('OPENAI_API_KEY', '').strip()
             elif provider_name == 'openrouter':
                 self.api_key = os.getenv('OPENROUTER_API_KEY', '').strip()
+            elif provider_name == 'google':
+                # Read Google API key from environment (GOOGLE_API_KEY)
+                self.api_key = os.getenv('GOOGLE_API_KEY', '').strip()
             else:
                 self.api_key = ''.strip()
             self.model = config.get('model', '')
@@ -251,6 +262,12 @@ class APIClient:
             temperature = self.config.openrouter.temperature
             max_tokens = self.config.openrouter.max_tokens
             api_base = "https://openrouter.ai/api/v1"
+        elif provider.lower() == "google":
+            api_key = self.config.google.api_key
+            model = self.config.google.model
+            temperature = self.config.google.temperature
+            max_tokens = self.config.google.max_tokens
+            api_base = None
         else:
             if self.logger:
                 self.logger.error(f"Unknown API provider: {provider}.")
@@ -278,21 +295,19 @@ class APIClient:
                     if self.logger:
                         self.logger.debug("Provider-side grounding succeeded; returning grounded text.")
                     return grounding_result.get("text")
-                # If grounding returned method none with allow_external_fallback true, fall through to normal call
+                # If grounding returned method none with allow_external_fallback true, fall through to provider-specific normal call
                 allow_fallback = grounding_result.get("tool_details", {}).get("allow_external_fallback", False) if isinstance(grounding_result, dict) else False
                 if grounding_result.get("tool_details", {}).get("error") == "provider_grounding_unavailable" and not allow_fallback:
-                    # Grounding unavailable and fallback not allowed — surface error or proceed without grounding
                     if self.logger:
                         self.logger.warning("Provider-side grounding unavailable and external fallback not permitted. Proceeding without grounding.")
-                    # Continue to normal API call below (no grounding)
+                    # Continue to provider-specific normal call below (no grounding)
                 else:
-                    # If grounding_result indicates an exception, log and continue to normal API call
                     if grounding_result.get("tool_details", {}).get("error"):
                         if self.logger:
-                            self.logger.warning(f"Grounding tool returned error: {grounding_result.get('tool_details')}. Falling back to standard API call.")
+                            self.logger.warning(f"Grounding tool returned error: {grounding_result.get('tool_details')}. Falling back to provider-specific standard API call.")
             except Exception as e:
                 if self.logger:
-                    self.logger.exception(f"Exception while attempting provider-side grounding: {e}. Falling back to standard API call.")
+                    self.logger.exception(f"Exception while attempting provider-side grounding: {e}. Falling back to provider-specific standard API call.")
 
         # Standard (non-grounded) API call (chat completion)
         client = OpenAI(api_key=api_key, base_url=api_base)

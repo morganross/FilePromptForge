@@ -187,23 +187,28 @@ def perform_google_grounding(provider_conf, system_prompt, user_prompt, groundin
     except Exception as e:
         raise RuntimeError(f"Authentication for Google grounding failed: {e}")
 
-    # Build endpoint URL: try the Generative API v1beta2 pattern
-    # e.g., https://generativelanguage.googleapis.com/v1beta2/models/{model}:generate
-    # Many public examples use this path; adjust if your Google API version differs.
+    # Build endpoint URL: use the Google Generative API generateContent endpoint.
+    # Many public examples use this path: https://generativelanguage.googleapis.com/v1/models/{model}:generateContent
+    # If your account uses a different API version (v1beta2), adjust accordingly.
     base = "https://generativelanguage.googleapis.com"
-    endpoint = f"{base}/v1beta2/models/{model}:generate"
+    endpoint = f"{base}/v1/models/{model}:generateContent"
     # If API key provided via params, requests will attach it as ?key=API_KEY
 
-    # Construct request body in a safe, simple shape.
-    # The exact accepted schema can vary by API version; this is a conservative attempt.
+    # Construct request body using the Generative API 'contents' + 'generationConfig' shape.
+    # This format is compatible with the public Gemini/Generative API examples.
     payload = {
-        "prompt": {
-            # Provide a combined prompt that includes system + user content.
-            "text": f"{system_prompt}\n\nUser:\n{user_prompt}"
-        },
-        # Control tokens via max_output_tokens if supported
-        "max_output_tokens": grounding_options.get("max_tokens", getattr(provider_conf, "max_tokens", 1500)),
-        "temperature": grounding_options.get("temperature", getattr(provider_conf, "temperature", 0.0))
+        "contents": [
+            {
+                "role": "user",
+                "parts": [
+                    {"text": f"{system_prompt}\n\n{user_prompt}"}
+                ]
+            }
+        ],
+        "generationConfig": {
+            "maxOutputTokens": grounding_options.get("max_tokens", getattr(provider_conf, "max_tokens", 1500)),
+            "temperature": grounding_options.get("temperature", getattr(provider_conf, "temperature", 0.0))
+        }
     }
 
     # Some GenAI endpoints expect 'input' instead of 'prompt'; try with 'prompt' first.
