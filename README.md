@@ -15,25 +15,12 @@ Features
 - Logging: configurable logging to console and to timestamped log files.
 - Installer GUI: creates required directories, default prompts and config, and can copy the main executable into the install directory.
 
-Important notes
----------------
-- Some files in earlier versions contained unresolved Git merge markers. This README is the consolidated, cleaned version.
-- The GUI (gpt_processor_installer_gui.py) was intentionally not edited; it may still contain alternate sections depending on your repository history. Do not run or modify the GUI until you review it if you have a custom setup.
-- The main processor script no longer installs packages at import/runtime. Install dependencies with requirements.txt or pip before running.
 
-Installation
-------------
-1. Create a virtual environment (recommended) and activate it:
-   - Windows:
-       python -m venv .venv
-       .venv\Scripts\activate
-   - macOS / Linux:
-       python3 -m venv .venv
-       source .venv/bin/activate
 
-2. Install dependencies:
-   pip install -r requirements.txt
-   (If you don't have a requirements.txt, install at least: openai PyYAML python-dotenv)
+###Installation
+
+
+install dependancies
 
 Usage
 -----
@@ -76,12 +63,4 @@ input_dir: input
 output_dir: output
 provider: OpenAI
 
-Recommendations & next steps
----------------------------
-- Resolve any remaining merge conflicts in the repository history and remove duplicate files if desired.
-- Add or update a `requirements.txt` with the required packages for predictable installs.
-- Review the GUI file (gpt_processor_installer_gui.py) manually before running; it contains GUI logic and network calls (fetching OpenRouter models).
 
-License & author
-----------------
-Check repository metadata for license and author information (not included here).
