@@ -250,6 +250,13 @@ class APIClient:
         """
         provider = self.config.provider
         # Resolve provider-specific credentials and defaults
+        # Resolve provider-specific credentials and defaults (ensure all variables are defined)
+        api_key = None
+        model = None
+        temperature = None
+        max_tokens = None
+        api_base = None
+
         if provider.lower() == "openai":
             api_key = self.config.openai.api_key
             model = self.config.openai.model
@@ -272,6 +279,18 @@ class APIClient:
             if self.logger:
                 self.logger.error(f"Unknown API provider: {provider}.")
             raise RuntimeError(f"Unknown API provider: {provider}")
+
+        # Validate/fallback: ensure max_tokens is assigned to avoid UnboundLocalError
+        if max_tokens is None:
+            # Prefer provider-specific config if available, otherwise fall back to OpenAI config or a safe default.
+            fallback = 1500
+            try:
+                fallback = int(getattr(self.config.openai, 'max_tokens', fallback))
+            except Exception:
+                fallback = 1500
+            max_tokens = fallback
+            if self.logger:
+                self.logger.warning(f"max_tokens was not set for provider '{provider}'. Falling back to {max_tokens}.")
 
         if not api_key or api_key == 'DUMMY_API_KEY':
             if self.logger:
