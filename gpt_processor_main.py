@@ -8,14 +8,22 @@ Features:
 - Save AI-generated responses to output directory.
 - Comprehensive logging to console and optional log file.
 """
-import os
+# Bootstrap sys.path to ensure package context when run as script
+import os, sys
+pkg_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if pkg_root not in sys.path:
+    sys.path.insert(0, pkg_root)
+
 import argparse
 import logging
-import sys
 import time
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 from grounding.grounder import Grounder
+from FilePromptForge.provider_api import _call_provider_api, _extract_text_from_google_resp, _extract_text_from_openai_resp
+from types import SimpleNamespace
+from llm import provider_adapter as provider_adapter_module
+import json
 
 # External dependencies (do NOT install at import time).
 # Ensure these are installed (see requirements.txt) before running the script:
@@ -329,89 +337,91 @@ class APIClient:
                     self.logger.exception(f"Exception while attempting provider-side grounding: {e}. Falling back to provider-specific standard API call.")
 
         # Standard (non-grounded) API call (chat completion)
-        client = OpenAI(api_key=api_key, base_url=api_base)
         messages = [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
         ]
         if self.logger:
             self.logger.debug(
-                f"API request payload ({provider}): model={model}, temperature={temperature}, max_tokens={max_tokens}"
+                f"Preparing API request ({provider}): model={model}, temperature={temperature}, requested_max_tokens={max_tokens}"
             )
-        try:
-            # Resolve provider-specific param name for token limit using the provider YAML registry
+
+        # Helper: build fresh request kwargs per attempt (no in-place mutation)
+        def build_request_kwargs(provider_name, model_name, messages_payload, temperature_val, max_tokens_val):
+            base = {"model": model_name, "messages": messages_payload}
+            if temperature_val is not None:
+                base["temperature"] = temperature_val
+            # Use provider_adapter_module to get exact param name if available
             try:
-                import yaml, pathlib
-                prov_dir = pathlib.Path(__file__).resolve().parents[1] / "model_registry" / "providers"
-                _provider_db = {}
-                for yf in prov_dir.glob("*.yaml"):
-                    try:
-                        d = yaml.safe_load(yf.read_text(encoding="utf-8")) or {}
-                        for k, v in d.items():
-                            key = k.lower()
-                            _provider_db.setdefault(key, {"models": {}, "default_param": None})
-                            for model_k, model_v in (v or {}).items():
-                                api_params = model_v.get("api_params", {}) if isinstance(model_v, dict) else {}
-                                context_window = model_v.get("context_window") if isinstance(model_v, dict) else None
-                                _provider_db[key]["models"][model_k] = {"api_params": api_params, "context_window": context_window}
-                    except Exception:
-                        continue
+                token_kwargs, _ctx, _preferred_client = provider_adapter_module.build_token_kwargs(provider_name, model_name, max_tokens_val)
+                base.update(token_kwargs)
             except Exception:
-                _provider_db = None
-
-            def _get_provider_param_name(provider_name: str, model_name: str, canonical: str, provider_db=None):
-                alternates = ["max_completion_tokens", "max_tokens", "maxOutputTokens", "max_tokens_to_sample"]
-                p = provider_name.lower() if isinstance(provider_name, str) else provider_name
-                m = model_name if isinstance(model_name, str) else None
-                if provider_db:
-                    prov = provider_db.get(p, {})
-                    models = prov.get("models", {})
-                    if m and m in models:
-                        api_params = models[m].get("api_params", {}) or {}
-                        if canonical in api_params:
-                            return api_params[canonical]
-                    default_param = prov.get("default_param")
-                    if default_param:
-                        return default_param
-                if p in ("openai",):
-                    return "max_completion_tokens"
-                if p in ("google",):
-                    return "maxOutputTokens"
-                if p in ("anthropic",):
-                    return "max_tokens_to_sample"
-                return alternates[0]
-
-            _provider_param = _get_provider_param_name(provider, model, "max_tokens", provider_db=_provider_db)
-            _kwargs = {
-                "model": model,
-                "messages": messages,
-                "temperature": temperature
-            }
-            _kwargs[_provider_param] = max_tokens
-
-            try:
-                response = client.chat.completions.create(**_kwargs)
-            except Exception as _e:
-                msg = str(_e).lower()
-                if "unsupported_parameter" in msg or "max_tokens" in msg:
-                    # fallback to legacy param name
-                    _kwargs.pop(_provider_param, None)
-                    _kwargs["max_tokens"] = max_tokens
-                    response = client.chat.completions.create(**_kwargs)
+                # Fallback legacy names (minimal and conservative)
+                p = provider_name.lower()
+                if p == "openai":
+                    base["max_completion_tokens"] = max_tokens_val
+                elif p == "google":
+                    base["maxOutputTokens"] = max_tokens_val
                 else:
-                    raise
+                    base["max_tokens"] = max_tokens_val
+            return base
 
+        # Prepare a provider_conf object for the provider_api helper
+        provider_conf = SimpleNamespace(api_key=api_key, api_base=api_base)
+
+        # Attempt call with up to two tries: first using adapter mapping, second using legacy param if rejected
+        attempts = 0
+        max_attempts = 2
+        last_exc = None
+        debug_dir = None  # keep None unless caller configures a debug path; do not write by default
+
+        while attempts < max_attempts:
+            attempts += 1
+            current_kwargs = build_request_kwargs(provider, model, messages, temperature, max_tokens)
             if self.logger:
-                self.logger.debug(f"API raw response ({provider}): {response}")
-            result = response.choices[0].message.content.strip()
-            if self.logger:
-                self.logger.debug(f"API response content ({provider}): {result}")
-            return result
-        except Exception as e:
-            if self.logger:
-                self.logger.exception(f"{provider} API error: {e}")
-            # Re-raise so the caller can handle the error and we never return fake data
-            raise
+                self.logger.debug(f"Attempt {attempts} - final kwargs: {current_kwargs}")
+            # Dry-run support: if caller set up dry_run behavior earlier, they may intercept here (not enabled by default)
+            try:
+                text, raw_resp, usage = _call_provider_api(provider, provider_conf, model, messages, dict(current_kwargs), logger=self.logger, debug_dir=debug_dir)
+                # Success: return text
+                result = text.strip() if isinstance(text, str) else str(text)
+                if self.logger:
+                    self.logger.debug(f"API response content ({provider}): {result[:2000]}")
+                return result
+            except Exception as e:
+                last_exc = e
+                msg = str(e).lower()
+                # If provider rejects parameter name or method signature mismatch, retry once using legacy simple param
+                if ("unsupported_parameter" in msg or "max_tokens" in msg or "unexpected keyword argument" in msg) and attempts < max_attempts:
+                    if self.logger:
+                        self.logger.warning(f"Provider rejected kwargs on attempt {attempts}: {e}. Retrying with legacy token param.")
+                    # On retry, call build_request_kwargs but force fallback by temporarily bypassing adapter
+                    try:
+                        # try legacy build (simple fallback)
+                        if provider.lower() == "openai":
+                            current_kwargs = {"model": model, "messages": messages, "temperature": temperature, "max_completion_tokens": max_tokens}
+                        elif provider.lower() == "google":
+                            current_kwargs = {"model": model, "messages": messages, "temperature": temperature, "maxOutputTokens": max_tokens}
+                        else:
+                            current_kwargs = {"model": model, "messages": messages, "temperature": temperature, "max_tokens": max_tokens}
+                        text, raw_resp, usage = _call_provider_api(provider, provider_conf, model, messages, dict(current_kwargs), logger=self.logger, debug_dir=debug_dir)
+                        result = text.strip() if isinstance(text, str) else str(text)
+                        if self.logger:
+                            self.logger.debug(f"API response content ({provider}) after fallback: {result[:2000]}")
+                        return result
+                    except Exception as e2:
+                        last_exc = e2
+                        if self.logger:
+                            self.logger.exception(f"Retry after fallback failed: {e2}")
+                        raise
+                else:
+                    # Not a recoverable kwarg issue: re-raise for caller to handle
+                    if self.logger:
+                        self.logger.exception(f"{provider} API error: {e}")
+                    raise
+        # If we exit loop with error, raise last exception
+        if last_exc:
+            raise last_exc
 
 
 # Function to create default prompt file if not exists
