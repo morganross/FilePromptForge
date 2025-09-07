@@ -339,12 +339,68 @@ class APIClient:
                 f"API request payload ({provider}): model={model}, temperature={temperature}, max_tokens={max_tokens}"
             )
         try:
-            response = client.chat.completions.create(
-                model=model,
-                messages=messages,
-                temperature=temperature,
-                max_tokens=max_tokens
-            )
+            # Resolve provider-specific param name for token limit using the provider YAML registry
+            try:
+                import yaml, pathlib
+                prov_dir = pathlib.Path(__file__).resolve().parents[1] / "model_registry" / "providers"
+                _provider_db = {}
+                for yf in prov_dir.glob("*.yaml"):
+                    try:
+                        d = yaml.safe_load(yf.read_text(encoding="utf-8")) or {}
+                        for k, v in d.items():
+                            key = k.lower()
+                            _provider_db.setdefault(key, {"models": {}, "default_param": None})
+                            for model_k, model_v in (v or {}).items():
+                                api_params = model_v.get("api_params", {}) if isinstance(model_v, dict) else {}
+                                context_window = model_v.get("context_window") if isinstance(model_v, dict) else None
+                                _provider_db[key]["models"][model_k] = {"api_params": api_params, "context_window": context_window}
+                    except Exception:
+                        continue
+            except Exception:
+                _provider_db = None
+
+            def _get_provider_param_name(provider_name: str, model_name: str, canonical: str, provider_db=None):
+                alternates = ["max_completion_tokens", "max_tokens", "maxOutputTokens", "max_tokens_to_sample"]
+                p = provider_name.lower() if isinstance(provider_name, str) else provider_name
+                m = model_name if isinstance(model_name, str) else None
+                if provider_db:
+                    prov = provider_db.get(p, {})
+                    models = prov.get("models", {})
+                    if m and m in models:
+                        api_params = models[m].get("api_params", {}) or {}
+                        if canonical in api_params:
+                            return api_params[canonical]
+                    default_param = prov.get("default_param")
+                    if default_param:
+                        return default_param
+                if p in ("openai",):
+                    return "max_completion_tokens"
+                if p in ("google",):
+                    return "maxOutputTokens"
+                if p in ("anthropic",):
+                    return "max_tokens_to_sample"
+                return alternates[0]
+
+            _provider_param = _get_provider_param_name(provider, model, "max_tokens", provider_db=_provider_db)
+            _kwargs = {
+                "model": model,
+                "messages": messages,
+                "temperature": temperature
+            }
+            _kwargs[_provider_param] = max_tokens
+
+            try:
+                response = client.chat.completions.create(**_kwargs)
+            except Exception as _e:
+                msg = str(_e).lower()
+                if "unsupported_parameter" in msg or "max_tokens" in msg:
+                    # fallback to legacy param name
+                    _kwargs.pop(_provider_param, None)
+                    _kwargs["max_tokens"] = max_tokens
+                    response = client.chat.completions.create(**_kwargs)
+                else:
+                    raise
+
             if self.logger:
                 self.logger.debug(f"API raw response ({provider}): {response}")
             result = response.choices[0].message.content.strip()
