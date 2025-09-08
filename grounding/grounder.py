@@ -42,16 +42,15 @@ class Grounder:
         self.config = config
         self.logger = logger or logging.getLogger('gpt_processor.grounder')
 
-        # Basic seeded whitelist for provider-side grounding support.
-        # This is intentionally conservative and can be extended.
         self.openai_whitelist = {
+            "gpt-5", "gpt-5-mini", "gpt-5-nano",
             "gpt-4.1", "gpt-4o", "gpt-4o-mini-search-preview", "gpt-4o-search-preview",
             "o3-deep-research", "o4-mini-deep-research", "gpt-4.1-mini"
         }
         self.google_whitelist = {
             "gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-live-2.5-flash-preview"
         }
-        # OpenRouter is model-catalog dependent; treat :online suffix as supportive
+        # OpenRouter is model-catalog dependent; treat ':online' suffix as supportive
         # or rely on explicit config.model that includes ':online'
 
     def _is_model_whitelisted(self, provider, model):
