@@ -140,7 +140,7 @@ def perform_openai_grounding(provider_conf, system_prompt, user_prompt, groundin
         }
     ]
 
-    temperature = grounding_options.get("temperature", getattr(provider_conf, "temperature", 0.0))
+    temperature = grounding_options.get("temperature", getattr(provider_conf, "temperature", None))
     max_tokens = grounding_options.get("max_tokens", getattr(provider_conf, "max_tokens", 1500))
 
     client = OpenAI(api_key=api_key)  # base_url defaults to OpenAI public
@@ -150,9 +150,11 @@ def perform_openai_grounding(provider_conf, system_prompt, user_prompt, groundin
         "model": model,
         "tools": tools,
         "input": user_prompt,
-        "temperature": temperature,
         "max_output_tokens": max_tokens
     }
+    # Only include temperature when explicitly provided; some models (e.g., GPT-5 family) do not accept custom temperature.
+    if temperature is not None:
+        payload["temperature"] = temperature
     if logger:
         logger.debug(f"OpenAI grounding payload: model={model}, tools={tools}, temperature={temperature}, max_tokens={max_tokens}")
 

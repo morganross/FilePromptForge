@@ -1,0 +1,30 @@
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "The U.S. Census Bureau has undergone significant evolution since its inception, transforming from a temporary operation into a permanent, sophisticated statistical agency.\n\nHere are the key changes over time:\n\n1.  **Early Origins (1790-1902):**\n    *   **Constitutional Mandate:** Established by Article I, Section 2 of the U.S. Constitution, mandating a decennial census for congressional apportionment.\n    *   **Temporary Nature:** For over a century, a temporary census office was created for each decennial count, typically staffed by U.S. Marshals for data collection, and then disbanded. The first census was conducted in 1790.\n    *   **Expanding Scope:** While initially focused on population, early censuses gradually began collecting data on agriculture, manufacturing, and other demographics.\n\n2.  **Permanent Establishment (1902):**\n    *   **Creation of a Permanent Agency:** The U.S. Census Bureau was established as a permanent agency within the Department of the Interior in 1902, recognizing the growing need for continuous and standardized data collection.\n    *   **Departmental Shifts:** It moved to the newly formed Department of Commerce and Labor in 1903, and then remained with the Department of Commerce when Labor separated in 1913, where it resides today.\n\n3.  **Expansion of Data Collection and Methodologies:**\n    *   **Beyond Decennial:** The Bureau expanded its activities beyond the decennial population count to include a vast array of economic censuses (every five years), annual surveys (e.g., American Community Survey, Current Population Survey), and monthly indicators (e.g., retail sales, housing starts).\n    *   **Technological Advancements:**\n        *   **Hollerith Machines (late 19th Century):** Herman Hollerith's punch card tabulating machines revolutionized data processing for the 1890 census, significantly speeding up results.\n        *   **Computers (Mid-20th Century onwards):** The adoption of electronic computers further automated and expanded the Bureau's data processing and analytical capabilities.\n        *   **Digital and GIS (Late 20th/21st Century):** Modernization includes digital data collection, internet self-response, and the extensive use of Geographic Information Systems (GIS) for mapping and data visualization.\n\n4.  **Evolving Role and Challenges:**\n    *   **Statistical Authority:** The Census Bureau became the principal agency of the U.S. Federal Statistical System, providing critical data for government policy, business decisions, and academic research.\n    *   **Privacy and Accuracy:** Continuous efforts have been made to balance the need for comprehensive data with protecting respondent privacy and ensuring data accuracy, leading to refined methodologies and legal protections.\n    *   **Reaching Diverse Populations:** Strategies for enumerating hard-to-count populations have evolved, from traditional door-to-door enumeration to incorporating administrative records and targeted outreach campaigns.\n    *   **Political Scrutiny:** The Bureau has often faced political scrutiny regarding its methods, questions asked, and data uses, particularly concerning the decennial census.\n\nIn summary, the Census Bureau transformed from a temporary, ad-hoc count into a foundational, permanent statistical agency, continuously adapting its scope, technology, and methodologies to meet the evolving data needs of the nation."
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+    }
+  ],
+  "usageMetadata": {
+    "promptTokenCount": 47,
+    "candidatesTokenCount": 712,
+    "totalTokenCount": 1303,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 47
+      }
+    ],
+    "thoughtsTokenCount": 544
+  },
+  "modelVersion": "gemini-2.5-flash",
+  "responseId": "XNW9aJdb3sL7xg-b0IPYBw"
+}

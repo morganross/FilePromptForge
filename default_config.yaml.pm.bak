@@ -4,7 +4,7 @@ openai:
   model: gpt-4.1
   temperature: 0.7
 google:
-  max_tokens: 200000
+  max_tokens: 58250
   model: gemini-2.5-flash
   temperature: 0.7
 openrouter:
@@ -17,7 +17,7 @@ provider: google
 grounding:
   enabled: true
   provider: google
-  max_results: 5
+  max_results: 10
   search_prompt: 'Incorporate and cite these sources:'
   allow_external_fallback: false
   approve_tool_calls: false

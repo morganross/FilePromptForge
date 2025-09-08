@@ -1,0 +1,30 @@
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "The U.S. Census Bureau has undergone significant changes in its structure, permanence, and scope since its inception:\n\n1.  **Early Ad Hoc Operations (1790-1902):**\n    *   **Constitutional Mandate:** The U.S. Constitution (Article I, Section 2) mandated a decennial census for congressional apportionment, beginning in 1790.\n    *   **Temporary Offices:** For over a century, a temporary Census Office was established for each decennial count and then disbanded, with the work often overseen by various federal departments (e.g., State, Interior).\n\n2.  **Establishment as a Permanent Bureau (1902):**\n    *   **Permanent Status:** The Census Office became a permanent federal agency in **1902**, recognizing the need for continuous data collection and statistical expertise beyond just the decennial count. It was initially placed within the Department of the Interior.\n\n3.  **Departmental Shifts (1903-Present):**\n    *   **Commerce and Labor:** In **1903**, it moved to the newly created Department of Commerce and Labor.\n    *   **Department of Commerce:** When the Department of Commerce and Labor split in **1913**, the Census Bureau remained within the Department of Commerce, where it has been ever since.\n\n4.  **Expansion of Scope and Functions:**\n    *   **Beyond Population:** While initially focused on population, its mandate expanded to include detailed data on agriculture, manufacturing, mining, business, and housing.\n    *   **Ongoing Surveys:** It began conducting numerous intercensal and ongoing surveys (e.g., Current Population Survey, American Community Survey) to provide timely economic and social data.\n    *   **Statistical Innovation:** The Bureau became a leader in statistical methodology, including the development and application of sampling techniques in the 1930s and 1940s.\n\n5.  **Technological Advancements:**\n    *   **Punch Cards:** For the 1890 census, Herman Hollerith's electric tabulating system using punch cards revolutionized data processing, dramatically speeding up results.\n    *   **Computers:** The Census Bureau was an early adopter of electronic computers, utilizing UNIVAC I for the 1950 census data processing.\n    *   **Digital Data & GIS:** It has increasingly leveraged digital data collection, Geographic Information Systems (GIS) for mapping and data dissemination, and internet-based reporting.\n\nIn summary, the Census Bureau evolved from a temporary, decennial operation to a permanent, multi-faceted statistical agency, continually adapting its methods and expanding its scope to meet the nation's evolving data needs."
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+    }
+  ],
+  "usageMetadata": {
+    "promptTokenCount": 47,
+    "candidatesTokenCount": 572,
+    "totalTokenCount": 1186,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 47
+      }
+    ],
+    "thoughtsTokenCount": 567
+  },
+  "modelVersion": "gemini-2.5-flash",
+  "responseId": "U_a9aOLtOujzjrEP9oKU6A8"
+}

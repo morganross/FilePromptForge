@@ -288,6 +288,27 @@ class APIClient:
                 self.logger.error(f"Unknown API provider: {provider}.")
             raise RuntimeError(f"Unknown API provider: {provider}")
 
+        # For GPT-5 family models the provider enforces a fixed/default temperature.
+        # Omit custom temperature to avoid provider-side 400 errors like:
+        # "Unsupported value: 'temperature' does not support 0.7 with this model. Only the default (1) value is supported."
+        try:
+            model_lower = str(model).lower() if model is not None else ""
+        except Exception:
+            model_lower = ""
+        if model_lower and "gpt-5" in model_lower:
+            if self.logger:
+                self.logger.info(f"Detected GPT-5 family model '{model}'; omitting custom temperature to use provider default.")
+            temperature = None
+            # Cap max_tokens for GPT-5 family to provider-supported maximum to avoid invalid value errors
+            try:
+                if max_tokens is not None and int(max_tokens) > 128000:
+                    if self.logger:
+                        self.logger.warning(f"max_tokens {max_tokens} exceeds GPT-5 max; capping to 128000.")
+                    max_tokens = 128000
+            except Exception:
+                # If conversion fails, silently continue with existing max_tokens
+                pass
+
         # Validate/fallback: ensure max_tokens is assigned to avoid UnboundLocalError
         if max_tokens is None:
             # Prefer provider-specific config if available, otherwise fall back to OpenAI config or a safe default.
@@ -316,6 +337,14 @@ class APIClient:
                 "search_prompt": getattr(grounding_cfg, 'search_prompt', None),
                 "allow_external_fallback": getattr(grounding_cfg, 'allow_external_fallback', False)
             }
+            # For GPT-5 family, explicitly omit temperature in grounding options to avoid provider rejection.
+            try:
+                if model_lower and "gpt-5" in model_lower:
+                    grounding_options["temperature"] = None
+                    if self.logger:
+                        self.logger.debug("Omitting temperature from grounding options for GPT-5 family models.")
+            except Exception:
+                pass
             try:
                 grounding_result = grounder.run(system_prompt, user_prompt, grounding_options=grounding_options)
                 if grounding_result and grounding_result.get("method") == "provider-tool" and grounding_result.get("text"):
@@ -399,11 +428,17 @@ class APIClient:
                     try:
                         # try legacy build (simple fallback)
                         if provider.lower() == "openai":
-                            current_kwargs = {"model": model, "messages": messages, "temperature": temperature, "max_completion_tokens": max_tokens}
+                            current_kwargs = {"model": model, "messages": messages, "max_completion_tokens": max_tokens}
+                            if temperature is not None:
+                                current_kwargs["temperature"] = temperature
                         elif provider.lower() == "google":
-                            current_kwargs = {"model": model, "messages": messages, "temperature": temperature, "maxOutputTokens": max_tokens}
+                            current_kwargs = {"model": model, "messages": messages, "maxOutputTokens": max_tokens}
+                            if temperature is not None:
+                                current_kwargs["temperature"] = temperature
                         else:
-                            current_kwargs = {"model": model, "messages": messages, "temperature": temperature, "max_tokens": max_tokens}
+                            current_kwargs = {"model": model, "messages": messages, "max_tokens": max_tokens}
+                            if temperature is not None:
+                                current_kwargs["temperature"] = temperature
                         text, raw_resp, usage = _call_provider_api(provider, provider_conf, model, messages, dict(current_kwargs), logger=self.logger, debug_dir=debug_dir)
                         result = text.strip() if isinstance(text, str) else str(text)
                         if self.logger:

@@ -1,0 +1,30 @@
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Here are the answers to your queries:\n\n*   **Did Trump change the name of the Department of Defense?**\n    No, the name of the Department of Defense was not changed by the Trump administration.\n\n*   **Did Trump attack cartel boats?**\n    The Trump administration significantly increased anti-drug trafficking operations, particularly in maritime areas, which involved the U.S. Navy and Coast Guard interdicting and seizing boats used by cartels for smuggling. These operations were aimed at disrupting drug flows.\n\n*   **Who is the current Vice President and what did he say about the cartel boat attack if anything.**\n    The current Vice President is Kamala Harris. The actions against cartel boats mentioned above occurred during the Trump administration, prior to her tenure as Vice President. Therefore, she did not comment on those specific events as Vice President."
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+    }
+  ],
+  "usageMetadata": {
+    "promptTokenCount": 79,
+    "candidatesTokenCount": 173,
+    "totalTokenCount": 777,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 79
+      }
+    ],
+    "thoughtsTokenCount": 525
+  },
+  "modelVersion": "gemini-2.5-flash",
+  "responseId": "kiK-aInaJd7C-8YPm9CD2Ac"
+}
