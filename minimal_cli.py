@@ -20,6 +20,20 @@ import argparse
 import logging
 from datetime import datetime
 from typing import List
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Load .env from the filepromptforge directory (script directory)
+script_dir = Path(__file__).resolve().parent
+dotenv_path = script_dir / ".env"
+if dotenv_path.exists():
+    load_dotenv(dotenv_path)
+else:
+    # fallback: attempt to load from default locations (cwd / parent dirs)
+    try:
+        load_dotenv()
+    except Exception:
+        pass
 
 try:
     from openai import OpenAI
@@ -102,16 +116,32 @@ class APIClient:
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
         ]
-        resp = self.client.chat.completions.create(model=self.model, messages=messages, temperature=self.temperature, max_tokens=self.max_tokens)
-        # Extract text: new SDK returns resp.choices[0].message.content
+        resp = self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            temperature=self.temperature,
+            max_tokens=self.max_tokens
+        )
+        # Extract content robustly across SDK variants
+        content = ""
         try:
-            content = resp.choices[0].message.get("content") if hasattr(resp.choices[0], "message") else resp.choices[0].get("message", {}).get("content")
+            choices = getattr(resp, "choices", []) or []
+            if choices:
+                c0 = choices[0]
+                msg = getattr(c0, "message", None)
+                if msg is not None:
+                    # message may be an object or a dict
+                    if hasattr(msg, "content"):
+                        content = msg.content or ""
+                    elif isinstance(msg, dict):
+                        content = msg.get("content", "") or ""
+                if not content and hasattr(c0, "content"):
+                    content = getattr(c0, "content") or ""
+                if not content and hasattr(c0, "text"):
+                    content = getattr(c0, "text") or ""
         except Exception:
             content = ""
-        if not content:
-            # fallback to text property if present
-            content = getattr(resp.choices[0], "text", "") or ""
-        return content.strip()
+        return (content or "").strip()
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="FilePromptForge - Minimal OpenAI-only CLI")
