@@ -30,12 +30,7 @@ Key code anchors:
 - Orchestrator: main() wires the above together, handling CLI args, path resolution, and the main processing loop.
 
 Key code anchors:
-- [PromptManager.load_prompts](filepromptforge/gpt_processor_main.py:181)
-- [FileHandler.list_input_files](filepromptforge/gpt_processor_main.py:202)
-- [FileHandler.read_file](filepromptforge/gpt_processor_main.py:216)
-- [FileHandler.write_file](filepromptforge/gpt_processor_main.py:230)
-- [APIClient.send_prompt](filepromptforge/gpt_processor_main.py:251)
-- [Grounder integration](grounding/grounder.py)
+
 
 4) Data model and lifecycle
 - system_prompt: Built by concatenating prompt contents with a single newline separator between prompts.
@@ -48,10 +43,7 @@ Key code anchors:
   4) Enumerate input files
   5) For each input, read user_prompt, call API client, write response, optionally delay between files
 
-Code anchors:
-- Loading and concatenating prompts relies on [PromptManager.load_prompts](filepromptforge/gpt_processor_main.py:181)
-- Directory and file IO flow is driven by [FileHandler] methods
-- End-to-end flow is driven by [main()](filepromptforge/gpt_processor_main.py:481)
+
 
 5) Prompt concatenation details (deep dive)
 - Order of prompts:
@@ -167,13 +159,6 @@ Edge cases and safeguards
   - Standard prompt content: [`filepromptforge/test/prompts/standard_prompt.txt`](filepromptforge/test/prompts/standard_prompt.txt:1)
   - Test inputs: [`filepromptforge/test/input/`](filepromptforge/test/input)
 
-9) Migration plan (phases)
-- Phase 0: Archive current code as an immutable snapshot (so you can revert)
-- Phase 1: Create a minimal, clean repository with a simplified architecture
-- Phase 2: Implement a lightweight CLI and a mock backend
-- Phase 3: Write end-to-end tests with deterministic mocks
-- Phase 4: Gradually deprecate the old codebase and replace references
-- Phase 5: Document how to run tests and how to extend with real providers
 
 10) Acceptance criteria for the rebuild
 - The pipeline can load prompts, read inputs, and write outputs without contacting external APIs
@@ -188,4 +173,6 @@ Edge cases and safeguards
 - Main orchestration: [main()](filepromptforge/gpt_processor_main.py:481)
 - Grounding integration (optional): [grounding/grounder.py](grounding/grounder.py)
 
-End of document
+We will use python best practices. we will seperate logic into multiple py files. we will organize the code into subfolder. every function must be made as simple as possible. there must be a cli and programatic entry points like importable functions.
+
+we perfer to be file based, as in fpf loads its config file and runs and outputs a file. however, its functions can be imported and variables set at run time.
