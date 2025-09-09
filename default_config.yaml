@@ -6,7 +6,6 @@ provideer: openai
 model: gpt-4
 grounding:
   enabled: true
-  provider: google
   max_results: 10
   search_prompt: 'Incorporate and cite these sources:'
   allow_external_fallback: false
