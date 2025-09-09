@@ -1,5 +1,9 @@
 # FilePromptForge — GPT Processor
 
+Must Read:
+https://platform.openai.com/docs/guides/tools-web-search?api-mode=responses
+
+
 Overview
 --------
 FilePromptForge is a small toolkit for batch-processing text files with an LLM. It includes:
@@ -16,7 +20,7 @@ Features
 - Installer GUI: creates required directories, default prompts and config, and can copy the main executable into the install directory.
 
 
-
+https://platform.openai.com/docs/guides/tools-web-search?api-mode=responses
 ###Installation
 
 
@@ -50,17 +54,5 @@ Behavioral details
 - If no API key is configured, the script will generate mock responses rather than calling the remote API.
 - The script processes input files sequentially and writes each response to `response_<original_filename>` in the output directory.
 
-Configuration example (YAML)
----------------------------
-openai:
-  api_key: your_openai_api_key
-  model: gpt-4
-  temperature: 0.7
-  max_tokens: 1500
-
-prompts_dir: prompts
-input_dir: input
-output_dir: output
-provider: OpenAI
 
 
