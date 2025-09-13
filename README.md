@@ -1,3 +1,6 @@
+AS A RULE This project does not use any fallback logic nor does it have any mock responses or placeholer content. Also, we never use streming repsonses from any LLM.
+
+
 # FilePromptForge — GPT Processor
 
 Must Read:

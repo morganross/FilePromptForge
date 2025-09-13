@@ -1,9 +1,12 @@
-llm_endpoint_url:
-input_dir: test/input
+llm_endpoint_url: http://localhost:4000
+input_file: test/input/sample_utf8.txt
 output_dir: test/output
 prompts_dir: test/prompts
-provideer: openai
-model: gpt-4
+provider: OpenAI
+openai:
+  model: gpt-4.1
+  temperature: 0.7
+  max_tokens: 1500
 grounding:
   enabled: true
   max_results: 10
