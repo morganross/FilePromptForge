@@ -1,0 +1,7 @@
+Topic: OpenRouter Web Search
+
+Questions to address:
+- What does the :online model suffix do?
+- How are web results incorporated into responses?
+- What options exist to customize web search behavior?
+

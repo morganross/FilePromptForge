@@ -1,0 +1,31 @@
+provider_url: https://openrouter.ai/api/v1/chat/completions
+model: openai/gpt-4o-mini:online
+
+# Always on (per project rules). You can add more keys here
+# based on OpenRouter's web search options.
+web_search:
+  enable: true
+  # Docs: control number of results
+  max_results: 5
+  # Docs: customize how results are integrated
+  # Set a string to override the default integration prompt.
+  # Example: "Use these sources to verify facts and cite them."
+  # Leave empty or remove to use provider defaults.
+  search_prompt: "A web search was conducted. Incorporate the following web search results into your response. IMPORTANT: Cite them using markdown links named using the domain of the source. Example: [nytimes.com](https://nytimes.com/some-page)."
+
+referer: https://local.dev/fpf
+title: File Prompt Forge
+
+prompt_template: |
+  You are File Prompt Forge (FPF). Combine the following two files into a single, helpful response.
+  Crucially, you MUST use web search to find up-to-date information for any questions or topics that require current knowledge.
+  Cite all web search results using markdown links named using the domain of the source. Example: [nytimes.com](https://nytimes.com/some-page).
+
+  # File A ({{file_a_name}})
+  {{file_a}}
+
+  # File B ({{file_b_name}})
+  {{file_b}}
+
+  # Task
+  Provide the best possible answer using both files and the web search results.
