@@ -257,72 +257,74 @@ def run(file_a: Optional[str] = None,
     # Raw provider sidecar files are no longer written. The response is captured in the consolidated run log.
 
     # ---- Enhanced logging & extraction (request/response, web_search results, reasoning) ----
+    base_dir = Path(__file__).resolve().parent
+
+    # Extract web_search_call entries from provider response (if present)
+    websearch_entries = []
     try:
-        base_dir = Path(__file__).resolve().parent
-
-        # Extract web_search_call entries from provider response (if present)
+        output_items = raw_json.get("output") or raw_json.get("outputs") or []
+        for item in output_items:
+            if not isinstance(item, dict):
+                continue
+            t = item.get("type", "")
+            if t == "web_search_call" or "web_search" in t or t.startswith("ws_"):
+                websearch_entries.append(item)
+    except Exception:
+        LOG.exception("Failed to extract web_search entries from raw response")
         websearch_entries = []
-        try:
-            output_items = raw_json.get("output") or raw_json.get("outputs") or []
-            for item in output_items:
-                if not isinstance(item, dict):
-                    continue
-                t = item.get("type", "")
-                if t == "web_search_call" or "web_search" in t or t.startswith("ws_"):
-                    websearch_entries.append(item)
-        except Exception:
-            LOG.exception("Failed to extract web_search entries from raw response")
-            websearch_entries = []
 
-        # Extract provider reasoning (if provider exposes an extractor)
+    # Extract provider reasoning (if provider exposes an extractor)
+    reasoning_text = None
+    try:
+        if hasattr(provider, "extract_reasoning"):
+            reasoning_text = provider.extract_reasoning(raw_json)
+        else:
+            reasoning_text = raw_json.get("reasoning")
+    except Exception:
+        LOG.exception("Failed to extract reasoning via provider.extract_reasoning")
         reasoning_text = None
+
+    # Consolidated per-run log (single JSON) written to logs/ with a run UID
+    try:
+        import uuid as _uuid
+        import datetime as _dt
+        run_id = _uuid.uuid4().hex[:8]
+        started_iso = _dt.datetime.fromtimestamp(start_ts).isoformat()
+        finished_iso = _dt.datetime.now().isoformat()
+
+        # Attempt to get a human-readable text representation for inclusion
         try:
-            if hasattr(provider, "extract_reasoning"):
-                reasoning_text = provider.extract_reasoning(raw_json)
-            else:
-                reasoning_text = raw_json.get("reasoning")
+            human_text = provider.parse_response(raw_json) if hasattr(provider, "parse_response") else json.dumps(raw_json, indent=2, ensure_ascii=False)
         except Exception:
-            LOG.exception("Failed to extract reasoning via provider.extract_reasoning")
-            reasoning_text = None
+            human_text = None
 
-        # Consolidated per-run log (single JSON) written to logs/ with a run UID
+        consolidated = {
+            "run_id": run_id,
+            "started_at": started_iso,
+            "finished_at": finished_iso,
+            "model": cfg.get("model"),
+            "config": cfg,
+            "request": payload_body,
+            "response": raw_json,
+            "web_search": websearch_entries,
+            "reasoning": reasoning_text,
+            "human_text": human_text,
+            "usage": raw_json.get("usage"),
+        }
+
+        logs_dir = base_dir / "logs"
+        if not logs_dir.exists():
+            logs_dir.mkdir(parents=True, exist_ok=True)
+
+        # Write a unique per-run JSON log file that contains the full run data.
         try:
-            import uuid as _uuid
-            import datetime as _dt
-            run_id = _uuid.uuid4().hex[:8]
-            started_iso = _dt.datetime.fromtimestamp(start_ts).isoformat()
-            finished_iso = _dt.datetime.now().isoformat()
-
-            # Attempt to get a human-readable text representation for inclusion
-            try:
-                human_text = provider.parse_response(raw_json) if hasattr(provider, "parse_response") else json.dumps(raw_json, indent=2, ensure_ascii=False)
-            except Exception:
-                human_text = None
-
-            consolidated = {
-                "run_id": run_id,
-                "started_at": started_iso,
-                "finished_at": finished_iso,
-                "model": cfg.get("model"),
-                "config": cfg,
-                "request": payload_body,
-                "response": raw_json,
-                "web_search": websearch_entries,
-                "reasoning": reasoning_text,
-                "human_text": human_text,
-                "usage": raw_json.get("usage"),
-            }
-
-            logs_dir = base_dir / "logs"
-            if not logs_dir.exists():
-                logs_dir.mkdir(parents=True, exist_ok=True)
             log_name = f"{_dt.datetime.now().strftime('%Y%m%dT%H%M%S')}-{run_id}.json"
             log_path = logs_dir / log_name
             with open(log_path, "w", encoding="utf-8") as fh:
                 json.dump(consolidated, fh, indent=2, ensure_ascii=False)
-            LOG.info("Wrote consolidated run log to %s (run_id=%s)", log_path, run_id)
+            LOG.info("Wrote per-run consolidated log %s (run_id=%s)", log_path, run_id)
         except Exception:
-            LOG.exception("Failed to write consolidated run log")
+            LOG.exception("Failed to write per-run consolidated log")
     except Exception:
         LOG.exception("Unexpected error in enhanced logging/extraction")
 
