@@ -2,12 +2,12 @@
 # Minimal config for local testing. Points the runner at the OpenAI Responses API
 # and provides test input files so the canonical CLI run works without additional args.
 provider_url: "https://api.openai.com/v1/responses"
-model: "gpt-5-mini"
+model: "gpt-5-nano"
 
 # Test files used when no --file-a / --file-b are provided on the CLI.
 test:
-  file_a: "filepromptforge/test/input/sample_utf8.txt"
-  file_b: "filepromptforge/test/prompts/standard_prompt.txt"
+  file_a: "test/input/sample_utf8.txt"
+  file_b: "test/prompts/standard_prompt.txt"
 
 # Optional prompt template (path or literal). Leave null to just concat files.
 prompt_template: null
