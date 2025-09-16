@@ -1,0 +1,684 @@
+{
+  "run_id": "70cb05f3",
+  "started_at": "2025-09-16T11:42:22.047513",
+  "finished_at": "2025-09-16T11:43:53.898000",
+  "model": "gpt-5-nano",
+  "config": {
+    "provider_url": "https://api.openai.com/v1/responses",
+    "model": "gpt-5-nano",
+    "test": {
+      "file_a": "test/input/sample_utf8.txt",
+      "file_b": "test/prompts/standard_prompt.txt"
+    },
+    "prompt_template": null,
+    "web_search": {
+      "max_results": 10,
+      "search_prompt": "Perform a focused web search for up-to-date information relevant to the user's request. Summarize the most relevant findings and include citation links."
+    },
+    "include": [
+      "web_search_call.action.sources"
+    ]
+  },
+  "request": {
+    "model": "gpt-5-nano",
+    "input": [
+      {
+        "role": "user",
+        "content": "you must search the internet for up to date info.\n\nWho is the president?\n\nwhat is tommarows weather in portland oregon?\n\nwhat day is it today?\n\nwhat happend to charlie kirk\n\n\n\nYou are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries."
+      }
+    ],
+    "tools": [
+      {
+        "type": "web_search"
+      }
+    ],
+    "tool_choice": "auto",
+    "reasoning": {
+      "effort": "high"
+    },
+    "include": [
+      "web_search_call.action.sources"
+    ]
+  },
+  "response": {
+    "id": "resp_0ea03d7e427ffb470068c9af8f03808197a0708802f8af8d3a",
+    "object": "response",
+    "created_at": 1758048143,
+    "status": "completed",
+    "background": false,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "model": "gpt-5-nano-2025-08-07",
+    "output": [
+      {
+        "id": "rs_0ea03d7e427ffb470068c9af927c9c81979cb156148f2e1fac",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_0ea03d7e427ffb470068c9af9f6e4c8197a06f0e09b4dd25e6",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "query": "Who is the president United States 2025 Sep",
+          "sources": [
+            {
+              "type": "url",
+              "url": "https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/"
+            },
+            {
+              "type": "url",
+              "url": "https://apnews.com/article/f541df08a936e06497ee2342296bc398"
+            },
+            {
+              "type": "url",
+              "url": "https://www.theguardian.com/us-news/2025/sep/15/dna-evidence-charlie-kirk-shooter"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Charlie_Kirk"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Killing_of_Charlie_Kirk"
+            },
+            {
+              "type": "url",
+              "url": "https://es.wikipedia.org/wiki/Charlie_Kirk"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_0ea03d7e427ffb470068c9afa1ce6c8197acf6bc56ef09c653",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_0ea03d7e427ffb470068c9afa395f481979ba0b4375e02b5c0",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "sources": [
+            {
+              "type": "url",
+              "url": "https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_0ea03d7e427ffb470068c9afa48f98819793177cb158cfc0d7",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_0ea03d7e427ffb470068c9afa516288197bdfd9c535cc0efb8",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "sources": [
+            {
+              "type": "url",
+              "url": "https://apnews.com/article/f541df08a936e06497ee2342296bc398"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_0ea03d7e427ffb470068c9afa5efd88197a7ed780692fc27df",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_0ea03d7e427ffb470068c9afa75da081978a44e128d6c6a12c",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "query": "United States President 2025 Trump re-elected 2024",
+          "sources": [
+            {
+              "type": "url",
+              "url": "https://apnews.com/article/334930dc7a467118b5551c6e4ec3d1db"
+            },
+            {
+              "type": "url",
+              "url": "https://www.thesun.ie/news/15842421/trump-king-charles-friend-elegant-gentleman/"
+            },
+            {
+              "type": "url",
+              "url": "https://www.reuters.com/world/china/trump-says-australian-leader-coming-see-him-soon-2025-09-16/"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Second_presidency_of_Donald_Trump"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Second_inauguration_of_Donald_Trump"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/2024_United_States_presidential_election"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Withdrawal_of_Joe_Biden_from_the_2024_United_States_presidential_election"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/2025_state_visit_by_Donald_Trump_to_the_United_Kingdom"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Second_presidential_transition_of_Donald_Trump"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_0ea03d7e427ffb470068c9afa930f48197a43d9e3687178276",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_0ea03d7e427ffb470068c9afaceebc8197903d707f89c0601d",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "query": "weather: Portland, Oregon",
+          "sources": [
+            {
+              "type": "api",
+              "name": "oai-weather"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_0ea03d7e427ffb470068c9afaed1ec8197a87844cfd3b39d4d",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_0ea03d7e427ffb470068c9afb9355c8197b6e57493bb1179e0",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "query": "Doomsday September date leap year Doomsday algorithm",
+          "sources": [
+            {
+              "type": "url",
+              "url": "https://navbharattimes.indiatimes.com/astro/religion-rituals/panchang/aaj-ka-panchang-16-september-2025-today-panchang-tuesday-dashami-tithi-shradh-2025-shradh-today-know-rahukal-and-puja-shubh-muhurat/articleshow/123901808.cms"
+            },
+            {
+              "type": "url",
+              "url": "https://www.statesman.com/news/article/mexican-independence-day-celebration-2025-when-21050544.php"
+            },
+            {
+              "type": "url",
+              "url": "https://www.newyorker.com/puzzles-and-games-dept/crossword/2025/09/16"
+            },
+            {
+              "type": "url",
+              "url": "https://m.economictimes.com/news/new-updates/world-ozone-day-2025-significance-origins-theme-this-year-everything-you-need-to-know/articleshow/123911638.cms"
+            },
+            {
+              "type": "url",
+              "url": "https://www.timeanddate.com/date/doomsday-rule.html"
+            },
+            {
+              "type": "url",
+              "url": "https://www.whattheday.com/practice/doomsday-dates-advanced"
+            },
+            {
+              "type": "url",
+              "url": "https://whattheday.com/practice/leap-years"
+            },
+            {
+              "type": "url",
+              "url": "https://time-and-calendar.com/what-day-of-the-week/2025/9/16"
+            },
+            {
+              "type": "url",
+              "url": "https://whattheday.com/practice/doomsday-dates-basic"
+            },
+            {
+              "type": "url",
+              "url": "https://www.timeanddate.com/date/doomsday-calculator.html"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Doomsday_rule"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Square_Root_Day"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_0ea03d7e427ffb470068c9afbb093881979c4d67c2ecf58adf",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_0ea03d7e427ffb470068c9afc3a67c8197b0ed5be6a3b8a79b",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "query": "Donald Trump inaugurated January 20, 2025 second term",
+          "sources": [
+            {
+              "type": "url",
+              "url": "https://apnews.com/article/334930dc7a467118b5551c6e4ec3d1db"
+            },
+            {
+              "type": "url",
+              "url": "https://apnews.com/article/b7da9dd41c722c182d895df24f4f6405"
+            },
+            {
+              "type": "url",
+              "url": "https://people.com/donald-trump-says-construction-has-begun-on-massive-new-white-house-ballroom-11809043"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Second_inauguration_of_Donald_Trump"
+            },
+            {
+              "type": "url",
+              "url": "https://www.dw.com/en/donald-trump-to-be-inaugurated-as-us-president/live-71346591"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Second_presidency_of_Donald_Trump"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/First_100_days_of_the_second_Trump_presidency"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Donald_Trump"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_0ea03d7e427ffb470068c9afc57d708197b7aca29d0cf383ae",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_0ea03d7e427ffb470068c9afd2815881978555605997b10b27",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "sources": [
+            {
+              "type": "url",
+              "url": "https://www.theguardian.com/us-news/2025/sep/15/dna-evidence-charlie-kirk-shooter"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_0ea03d7e427ffb470068c9afd3c2c48197b18dec033e50f405",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "msg_0ea03d7e427ffb470068c9afe92134819780304e63b539fcfa",
+        "type": "message",
+        "status": "completed",
+        "content": [
+          {
+            "type": "output_text",
+            "annotations": [
+              {
+                "type": "url_citation",
+                "end_index": 329,
+                "start_index": 189,
+                "title": "Suspect in Charlie Kirk assassination formally charged with murder, faces death penalty | Reuters",
+                "url": "https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/"
+              },
+              {
+                "type": "url_citation",
+                "end_index": 751,
+                "start_index": 646,
+                "title": "What Day of The Week Will be September 16, 2025 Be",
+                "url": "https://time-and-calendar.com/what-day-of-the-week/2025/9/16?utm_source=openai"
+              },
+              {
+                "type": "url_citation",
+                "end_index": 1262,
+                "start_index": 1122,
+                "title": "Suspect in Charlie Kirk assassination formally charged with murder, faces death penalty | Reuters",
+                "url": "https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/"
+              }
+            ],
+            "logprobs": [],
+            "text": "Here are the latest answers based on current reporting:\n\n- President: Donald Trump is the President of the United States (the 47th president), serving a second term since January 20, 2025. ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/))\n\n- Tomorrow’s weather in Portland, Oregon: Tomorrow should be mostly sunny to partly sunny with a high near 80°F (around 27°C). Tonight through the afternoon shows sun and temps in the upper 60s to around 80°F, dipping into the 60s again after sunset. \n\n- What day is it today: Today is Tuesday, September 16, 2025. ([time-and-calendar.com](https://time-and-calendar.com/what-day-of-the-week/2025/9/16?utm_source=openai))\n\n- What happened to Charlie Kirk: Charlie Kirk, co-founder of Turning Point USA, was shot during an event at Utah Valley University in Orem, Utah, on September 10, 2025 and died from his injuries. The 22-year-old suspect, Tyler Robinson, has been charged with aggravated murder and related counts; investigators have cited DNA evidence linking the suspect to the crime. ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/))\n\nIf you’d like, I can fetch more details or recent updates on any of these."
+          }
+        ],
+        "role": "assistant"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "reasoning": {
+      "effort": "high",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": true,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tools": [
+      {
+        "type": "web_search",
+        "filters": null,
+        "search_context_size": "medium",
+        "user_location": {
+          "type": "approximate",
+          "city": null,
+          "country": "US",
+          "region": null,
+          "timezone": null
+        }
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 1.0,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 189929,
+      "input_tokens_details": {
+        "cached_tokens": 140544
+      },
+      "output_tokens": 8752,
+      "output_tokens_details": {
+        "reasoning_tokens": 8448
+      },
+      "total_tokens": 198681
+    },
+    "user": null,
+    "metadata": {}
+  },
+  "web_search": [
+    {
+      "id": "ws_0ea03d7e427ffb470068c9af9f6e4c8197a06f0e09b4dd25e6",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "query": "Who is the president United States 2025 Sep",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/"
+          },
+          {
+            "type": "url",
+            "url": "https://apnews.com/article/f541df08a936e06497ee2342296bc398"
+          },
+          {
+            "type": "url",
+            "url": "https://www.theguardian.com/us-news/2025/sep/15/dna-evidence-charlie-kirk-shooter"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Charlie_Kirk"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Killing_of_Charlie_Kirk"
+          },
+          {
+            "type": "url",
+            "url": "https://es.wikipedia.org/wiki/Charlie_Kirk"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_0ea03d7e427ffb470068c9afa395f481979ba0b4375e02b5c0",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_0ea03d7e427ffb470068c9afa516288197bdfd9c535cc0efb8",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://apnews.com/article/f541df08a936e06497ee2342296bc398"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_0ea03d7e427ffb470068c9afa75da081978a44e128d6c6a12c",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "query": "United States President 2025 Trump re-elected 2024",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://apnews.com/article/334930dc7a467118b5551c6e4ec3d1db"
+          },
+          {
+            "type": "url",
+            "url": "https://www.thesun.ie/news/15842421/trump-king-charles-friend-elegant-gentleman/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.reuters.com/world/china/trump-says-australian-leader-coming-see-him-soon-2025-09-16/"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Second_presidency_of_Donald_Trump"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Second_inauguration_of_Donald_Trump"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/2024_United_States_presidential_election"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Withdrawal_of_Joe_Biden_from_the_2024_United_States_presidential_election"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/2025_state_visit_by_Donald_Trump_to_the_United_Kingdom"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Second_presidential_transition_of_Donald_Trump"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_0ea03d7e427ffb470068c9afaceebc8197903d707f89c0601d",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "query": "weather: Portland, Oregon",
+        "sources": [
+          {
+            "type": "api",
+            "name": "oai-weather"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_0ea03d7e427ffb470068c9afb9355c8197b6e57493bb1179e0",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "query": "Doomsday September date leap year Doomsday algorithm",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://navbharattimes.indiatimes.com/astro/religion-rituals/panchang/aaj-ka-panchang-16-september-2025-today-panchang-tuesday-dashami-tithi-shradh-2025-shradh-today-know-rahukal-and-puja-shubh-muhurat/articleshow/123901808.cms"
+          },
+          {
+            "type": "url",
+            "url": "https://www.statesman.com/news/article/mexican-independence-day-celebration-2025-when-21050544.php"
+          },
+          {
+            "type": "url",
+            "url": "https://www.newyorker.com/puzzles-and-games-dept/crossword/2025/09/16"
+          },
+          {
+            "type": "url",
+            "url": "https://m.economictimes.com/news/new-updates/world-ozone-day-2025-significance-origins-theme-this-year-everything-you-need-to-know/articleshow/123911638.cms"
+          },
+          {
+            "type": "url",
+            "url": "https://www.timeanddate.com/date/doomsday-rule.html"
+          },
+          {
+            "type": "url",
+            "url": "https://www.whattheday.com/practice/doomsday-dates-advanced"
+          },
+          {
+            "type": "url",
+            "url": "https://whattheday.com/practice/leap-years"
+          },
+          {
+            "type": "url",
+            "url": "https://time-and-calendar.com/what-day-of-the-week/2025/9/16"
+          },
+          {
+            "type": "url",
+            "url": "https://whattheday.com/practice/doomsday-dates-basic"
+          },
+          {
+            "type": "url",
+            "url": "https://www.timeanddate.com/date/doomsday-calculator.html"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Doomsday_rule"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Square_Root_Day"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_0ea03d7e427ffb470068c9afc3a67c8197b0ed5be6a3b8a79b",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "query": "Donald Trump inaugurated January 20, 2025 second term",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://apnews.com/article/334930dc7a467118b5551c6e4ec3d1db"
+          },
+          {
+            "type": "url",
+            "url": "https://apnews.com/article/b7da9dd41c722c182d895df24f4f6405"
+          },
+          {
+            "type": "url",
+            "url": "https://people.com/donald-trump-says-construction-has-begun-on-massive-new-white-house-ballroom-11809043"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Second_inauguration_of_Donald_Trump"
+          },
+          {
+            "type": "url",
+            "url": "https://www.dw.com/en/donald-trump-to-be-inaugurated-as-us-president/live-71346591"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Second_presidency_of_Donald_Trump"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/First_100_days_of_the_second_Trump_presidency"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Donald_Trump"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_0ea03d7e427ffb470068c9afd2815881978555605997b10b27",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.theguardian.com/us-news/2025/sep/15/dna-evidence-charlie-kirk-shooter"
+          }
+        ]
+      }
+    }
+  ],
+  "reasoning": "high",
+  "human_text": "Here are the latest answers based on current reporting:\n\n- President: Donald Trump is the President of the United States (the 47th president), serving a second term since January 20, 2025. ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/))\n\n- Tomorrow’s weather in Portland, Oregon: Tomorrow should be mostly sunny to partly sunny with a high near 80°F (around 27°C). Tonight through the afternoon shows sun and temps in the upper 60s to around 80°F, dipping into the 60s again after sunset. \n\n- What day is it today: Today is Tuesday, September 16, 2025. ([time-and-calendar.com](https://time-and-calendar.com/what-day-of-the-week/2025/9/16?utm_source=openai))\n\n- What happened to Charlie Kirk: Charlie Kirk, co-founder of Turning Point USA, was shot during an event at Utah Valley University in Orem, Utah, on September 10, 2025 and died from his injuries. The 22-year-old suspect, Tyler Robinson, has been charged with aggravated murder and related counts; investigators have cited DNA evidence linking the suspect to the crime. ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/))\n\nIf you’d like, I can fetch more details or recent updates on any of these.",
+  "usage": {
+    "input_tokens": 189929,
+    "input_tokens_details": {
+      "cached_tokens": 140544
+    },
+    "output_tokens": 8752,
+    "output_tokens_details": {
+      "reasoning_tokens": 8448
+    },
+    "total_tokens": 198681
+  }
+}

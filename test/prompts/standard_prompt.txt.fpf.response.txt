@@ -1,15 +1,15 @@
-Short answers (I searched current sources):
+Here are the latest updates based on current public reports (as of Sept 16, 2025):
 
 - Who is the president?
-  Donald J. Trump is the President of the United States (inaugurated January 20, 2025). ([whitehouse.gov](https://www.whitehouse.gov/administration/donald-j-trump/?utm_source=openai))
+  - Donald Trump is the President of the United States (47th president). He was inaugurated on January 20, 2025. ([reutersconnect.com](https://www.reutersconnect.com/item/inauguration-ceremony-for-trumps-second-presidential-term/dGFnOnJldXRlcnMuY29tLDIwMjU6bmV3c21sX1JDMlREQ0FJTkNTQg%3D%3D?utm_source=openai))
 
-- What is tomorrow’s weather in Portland, Oregon?
-  Tomorrow is Wednesday, September 17, 2025. Portland, OR — mostly sunny; high about 88°F (31°C) and low about 60°F (16°C). Hourly forecast shows sunshine through the afternoon with a peak near the upper 80s. 
+- Tomorrow’s weather in Portland, Oregon
+  - Portland, OR: Wednesday, September 17, 2025 — Mostly sunny, high around 80°F (26°C), low around 57°F (14°C). 
 
 - What day is it today?
-  Today is Tuesday, September 16, 2025. ([time-and-calendar.com](https://time-and-calendar.com/what-day-of-the-week/2025/9/16?utm_source=openai))
+  - Today is Tuesday, September 16, 2025. (Weather forecast page shows today as September 16.) 
 
-- What happened to Charlie Kirk?
-  Charlie Kirk was fatally shot while speaking at a Turning Point USA event at Utah Valley University in Orem, Utah on September 10, 2025. A 22‑year‑old suspect (identified in reports as Tyler Robinson) has been linked to the scene by DNA and investigators say they plan to pursue charges; the FBI and local authorities are continuing the investigation. ([apnews.com](https://apnews.com/article/92a643a3f16bce587fd34896ca7f4f76?utm_source=openai))
+- What happened to Charlie Kirk
+  - Charlie Kirk was fatally shot on September 10, 2025, during a campus appearance at Utah Valley University. A 22-year-old suspect, Tyler Robinson, has been charged with aggravated murder and related offenses; the case is ongoing. ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/?utm_source=openai))
 
-If you want more details or sources (e.g., full weather hourly chart, White House bio, or the latest updates on the Kirk investigation), I can pull those up.
+If you’d like, I can pull more details or provide direct links to the articles.
