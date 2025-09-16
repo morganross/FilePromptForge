@@ -9,6 +9,7 @@ __pycache__/
 
 # Logs and runtime artifacts
 fpf_run.log
+logs/*.log
 last_payload.json
 
 # Editor directories
