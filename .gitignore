@@ -1,0 +1,20 @@
+# Ignore environment files
+.env
+.env.* 
+
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs and runtime artifacts
+fpf_run.log
+last_payload.json
+
+# Editor directories
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

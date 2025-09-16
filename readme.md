@@ -32,23 +32,24 @@ CLI usage:
   - `python fpf_main.py a.txt b.md --env fpf/.env`
 
 API key via .env:
-- Create `fpf/.env` with `OPENROUTER_API_KEY=sk-...` (quotes optional).
-- CLI searches `fpf/.env` then `.env` by default, or specify with `--env`.
+
 
 Config (`fpf_config.yaml`):
-- `provider_url`: `https://openrouter.ai/api/v1/responses`
 - `model`: model id to use (defaults to `...:online`; CLI also auto-appends if missing)
 - `web_search`: always enabled; supports `max_results` and optional `search_prompt`
 - `referer`, `title`: optional headers recommended by OpenRouter
 - `prompt_template`: uses `{{file_a_name}}`, `{{file_b_name}}`, `{{file_a}}`, `{{file_b}}`
 
-Library use:
-- You can import `run`, `compose_input`, and `call_openrouter_responses` from `fpf_main.py`.
+fpf_main's pirpose is to allow for other software to programaticly call fpf for various differnt llm's without having to have llm specific knowlege.
 
-Notes:
-- Requires Python 3.8+ and `pyyaml` if you want to load YAML; without it, defaults are used.
-- Set `OPENROUTER_API_KEY` in your environment; otherwise the request will fail.
+fpf does not have any knowelge, its provider folders do, it simply routes requests from the 3rd party softrware to the applicaable provider logic. this allows other software to use different llms without having per model knowelege and logic.
 
-References:
-- https://openrouter.ai/announcements/introducing-web-search-via-the-api
-- https://openrouter.ai/docs/features/web-search
+fpf_main acts like a router and translator, since different llms use different syntax. 
+
+
+
+https://platform.openai.com/docs/guides/tools-web-search?api-mode=responses
+
+https://platform.openai.com/docs/guides/tools-web-search?api-mode=responses
+
+https://platform.openai.com/docs/guides/tools-web-search?api-mode=responses

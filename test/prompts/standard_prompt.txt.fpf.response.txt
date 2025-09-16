@@ -1,0 +1,15 @@
+Short answers (I searched current sources):
+
+- Who is the president?
+  Donald J. Trump is the President of the United States (inaugurated January 20, 2025). ([whitehouse.gov](https://www.whitehouse.gov/administration/donald-j-trump/?utm_source=openai))
+
+- What is tomorrow’s weather in Portland, Oregon?
+  Tomorrow is Wednesday, September 17, 2025. Portland, OR — mostly sunny; high about 88°F (31°C) and low about 60°F (16°C). Hourly forecast shows sunshine through the afternoon with a peak near the upper 80s. 
+
+- What day is it today?
+  Today is Tuesday, September 16, 2025. ([time-and-calendar.com](https://time-and-calendar.com/what-day-of-the-week/2025/9/16?utm_source=openai))
+
+- What happened to Charlie Kirk?
+  Charlie Kirk was fatally shot while speaking at a Turning Point USA event at Utah Valley University in Orem, Utah on September 10, 2025. A 22‑year‑old suspect (identified in reports as Tyler Robinson) has been linked to the scene by DNA and investigators say they plan to pursue charges; the FBI and local authorities are continuing the investigation. ([apnews.com](https://apnews.com/article/92a643a3f16bce587fd34896ca7f4f76?utm_source=openai))
+
+If you want more details or sources (e.g., full weather hourly chart, White House bio, or the latest updates on the Kirk investigation), I can pull those up.

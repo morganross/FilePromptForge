@@ -1,0 +1,23 @@
+# File Prompt Forge configuration
+# Minimal config for local testing. Points the runner at the OpenAI Responses API
+# and provides test input files so the canonical CLI run works without additional args.
+provider_url: "https://api.openai.com/v1/responses"
+model: "gpt-5-mini"
+
+# Test files used when no --file-a / --file-b are provided on the CLI.
+test:
+  file_a: "filepromptforge/test/input/sample_utf8.txt"
+  file_b: "filepromptforge/test/prompts/standard_prompt.txt"
+
+# Optional prompt template (path or literal). Leave null to just concat files.
+prompt_template: null
+
+# Web search/tooling tuning (enable flag removed — web_search enforced in code)
+web_search:
+  # tuning: max_results, search_prompt, filters may be specified but disabling is ignored
+  max_results: 10
+  search_prompt: "Perform a focused web search for up-to-date information relevant to the user's request. Summarize the most relevant findings and include citation links."
+
+# Include extra fields in Responses API to capture web_search sources
+include:
+  - "web_search_call.action.sources"

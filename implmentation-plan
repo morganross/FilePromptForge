@@ -1,0 +1,105 @@
+Plan explained in plain high-school language
+
+Overview — what the program does
+- You give the program two files: File A and File B.
+- The program makes one prompt from those files.
+- It sends that prompt to OpenAI’s Responses API (with web search turned on).
+- It gets the reply and writes two files: a human-readable response and a raw JSON file with the full API output.
+the keys for providers are in .env in the /filepromptforge/ root dir. load from there, and offer no other choices.
+
+
+Step-by-step flow (easy words)
+
+1) Start / CLI
+- You run the program from the command line (or call run() from code).
+- You can pass file paths or use the default test files that live in /test/.
+
+2) Load secrets and configuration
+- The program reads a small config file (YAML) to know:
+  - Which model to use
+  - The provider URL to call
+  - Web search settings (like how many results)
+  - A default test pair of files
+- It also reads a .env file for the OpenAI API key. The key never gets written to disk.
+
+3) Build the prompt
+- The program reads the text of File A and File B.
+- It plugs that text into a template that looks like:
+  "File A: <name>\n<contents>\nFile B: <name>\n<contents>"
+- This combined text is the prompt we send to the model.
+
+4) Provider module (OpenAI only)
+- There is one provider module for OpenAI. It knows:
+  - How to build the exact JSON payload the OpenAI Responses API expects.
+  - Which models are allowed (a whitelist).
+  - How to pull readable text out of the API response.
+- The provider module exposes three functions the router will call:
+  - build_payload(prompt, cfg) -> payload (and optional headers)
+  - parse_response(raw_json) -> readable_text
+  - validate_model(model_id) -> bool
+
+    The most important job of the provider modules,
+    and the most important job of the entire fpf project, is that the provider modules translate the variables we have specifyed in fpf_config like 'tokens' and translates it into the syntax that the indivual provider perfers, like 'max_tokens" or 'max_completion_tokens" or whatever.
+
+
+
+
+5) Router / file_handler
+- The router (file_handler.py) is the central place that:
+  - Calls compose_input to make the prompt
+  - Calls provider.build_payload to get the request body
+  - Adds the Authorization header from the environment
+  - Sends ONE non-streaming HTTP POST to the provider_url
+  - Receives JSON back from the API
+  - Calls provider.parse_response to get human text
+  - Writes two files:
+    - <file_b>.fpf.response.txt (the human text)
+    - <file_b>.fpf.response.txt.raw.json (full JSON)
+- Overwrite is allowed: the program will replace existing output files.
+
+6) Default test run
+- If you run the program without specifying files, it will load the test pair listed in the YAML config (the files already in /test/).
+- This gives a predictable demo run.
+
+7) Error messages and safety
+- If the API key is missing, the program prints a short error and exits.
+- If the HTTP call fails, the program prints the returned error (status code and message).
+- The API key is never logged or saved.
+
+What I’ll change in the repo (concrete files)
+- filepromptforge/file_handler.py
+  - Make it the single router that performs the HTTP call and writes output.
+  - It will import the provider module for OpenAI and call its functions.
+- filepromptforge/fpf/fpf_main.py
+  - Keep the compose_input and config loader functions available for import.
+- filepromptforge/providers/openai/fpf_openai_main.py
+  - Ensure it exposes build_payload, parse_response, validate_model.
+  - Keep the model whitelist here.
+- filepromptforge/fpf_config.yaml (or top-level fpf_config.yaml)
+  - Make sure it contains test.file_a and test.file_b entries pointing at the /test/ files.
+
+Why this design is good
+- Clear separation: provider-specific details live in the provider file. Router does networking and file I/O only.
+- Easy to change models: whitelist lives with the provider, so adding/removing models is simple.
+- Simple behavior: program does one API call per run, so it’s easy to reason about and debug.
+- Matches your rules: OpenAI only, non-streaming, web search enabled.
+
+Small decisions I made for you
+- Use the OpenAI Responses API shapes (model, input list, web_search key).
+- Use a simple HTTP client (urllib) to avoid adding library dependencies.
+- Write output files directly (overwrite allowed) since you said overwrite is fine.
+
+Open question you already answered
+- Provider target: OpenAI only (not OpenRouter) — implemented.
+- Overwrite: allowed — implemented.
+- Tests: use your default script behavior (no separate test framework) — implemented.
+
+Next steps if you want me to implement this now
+- Toggle to Act mode and I will:
+  1) Normalize the provider module (add build_payload/parse_response/validate_model).
+  2) Make file_handler the router that does the POST and file writes.
+  3) Ensure compose_input and config are available and the YAML test entries are correct.
+  4) Run a non-network dry-check (compose prompt from /test/ files) to confirm prompt building (no API call).
+  5) If you want, run the real API call (requires OPENAI_API_KEY in environment).
+
+If any part of this explanation is unclear, say which step and I’ll rephrase it even simpler.
