@@ -35,7 +35,10 @@ if str(PROJECT_ROOT.parent) not in sys.path:
 
 from filepromptforge.file_handler import run as run_handler  # type: ignore
 
-LOG_FILENAME = SCRIPT_DIR / "fpf_run.log"
+LOG_FILENAME = SCRIPT_DIR / "logs" / "fpf_run.log"
+# Ensure logs directory exists so the rotating file handler can write there
+if not LOG_FILENAME.parent.exists():
+    LOG_FILENAME.parent.mkdir(parents=True, exist_ok=True)
 
 
 def setup_logging(level: int = logging.INFO) -> None:

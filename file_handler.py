@@ -329,8 +329,8 @@ def run(file_a: Optional[str] = None,
     # Verify provider performed web_search (strict policy)
     used_websearch = _response_used_websearch(raw_json)
     if not used_websearch:
-        LOG.error("Provider did not perform web_search according to response: %s", raw_path)
-        raise RuntimeError("Provider did not perform web_search; aborting per policy. Raw response saved to: " + raw_path)
+        LOG.error("Provider did not perform web_search according to response; consolidated log will contain details")
+        raise RuntimeError("Provider did not perform web_search; aborting per policy. See consolidated log in logs/")
 
     # Extract and verify reasoning
     reasoning_text = None
@@ -348,8 +348,8 @@ def run(file_a: Optional[str] = None,
         reasoning_text = None
 
     if not reasoning_text or (isinstance(reasoning_text, str) and not reasoning_text.strip()):
-        LOG.error("Provider response did not contain reasoning; aborting. Raw response saved to: %s", raw_path)
-        raise RuntimeError("Provider did not return reasoning; aborting per policy. Raw response saved to: " + raw_path)
+        LOG.error("Provider response did not contain reasoning; aborting. See consolidated log in logs/")
+        raise RuntimeError("Provider did not return reasoning; aborting per policy. See consolidated log in logs/")
 
     # Parse human-readable text and write outputs
     if hasattr(provider, "parse_response"):
@@ -357,15 +357,6 @@ def run(file_a: Optional[str] = None,
     else:
         human_text = json.dumps(raw_json, indent=2, ensure_ascii=False)
 
-    # Write reasoning sidecar
-    reasoning_path = out_path + ".reasoning.txt"
-    try:
-        with open(reasoning_path, "w", encoding="utf-8") as fh:
-            fh.write(reasoning_text if isinstance(reasoning_text, str) else str(reasoning_text))
-    except Exception as e:
-        LOG.exception("Failed to write reasoning sidecar: %s", e)
-        # treat failure to write reasoning as runtime error
-        raise RuntimeError(f"Failed to write reasoning sidecar: {e}") from e
 
     # Write human-readable output (only after all checks passed)
     try:
