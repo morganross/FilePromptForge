@@ -233,14 +233,8 @@ def run(file_a: Optional[str] = None,
     if cfg.get("title"):
         headers["Title"] = cfg.get("title")
 
-    # perform HTTP POST: save outbound payload for debugging, log a compact summary, and measure timing
-    try:
-        last_payload_path = Path(__file__).resolve().parent / "last_payload.json"
-        with open(last_payload_path, "w", encoding="utf-8") as ph:
-            json.dump(payload_body, ph, indent=2, ensure_ascii=False)
-        LOG.info("Saved outbound payload to %s (compact headers shown)", last_payload_path)
-    except Exception:
-        LOG.exception("Failed to save outbound payload for debugging")
+    # perform HTTP POST: log timing and send request
+    # Note: outbound payload is intentionally not persisted to reduce sidecar files.
 
     import time
     start_ts = time.time()
@@ -260,37 +254,11 @@ def run(file_a: Optional[str] = None,
         out_name = f"{b_path.name}.fpf.response.txt"
         out_path = str(b_path.parent / out_name)
 
-    raw_path = out_path + ".raw.json"
-    # Ensure the parent directory exists before attempting to write the sidecar
-    raw_parent = Path(raw_path).parent
-    if not raw_parent.exists():
-        raw_parent.mkdir(parents=True, exist_ok=True)
-    try:
-        # Persist raw provider JSON
-        with open(raw_path, "w", encoding="utf-8") as fh:
-            json.dump(raw_json, fh, indent=2, ensure_ascii=False)
-        try:
-            size = Path(raw_path).stat().st_size
-            LOG.info("Wrote raw JSON sidecar %s (size=%d bytes)", raw_path, size)
-        except Exception:
-            LOG.debug("Wrote raw JSON sidecar %s", raw_path)
-    except Exception as e:
-        LOG.exception("Failed to write raw JSON sidecar: %s", e)
-        # treat failure to persist raw sidecar as runtime error
-        raise RuntimeError(f"Failed to write raw JSON sidecar: {e}") from e
+    # Raw provider sidecar files are no longer written. The response is captured in the consolidated run log.
 
     # ---- Enhanced logging & extraction (request/response, web_search results, reasoning) ----
     try:
         base_dir = Path(__file__).resolve().parent
-        # Save full exchange (request + response) next to last_payload.json for auditability
-        try:
-            full_exchange_path = base_dir / "last_exchange.json"
-            exchange_obj = {"request": payload_body, "response": raw_json}
-            with open(full_exchange_path, "w", encoding="utf-8") as fh:
-                json.dump(exchange_obj, fh, indent=2, ensure_ascii=False)
-            LOG.info("Wrote full request/response exchange to %s", full_exchange_path)
-        except Exception:
-            LOG.exception("Failed to write full exchange file")
 
         # Extract web_search_call entries from provider response (if present)
         websearch_entries = []
@@ -300,32 +268,11 @@ def run(file_a: Optional[str] = None,
                 if not isinstance(item, dict):
                     continue
                 t = item.get("type", "")
-                # Accept explicit 'web_search_call' or any item id prefix used for websearch evidence
                 if t == "web_search_call" or "web_search" in t or t.startswith("ws_"):
                     websearch_entries.append(item)
-            if websearch_entries:
-                websearch_path = out_path + ".websearch.json"
-                web_parent = Path(websearch_path).parent
-                if not web_parent.exists():
-                    web_parent.mkdir(parents=True, exist_ok=True)
-                with open(websearch_path, "w", encoding="utf-8") as fh:
-                    json.dump(websearch_entries, fh, indent=2, ensure_ascii=False)
-                LOG.info("Wrote extracted web_search results to %s (entries=%d)", websearch_path, len(websearch_entries))
-                # Log URLs found in the web_search entries for quick visibility
-                try:
-                    for idx, entry in enumerate(websearch_entries):
-                        action = entry.get("action") or {}
-                        sources = action.get("sources") or []
-                        for s in sources:
-                            url = s.get("url") or s.get("link") or s.get("name")
-                            if url:
-                                LOG.info("web_search[%d] source: %s", idx, url)
-                except Exception:
-                    LOG.exception("Failed to log web_search sources in detail")
-            else:
-                LOG.debug("No web_search entries found in response outputs")
         except Exception:
             LOG.exception("Failed to extract web_search entries from raw response")
+            websearch_entries = []
 
         # Extract provider reasoning (if provider exposes an extractor)
         reasoning_text = None
@@ -336,20 +283,46 @@ def run(file_a: Optional[str] = None,
                 reasoning_text = raw_json.get("reasoning")
         except Exception:
             LOG.exception("Failed to extract reasoning via provider.extract_reasoning")
+            reasoning_text = None
 
-        # Write a more detailed reasoning sidecar (if present)
+        # Consolidated per-run log (single JSON) written to logs/ with a run UID
         try:
-            reasoning_full_path = out_path + ".reasoning.full.txt"
-            reasoning_parent = Path(reasoning_full_path).parent
-            if not reasoning_parent.exists():
-                reasoning_parent.mkdir(parents=True, exist_ok=True)
-            with open(reasoning_full_path, "w", encoding="utf-8") as fh:
-                fh.write(reasoning_text if isinstance(reasoning_text, str) else json.dumps(reasoning_text, indent=2, ensure_ascii=False))
-            LOG.info("Wrote detailed reasoning sidecar to %s", reasoning_full_path)
-            # Also log reasoning summary to the main log at DEBUG level
-            LOG.debug("Provider reasoning (excerpt): %s", (reasoning_text or "")[:1000])
+            import uuid as _uuid
+            import datetime as _dt
+            run_id = _uuid.uuid4().hex[:8]
+            started_iso = _dt.datetime.fromtimestamp(start_ts).isoformat()
+            finished_iso = _dt.datetime.now().isoformat()
+
+            # Attempt to get a human-readable text representation for inclusion
+            try:
+                human_text = provider.parse_response(raw_json) if hasattr(provider, "parse_response") else json.dumps(raw_json, indent=2, ensure_ascii=False)
+            except Exception:
+                human_text = None
+
+            consolidated = {
+                "run_id": run_id,
+                "started_at": started_iso,
+                "finished_at": finished_iso,
+                "model": cfg.get("model"),
+                "config": cfg,
+                "request": payload_body,
+                "response": raw_json,
+                "web_search": websearch_entries,
+                "reasoning": reasoning_text,
+                "human_text": human_text,
+                "usage": raw_json.get("usage"),
+            }
+
+            logs_dir = base_dir / "logs"
+            if not logs_dir.exists():
+                logs_dir.mkdir(parents=True, exist_ok=True)
+            log_name = f"{_dt.datetime.now().strftime('%Y%m%dT%H%M%S')}-{run_id}.json"
+            log_path = logs_dir / log_name
+            with open(log_path, "w", encoding="utf-8") as fh:
+                json.dump(consolidated, fh, indent=2, ensure_ascii=False)
+            LOG.info("Wrote consolidated run log to %s (run_id=%s)", log_path, run_id)
         except Exception:
-            LOG.exception("Failed to write detailed reasoning sidecar")
+            LOG.exception("Failed to write consolidated run log")
     except Exception:
         LOG.exception("Unexpected error in enhanced logging/extraction")
 
