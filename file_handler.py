@@ -261,6 +261,10 @@ def run(file_a: Optional[str] = None,
         out_path = str(b_path.parent / out_name)
 
     raw_path = out_path + ".raw.json"
+    # Ensure the parent directory exists before attempting to write the sidecar
+    raw_parent = Path(raw_path).parent
+    if not raw_parent.exists():
+        raw_parent.mkdir(parents=True, exist_ok=True)
     try:
         with open(raw_path, "w", encoding="utf-8") as fh:
             json.dump(raw_json, fh, indent=2, ensure_ascii=False)
