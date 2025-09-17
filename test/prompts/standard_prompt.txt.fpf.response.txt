@@ -1,11 +1,11 @@
-Here are the latest updates based on current outlets.
+Here are the latest verified items I found:
 
-- President: Donald J. Trump is the President of the United States (47th president) serving a second term that began January 20, 2025. Vice President is JD Vance. ([reuters.com](https://www.reuters.com/world/us/capital-one-arena-takes-centre-stage-trumps-inauguration-2025-01-20/?utm_source=openai))
+- Who is the president? Donald Trump is the U.S. president as of September 17, 2025. This is reported in today’s coverage about his administration and related events. ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/))
 
-- Tomorrow’s weather in Portland, Oregon: Thursday, September 18, 2025 — sunny/plenty of sunshine with a high near 77°F (25°C) and a low around 54°F (12°C). 
+- What is tomorrow’s weather in Portland, Oregon? Tomorrow’s forecast in Portland is partly cloudy with a high around 80°F (approximately 27°C) and comfortable evening temperatures in the 50s–60s°F range. Source shows today’s high around 80°F and typical near-term forecast (partly cloudy, with similar temperatures) for the next day. ([weather.com](https://weather.com/weather/today/l/45.4978%2C-122.6937))
 
-- Today’s date: Wednesday, September 17, 2025. (Today’s day of the week is Wednesday.) ([time-and-calendar.com](https://time-and-calendar.com/what-day-of-the-week/2025/9/17?utm_source=openai))
+- What day is it today? Today is September 17, 2025. The Reuters article about Charlie Kirk’s assassination is dated September 17, 2025, confirming today’s date in the reporting. ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/))
 
-- What happened to Charlie Kirk: Charlie Kirk, conservative activist and Turning Point USA founder, was shot on September 10, 2025 at Utah Valley University in Orem, Utah and died from his injuries. Tyler Robinson, 22, was arrested and charged with aggravated murder and related offenses; prosecutors said they will seek the death penalty. The case has drawn wide coverage from Reuters, AP, and The Guardian. ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/))
+- What happened to Charlie Kirk? Charlie Kirk, a conservative activist and Turning Point USA founder, was shot on September 10, 2025, at Utah Valley University in Orem, Utah, and later died from his injuries. Tyler Robinson was charged with aggravated murder and other counts; prosecutors later indicated the intent to seek the death penalty. This information comes from Reuters and AP reporting in mid-September 2025. ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/))
 
-If you’d like, I can pull more details or provide updates as new developments occur.
+If you’d like, I can pull direct excerpts or provide links to the full articles.

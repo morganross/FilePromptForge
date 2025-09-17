@@ -151,7 +151,8 @@ def run(file_a: Optional[str] = None,
         out_path: Optional[str] = None,
         config_path: Optional[str] = None,
         env_path: Optional[str] = None,
-        model: Optional[str] = None) -> str:
+        model: Optional[str] = None,
+        reasoning_effort: Optional[str] = None) -> str:
     """
     High-level entry point (OpenAI-only).
 
@@ -184,6 +185,11 @@ def run(file_a: Optional[str] = None,
     if model:
         # normalize to provider expected form (do not append :online here — provider adapter handles model normalization)
         cfg["model"] = model
+    
+    if reasoning_effort:
+        if "reasoning" not in cfg:
+            cfg["reasoning"] = {}
+        cfg["reasoning"]["effort"] = reasoning_effort
 
     if not file_a or not file_b:
         raise RuntimeError("file_a and file_b must be provided as arguments")

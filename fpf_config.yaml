@@ -21,3 +21,7 @@ web_search:
 # Include extra fields in Responses API to capture web_search sources
 include:
   - "web_search_call.action.sources"
+
+# Reasoning configuration
+reasoning:
+  effort: "medium"
