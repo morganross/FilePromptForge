@@ -152,7 +152,8 @@ def run(file_a: Optional[str] = None,
         config_path: Optional[str] = None,
         env_path: Optional[str] = None,
         model: Optional[str] = None,
-        reasoning_effort: Optional[str] = None) -> str:
+        reasoning_effort: Optional[str] = None,
+        max_completion_tokens: Optional[int] = None) -> str:
     """
     High-level entry point (OpenAI-only).
 
@@ -190,6 +191,9 @@ def run(file_a: Optional[str] = None,
         if "reasoning" not in cfg:
             cfg["reasoning"] = {}
         cfg["reasoning"]["effort"] = reasoning_effort
+    
+    if max_completion_tokens:
+        cfg["max_completion_tokens"] = max_completion_tokens
 
     if not file_a or not file_b:
         raise RuntimeError("file_a and file_b must be provided as arguments")

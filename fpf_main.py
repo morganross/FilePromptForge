@@ -114,6 +114,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     parser.add_argument("--env", help="Path to .env (optional). Defaults to package .env", dest="env")
     parser.add_argument("--model", help="Override model id", dest="model")
     parser.add_argument("--reasoning-effort", help="Override reasoning effort", dest="reasoning_effort")
+    parser.add_argument("--max-completion-tokens", help="Override max completion tokens", dest="max_completion_tokens", type=int)
     parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose logging")
     args = parser.parse_args(argv)
 
@@ -143,6 +144,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     out = resolve_path_candidate(args.out)
     model = args.model
     reasoning_effort = args.reasoning_effort
+    max_completion_tokens = args.max_completion_tokens
 
     log.debug("Resolved paths - file_a=%s, file_b=%s, config=%s, env=%s, out=%s, model=%s",
               file_a, file_b, config, env, out, model)
@@ -156,6 +158,7 @@ def main(argv: Optional[list[str]] = None) -> int:
             env_path=env,
             model=model,
             reasoning_effort=reasoning_effort,
+            max_completion_tokens=max_completion_tokens,
         )
         log.info("Run completed. Output written to %s", result_path)
         print(result_path)

@@ -25,3 +25,6 @@ include:
 # Reasoning configuration
 reasoning:
   effort: "medium"
+
+# Max completion tokens
+max_completion_tokens: 14096
