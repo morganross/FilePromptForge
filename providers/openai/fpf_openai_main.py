@@ -51,7 +51,7 @@ def validate_model(model_id: str) -> bool:
     return False
 
 
-def _translate_sampling(cfg: Dict) -> Dict:
+def _translate_sampling(cfg: Dict, model: str) -> Dict:
     out: Dict[str, Any] = {}
     if "max_output_tokens" in cfg and cfg["max_output_tokens"] is not None:
         out["max_output_tokens"] = int(cfg["max_output_tokens"])
@@ -60,8 +60,6 @@ def _translate_sampling(cfg: Dict) -> Dict:
     elif "tokens" in cfg and cfg["tokens"] is not None:
         out["max_output_tokens"] = int(cfg["tokens"])
 
-    if "temperature" in cfg and cfg["temperature"] is not None:
-        out["temperature"] = float(cfg["temperature"])
     if "top_p" in cfg and cfg["top_p"] is not None:
         out["top_p"] = float(cfg["top_p"])
 
@@ -141,7 +139,7 @@ def build_payload(prompt: str, cfg: Dict) -> Tuple[Dict, Optional[Dict]]:
     }
 
     # Merge sampling / token params
-    sampling = _translate_sampling(cfg)
+    sampling = _translate_sampling(cfg, model_to_use)
     payload.update(sampling)
 
     # Enforce provider-side web_search (always on for supported models).
