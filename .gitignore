@@ -11,7 +11,7 @@ __pycache__/
 fpf_run.log
 /logs/
 last_payload.json
-
+/test/output/
 # Editor directories
 .vscode/
 .idea/
