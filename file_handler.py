@@ -68,13 +68,20 @@ def _http_post_json(url: str, payload: Dict, headers: Dict, timeout: int = 120) 
         raise RuntimeError(f"HTTP request failed: {e}") from e
 
 
-def _load_provider_module():
-    """Import the OpenAI provider module. Raise RuntimeError if not found."""
+def _load_provider_module(provider_name: str = "openai"):
+    """Import the provider module. Raise RuntimeError if not found."""
     try:
-        mod = importlib.import_module("filepromptforge.providers.openai.fpf_openai_main")
+        # Construct the module name dynamically.
+        module_name = f"filepromptforge.providers.{provider_name}.fpf_{provider_name}_main"
+        mod = importlib.import_module(module_name)
+        LOG.info("Successfully loaded provider module: %s", module_name)
         return mod
     except ModuleNotFoundError as e:
-        raise RuntimeError("OpenAI provider module not found: filepromptforge.providers.openai.fpf_openai_main") from e
+        LOG.error("Provider module not found for: %s", provider_name)
+        raise RuntimeError(f"Provider module not found for: {provider_name}") from e
+    except Exception as e:
+        LOG.exception("An unexpected error occurred while loading provider module for: %s", provider_name)
+        raise RuntimeError(f"Could not load provider module for {provider_name}") from e
 
 
 def _read_key_from_env_file(env_path: Path, key: str) -> Optional[str]:
@@ -151,6 +158,15 @@ def _response_used_websearch(raw_json: Dict) -> bool:
             return "web_search" in raw_str
     except Exception:
         pass
+        
+    # Gemini specific check for groundingMetadata
+    try:
+        if "candidates" in raw_json and isinstance(raw_json["candidates"], list):
+            for candidate in raw_json["candidates"]:
+                if "groundingMetadata" in candidate and candidate["groundingMetadata"]:
+                    return True
+    except Exception:
+        pass
 
     return False
 
@@ -160,6 +176,7 @@ def run(file_a: Optional[str] = None,
         out_path: Optional[str] = None,
         config_path: Optional[str] = None,
         env_path: Optional[str] = None,
+        provider: Optional[str] = None,
         model: Optional[str] = None,
         reasoning_effort: Optional[str] = None,
         max_completion_tokens: Optional[int] = None) -> str:
@@ -178,18 +195,25 @@ def run(file_a: Optional[str] = None,
         # fallback to top-level helpers if present
         from filepromptforge.fpf_main import compose_input, load_config, load_env_file  # type: ignore
 
-    # load env strictly from repository filepromptforge/.env (canonical)
-    repo_env = Path(__file__).resolve().parent / ".env"
-    # Ensure canonical env is parsed for OPENAI_API_KEY and used exclusively
-    api_key_value = _read_key_from_env_file(repo_env, "OPENAI_API_KEY")
-    if api_key_value is None or api_key_value == "":
-        LOG.error("API key not found in canonical env: %s", repo_env)
-        raise RuntimeError("API key not found. Set OPENAI_API_KEY in filepromptforge/.env")
-
-    # Explicitly set process env from canonical repo .env for determinism
-    os.environ["OPENAI_API_KEY"] = api_key_value
-
     cfg = load_config(config_path or str(Path(__file__).parent / "fpf_config.yaml"))
+    
+    # Determine the provider and load the correct API key.
+    provider_name = provider or cfg.get("provider", "openai")
+    api_key_name = f"{provider_name.upper()}_API_KEY"
+    
+    repo_env = Path(__file__).resolve().parent / ".env"
+    api_key_value = _read_key_from_env_file(repo_env, api_key_name)
+    
+    if api_key_value is None or api_key_value == "":
+        # Fallback for backward compatibility with OPENAI_API_KEY
+        if provider_name == "openai":
+            api_key_value = _read_key_from_env_file(repo_env, "OPENAI_API_KEY")
+
+    if api_key_value is None or api_key_value == "":
+        LOG.error("API key '%s' not found in canonical env: %s", api_key_name, repo_env)
+        raise RuntimeError(f"API key not found. Set {api_key_name} in filepromptforge/.env")
+
+    os.environ[api_key_name] = api_key_value
 
     # Allow CLI override of model but keep canonical config for web_search/reasoning enforcement
     if model:
@@ -211,9 +235,8 @@ def run(file_a: Optional[str] = None,
     prompt_template = cfg.get("prompt_template")
     prompt = compose_input(file_a, file_b, prompt_template)
 
-    provider = _load_provider_module()
+    provider = _load_provider_module(provider_name)
 
-    # ensure model is allowed by provider
     model_to_use = cfg.get("model")
     if hasattr(provider, "validate_model"):
         if not provider.validate_model(model_to_use):
@@ -230,17 +253,26 @@ def run(file_a: Optional[str] = None,
     else:
         raise RuntimeError("Provider does not expose build_payload")
 
-    provider_url = cfg.get("provider_url")
+    provider_urls = cfg.get("provider_urls", {})
+    provider_url = provider_urls.get(provider_name)
     if not provider_url:
-        raise RuntimeError("provider_url not configured in config")
+        # Fallback for backward compatibility
+        provider_url = cfg.get("provider_url")
+    if not provider_url:
+        raise RuntimeError(f"provider_url for '{provider_name}' not configured in config")
 
-    # build headers (Authorization from canonical repo .env only)
+    # build headers
     headers = dict(provider_headers or {})
-    api_key = os.environ.get("OPENAI_API_KEY")
+    api_key = os.environ.get(api_key_name)
     if not api_key:
-        # defensive: should not happen because we set it above from repo .env
-        raise RuntimeError("API key not found in environment after loading canonical .env")
-    headers["Authorization"] = f"Bearer {api_key}"
+        raise RuntimeError(f"API key {api_key_name} not found in environment after loading canonical .env")
+
+    if provider_name == "google":
+        # Google Gemini uses x-goog-api-key header
+        headers["x-goog-api-key"] = api_key
+    else:
+        # Default to bearer token for OpenAI and others
+        headers["Authorization"] = f"Bearer {api_key}"
 
     if cfg.get("referer"):
         headers["Referer"] = cfg.get("referer")

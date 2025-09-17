@@ -112,6 +112,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     parser.add_argument("--out", help="Output path for human-readable response", dest="out")
     parser.add_argument("--config", help="Path to fpf_config.yaml", dest="config")
     parser.add_argument("--env", help="Path to .env (optional). Defaults to package .env", dest="env")
+    parser.add_argument("--provider", help="Override provider", dest="provider")
     parser.add_argument("--model", help="Override model id", dest="model")
     parser.add_argument("--reasoning-effort", help="Override reasoning effort", dest="reasoning_effort")
     parser.add_argument("--max-completion-tokens", help="Override max completion tokens", dest="max_completion_tokens", type=int)
@@ -152,9 +153,10 @@ def main(argv: Optional[list[str]] = None) -> int:
     model = args.model
     reasoning_effort = args.reasoning_effort
     max_completion_tokens = args.max_completion_tokens
+    provider = args.provider
 
-    log.debug("Resolved paths - file_a=%s, file_b=%s, config=%s, env=%s, out=%s, model=%s",
-              file_a, file_b, config, env, out, model)
+    log.debug("Resolved paths - file_a=%s, file_b=%s, config=%s, env=%s, out=%s, provider=%s, model=%s",
+              file_a, file_b, config, env, out, provider, model)
 
     try:
         result_path = run_handler(
@@ -163,6 +165,7 @@ def main(argv: Optional[list[str]] = None) -> int:
             out_path=out,
             config_path=config,
             env_path=env,
+            provider=provider,
             model=model,
             reasoning_effort=reasoning_effort,
             max_completion_tokens=max_completion_tokens,

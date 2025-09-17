@@ -1,15 +1,11 @@
-Here are up-to-date answers with sources:
+Here are the latest answers with sources:
 
-- Who is the president?
-  - Donald J. Trump is the current president (sworn in January 20, 2025, beginning his second term as the 47th president; Vice President is JD Vance). Source: The White House. ([whitehouse.gov](https://www.whitehouse.gov/past-events/donald-j-trump-sworn-in-as-the-47th-president-of-the-united-states/?utm_source=openai))
+- Who is the president? Donald Trump is the President of the United States (41st? 47th president) as of today, having been inaugurated on January 20, 2025. ([reuters.com](https://www.reuters.com/world/us/trump-vows-national-emergency-washington-dc-over-ice-dispute-2025-09-15/?utm_source=openai))
 
-- Tomorrow’s weather in Portland, Oregon
-  - Thursday, September 18, 2025: Mostly sunny to partly sunny, high around 80°F (about 27°C), low around 58–60°F (14–16°C). Source: Forecast for Portland, OR. 
+- Tomorrow’s weather in Portland, Oregon: Thursday, September 18, 2025 — Partly cloudy with a high around 78°F and a low around 52°F. ([weather.com](https://weather.com/weather/today/l/45.4978%2C-122.6937))
 
-- What day is it today?
-  - Today is Wednesday, September 17, 2025. Source: date/day calculators. ([calculat.io](https://calculat.io/en/date/what-day-of-the-week-is/17-september-2025?utm_source=openai))
+- What day is it today? September 17, 2025 (Wednesday). ([calculat.io](https://calculat.io/en/date/what-day-of-the-week-is/17-september-2025?utm_source=openai))
 
-- What happened to Charlie Kirk
-  - Charlie Kirk, founder of Turning Point USA, was shot at Utah Valley University in Orem, Utah on September 10, 2025 and died from his injuries. The suspect, Tyler Robinson, was later charged with aggravated murder, with prosecutors indicating they would seek the death penalty. Source: Reuters coverage (Sept 16–17, 2025). ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/))
+- What happened to Charlie Kirk: Charlie Kirk was shot on September 10, 2025 at Utah Valley University in Orem, Utah; he died from his injuries. A suspect, Tyler James Robinson, was later charged with aggravated murder and related offenses. ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/?utm_source=openai))
 
-If you’d like, I can add more detail or pull additional sources.
+If you’d like, I can pull more details or summarize these events further.

@@ -30,8 +30,6 @@ ALLOWED_MODELS = {
     "gpt-5-nano",
     "o4-mini",
     "o3",
-    "o3-mini",
-    "o1",
 }
 
 

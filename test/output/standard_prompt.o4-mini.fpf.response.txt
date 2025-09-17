@@ -1,13 +1,13 @@
 Here are the answers to your questions:
 
 1. Who is the president?  
-   Donald J. Trump is serving as the 47th President of the United States; he was sworn in on January 20, 2025. ([whitehouse.gov](https://www.whitehouse.gov/past-events/donald-j-trump-sworn-in-as-the-47th-president-of-the-united-states/?utm_source=openai))
+   The current President of the United States is Donald J. Trump, who was inaugurated as the 47th president on January 20, 2025. ([en.wikipedia.org](https://en.wikipedia.org/wiki/Second_presidency_of_Donald_Trump?utm_source=openai))
 
 2. What is tomorrow’s weather in Portland, Oregon?  
-   On Thursday, September 18, 2025, Portland, OR is forecast to be sunny with a high near 80 °F (27 °C) and a low around 56 °F (14 °C). 
+   On Thursday, September 18, 2025, Portland, OR is forecast to be sunny with a high of 77 °F (25 °C) and a low of 54 °F (12 °C). 
 
 3. What day is it today?  
-   Today is Wednesday, September 17, 2025.
+   Today is Wednesday, September 17, 2025. ([calculat.io](https://calculat.io/en/date/what-day-of-the-week-is/17-september-2025?utm_source=openai))
 
 4. What happened to Charlie Kirk?  
-   On September 10, 2025, Charlie Kirk—conservative activist and co-founder of Turning Point USA—was fatally shot in the neck while speaking at Utah Valley University in Orem, Utah. A suspect, 22-year-old Tyler Robinson, was arrested and has been charged with aggravated murder; his initial court hearing took place on September 16, 2025. ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/?utm_source=openai))
+   On September 10, 2025, Charlie Kirk—a conservative activist and founder of Turning Point USA—was fatally shot in the neck while speaking at Utah Valley University in Orem, Utah. The accused shooter, 22-year-old Tyler James Robinson, has been charged with aggravated murder, felony firearm discharge, obstruction of justice, and witness tampering, and prosecutors are seeking the death penalty. ([en.wikipedia.org](https://en.wikipedia.org/wiki/Killing_of_Charlie_Kirk?utm_source=openai))
