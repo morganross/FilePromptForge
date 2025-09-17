@@ -131,6 +131,7 @@ def main(argv: Optional[list[str]] = None) -> int:
 
     file_a_path = args.file_a or cfg.get("test", {}).get("file_a")
     file_b_path = args.file_b or cfg.get("test", {}).get("file_b")
+    out_path = args.out or cfg.get("test", {}).get("out")
 
     file_a = resolve_path_candidate(file_a_path)
     if not file_a:
@@ -141,7 +142,13 @@ def main(argv: Optional[list[str]] = None) -> int:
 
     config = config_path
     env = resolve_path_candidate(args.env) or str(PROJECT_ROOT / ".env")
-    out = resolve_path_candidate(args.out)
+
+    # Resolve output path: if not absolute, make it relative to the project root.
+    if out_path and not Path(out_path).is_absolute():
+        out = str(PROJECT_ROOT / out_path)
+    else:
+        out = out_path
+
     model = args.model
     reasoning_effort = args.reasoning_effort
     max_completion_tokens = args.max_completion_tokens

@@ -6,6 +6,9 @@ model: "gpt-5-nano"
 
 # Test files used when no --file-a / --file-b are provided on the CLI.
 test:
+  # optional: if not supplied via --out, a default is composed from file_b
+  # The <file_b_stem> and <model_name> placeholders will be replaced.
+  out: "test/output/<file_b_stem>.<model_name>.fpf.response.txt"
   file_a: "test/input/sample_utf8.txt"
   file_b: "test/prompts/standard_prompt.txt"
 

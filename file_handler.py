@@ -11,6 +11,7 @@ Enforced guarantees implemented here:
 
 from __future__ import annotations
 import os
+import re
 import json
 import importlib
 import logging
@@ -18,6 +19,14 @@ from typing import Dict, Optional, Tuple, Any, List
 from pathlib import Path
 
 LOG = logging.getLogger("file_handler")
+
+
+def _sanitize_filename(name: str) -> str:
+    """Sanitize a string to be a valid filename."""
+    if not name:
+        return "unknown"
+    # remove chars that are problematic for filenames
+    return re.sub(r'[\\/*?:"<>|]', "", name)
 
 
 def _http_post_json(url: str, payload: Dict, headers: Dict, timeout: int = 120) -> Dict:
@@ -253,11 +262,24 @@ def run(file_a: Optional[str] = None,
     except Exception:
         LOG.debug("Completed HTTP POST in %.2fs but failed to inspect response for logging", elapsed)
 
-    # decide out_path
-    if not out_path:
-        b_path = Path(file_b)
-        out_name = f"{b_path.name}.fpf.response.txt"
+    # decide out_path, with support for placeholders
+    model_name_sanitized = _sanitize_filename(cfg.get("model"))
+    b_path = Path(file_b)
+    file_b_stem = b_path.stem
+
+    if out_path:
+        # if out_path is from config, it might have placeholders
+        out_path = out_path.replace("<model_name>", model_name_sanitized)
+        out_path = out_path.replace("<file_b_stem>", file_b_stem)
+    else:
+        # default path construction
+        out_name = f"{file_b_stem}.{model_name_sanitized}.fpf.response.txt"
         out_path = str(b_path.parent / out_name)
+    
+    final_out_path = Path(out_path)
+    # create parent directory if it does not exist
+    final_out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path = str(final_out_path)
 
     # Raw provider sidecar files are no longer written. The response is captured in the consolidated run log.
 
