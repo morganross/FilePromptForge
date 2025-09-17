@@ -1,0 +1,139 @@
+{
+  "run_id": "8b401168",
+  "started_at": "2025-09-16T16:51:38.952941",
+  "finished_at": "2025-09-16T16:51:46.706064",
+  "model": "gpt-5-nano",
+  "config": {
+    "provider_url": "https://api.openai.com/v1/responses",
+    "model": "gpt-5-nano",
+    "test": {
+      "file_a": "test/input/sample_utf8.txt",
+      "file_b": "test/prompts/standard_prompt.txt"
+    },
+    "prompt_template": null,
+    "web_search": {
+      "max_results": 1,
+      "search_prompt": "Perform a focused web search for up-to-date information relevant to the user's request. Summarize the most relevant findings and include citation links."
+    },
+    "include": [
+      "web_search_call.action.sources"
+    ]
+  },
+  "request": {
+    "model": "gpt-5-nano",
+    "input": [
+      {
+        "role": "user",
+        "content": "\n\n"
+      }
+    ],
+    "tools": [
+      {
+        "type": "web_search"
+      }
+    ],
+    "tool_choice": "auto",
+    "reasoning": {
+      "effort": "high"
+    },
+    "include": [
+      "web_search_call.action.sources"
+    ]
+  },
+  "response": {
+    "id": "resp_09435b8f6277d00a0068c9f80a62b4819596157fe922db9cc2",
+    "object": "response",
+    "created_at": 1758066698,
+    "status": "completed",
+    "background": false,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "model": "gpt-5-nano-2025-08-07",
+    "output": [
+      {
+        "id": "rs_09435b8f6277d00a0068c9f80b1a188195b59db3784a0da96b",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "msg_09435b8f6277d00a0068c9f810b95c81959e01991fc4a1cb96",
+        "type": "message",
+        "status": "completed",
+        "content": [
+          {
+            "type": "output_text",
+            "annotations": [],
+            "logprobs": [],
+            "text": "Today is September 16, 2025. It looks like your message came through empty—how can I help you today?\n\nIf you want the latest information on something, tell me:\n- the topic (e.g., a company, product, news item, weather, etc.)\n- any constraints (region, timeframe, etc.)\n\nI can fetch up-to-date details and give you exact dates. For example, if you mean “today,” that’s September 16, 2025; “yesterday” would be September 15, 2025; “tomorrow” would be September 17, 2025."
+          }
+        ],
+        "role": "assistant"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "reasoning": {
+      "effort": "high",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": true,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tools": [
+      {
+        "type": "web_search",
+        "filters": null,
+        "search_context_size": "medium",
+        "user_location": {
+          "type": "approximate",
+          "city": null,
+          "country": "US",
+          "region": null,
+          "timezone": null
+        }
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 1.0,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 4425,
+      "input_tokens_details": {
+        "cached_tokens": 4096
+      },
+      "output_tokens": 1221,
+      "output_tokens_details": {
+        "reasoning_tokens": 1088
+      },
+      "total_tokens": 5646
+    },
+    "user": null,
+    "metadata": {}
+  },
+  "web_search": [],
+  "reasoning": "high",
+  "human_text": "Today is September 16, 2025. It looks like your message came through empty—how can I help you today?\n\nIf you want the latest information on something, tell me:\n- the topic (e.g., a company, product, news item, weather, etc.)\n- any constraints (region, timeframe, etc.)\n\nI can fetch up-to-date details and give you exact dates. For example, if you mean “today,” that’s September 16, 2025; “yesterday” would be September 15, 2025; “tomorrow” would be September 17, 2025.",
+  "usage": {
+    "input_tokens": 4425,
+    "input_tokens_details": {
+      "cached_tokens": 4096
+    },
+    "output_tokens": 1221,
+    "output_tokens_details": {
+      "reasoning_tokens": 1088
+    },
+    "total_tokens": 5646
+  }
+}

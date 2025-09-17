@@ -1,15 +1,11 @@
-Here are the latest updates based on current public reports (as of Sept 16, 2025):
+Here are the latest updates based on reliable sources:
 
-- Who is the president?
-  - Donald Trump is the President of the United States (47th president). He was inaugurated on January 20, 2025. ([reutersconnect.com](https://www.reutersconnect.com/item/inauguration-ceremony-for-trumps-second-presidential-term/dGFnOnJldXRlcnMuY29tLDIwMjU6bmV3c21sX1JDMlREQ0FJTkNTQg%3D%3D?utm_source=openai))
+- Who is the president? Donald Trump is the current president (the 47th U.S. president), in office since January 20, 2025. ([reuters.com](https://www.reuters.com/sustainability/boards-policy-regulation/trump-says-us-will-announce-buyer-tiktok-2025-09-16/))
 
-- Tomorrow’s weather in Portland, Oregon
-  - Portland, OR: Wednesday, September 17, 2025 — Mostly sunny, high around 80°F (26°C), low around 57°F (14°C). 
+- What is tomorrow’s weather in Portland, Oregon? Portland tomorrow (Sept 18, 2025) is forecast to be mostly sunny with a high around 80°F (about 26°C) and a overnight low near 58–60°F (14–16°C). No rain is indicated in the forecast. 
 
-- What day is it today?
-  - Today is Tuesday, September 16, 2025. (Weather forecast page shows today as September 16.) 
+- What day is it today? Today is Wednesday, September 17, 2025. ([timeanddate.com](https://www.timeanddate.com/calendar/weekday-wednesday-17))
 
-- What happened to Charlie Kirk
-  - Charlie Kirk was fatally shot on September 10, 2025, during a campus appearance at Utah Valley University. A 22-year-old suspect, Tyler Robinson, has been charged with aggravated murder and related offenses; the case is ongoing. ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/?utm_source=openai))
+- What happened to Charlie Kirk? Charlie Kirk, the Turning Point USA founder, was shot and killed on September 10, 2025, at Utah Valley University in Orem, Utah. Tyler Robinson, 22, has been charged with aggravated murder and related offenses; prosecutors say they will seek the death penalty if convicted. The case is in Utah County court with a next hearing planned for September 29, 2025. ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/))
 
-If you’d like, I can pull more details or provide direct links to the articles.
+If you’d like, I can pull in more details or provide links to official court filings and local forecasts.

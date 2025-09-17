@@ -185,13 +185,8 @@ def run(file_a: Optional[str] = None,
         # normalize to provider expected form (do not append :online here — provider adapter handles model normalization)
         cfg["model"] = model
 
-    # if files not provided, try test section
     if not file_a or not file_b:
-        test_cfg = cfg.get("test", {})
-        file_a = file_a or test_cfg.get("file_a")
-        file_b = file_b or test_cfg.get("file_b")
-        if not file_a or not file_b:
-            raise RuntimeError("file_a and file_b must be provided either as arguments or in the config.test section")
+        raise RuntimeError("file_a and file_b must be provided as arguments")
 
     # compose prompt
     prompt_template = cfg.get("prompt_template")

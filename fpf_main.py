@@ -41,6 +41,9 @@ if not LOG_FILENAME.parent.exists():
     LOG_FILENAME.parent.mkdir(parents=True, exist_ok=True)
 
 
+import yaml
+
+
 def setup_logging(level: int = logging.INFO) -> None:
     logger = logging.getLogger()
     logger.setLevel(level)
@@ -67,7 +70,6 @@ def setup_logging(level: int = logging.INFO) -> None:
         logger.addHandler(ch)
     if not any(isinstance(h, logging.handlers.RotatingFileHandler) for h in logger.handlers):
         logger.addHandler(fh)
-
 
 def resolve_path_candidate(candidate: Optional[str]) -> Optional[str]:
     """
@@ -97,6 +99,9 @@ def resolve_path_candidate(candidate: Optional[str]) -> Optional[str]:
     logging.getLogger("fpf_main").error("Path not found in cwd or package: %s", candidate)
     return None
 
+def load_config(path: str) -> dict:
+    with open(path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
 
 def main(argv: Optional[list[str]] = None) -> int:
     setup_logging(logging.INFO)
@@ -118,11 +123,21 @@ def main(argv: Optional[list[str]] = None) -> int:
 
     log.info("Starting FPF runner")
     log.debug("Script dir: %s", SCRIPT_DIR)
+    
+    config_path = resolve_path_candidate(args.config) or str(PROJECT_ROOT / "fpf_config.yaml")
+    cfg = load_config(config_path)
 
-    # Resolve paths so the script can be run from anywhere
-    file_a = resolve_path_candidate(args.file_a)
-    file_b = resolve_path_candidate(args.file_b)
-    config = resolve_path_candidate(args.config) or str(PROJECT_ROOT / "fpf_config.yaml")
+    file_a_path = args.file_a or cfg.get("test", {}).get("file_a")
+    file_b_path = args.file_b or cfg.get("test", {}).get("file_b")
+
+    file_a = resolve_path_candidate(file_a_path)
+    if not file_a:
+        raise FileNotFoundError(f"Input file not found: {file_a_path}")
+    file_b = resolve_path_candidate(file_b_path)
+    if not file_b:
+        raise FileNotFoundError(f"Input file not found: {file_b_path}")
+
+    config = config_path
     env = resolve_path_candidate(args.env) or str(PROJECT_ROOT / ".env")
     out = resolve_path_candidate(args.out)
     model = args.model

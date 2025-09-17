@@ -1,0 +1,642 @@
+{
+  "run_id": "0c1495f1",
+  "started_at": "2025-09-16T17:05:47.401876",
+  "finished_at": "2025-09-16T17:06:38.234856",
+  "model": "gpt-5-nano",
+  "config": {
+    "provider_url": "https://api.openai.com/v1/responses",
+    "model": "gpt-5-nano",
+    "test": {
+      "file_a": "test/input/sample_utf8.txt",
+      "file_b": "test/prompts/standard_prompt.txt"
+    },
+    "prompt_template": null,
+    "web_search": {
+      "max_results": 1,
+      "search_prompt": "Perform a focused web search for up-to-date information relevant to the user's request. Summarize the most relevant findings and include citation links."
+    },
+    "include": [
+      "web_search_call.action.sources"
+    ]
+  },
+  "request": {
+    "model": "gpt-5-nano",
+    "input": [
+      {
+        "role": "user",
+        "content": "you must search the internet for up to date info.\n\nWho is the president?\n\nwhat is tommarows weather in portland oregon?\n\nwhat day is it today?\n\nwhat happend to charlie kirk\n\n\n\nYou are ChatGPT, a large language model trained by OpenAI. Provide clear and concise answers to the user's queries."
+      }
+    ],
+    "tools": [
+      {
+        "type": "web_search"
+      }
+    ],
+    "tool_choice": "auto",
+    "reasoning": {
+      "effort": "high"
+    },
+    "include": [
+      "web_search_call.action.sources"
+    ]
+  },
+  "response": {
+    "id": "resp_09199fe78caf05af0068c9fb5ad4a88197ba52e78a0bd9abad",
+    "object": "response",
+    "created_at": 1758067546,
+    "status": "completed",
+    "background": false,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "model": "gpt-5-nano-2025-08-07",
+    "output": [
+      {
+        "id": "rs_09199fe78caf05af0068c9fb5b83f48197a71820b7d233d47b",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_09199fe78caf05af0068c9fb61e804819799d80e3809ff11ca",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "query": "Who is the president of the United States September 2025",
+          "sources": [
+            {
+              "type": "url",
+              "url": "https://www.theguardian.com/us-news/2025/sep/16/charlie-kirk-shooter-charged"
+            },
+            {
+              "type": "url",
+              "url": "https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/"
+            },
+            {
+              "type": "url",
+              "url": "https://apnews.com/article/5b21388dd7c84f887df0a8c01cb4bf2c"
+            },
+            {
+              "type": "url",
+              "url": "https://weather.com/weather/today/l/45.4978%2C-122.6937"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Killing_of_Charlie_Kirk"
+            },
+            {
+              "type": "url",
+              "url": "https://calculat.io/en/date/what-day-of-the-week-is/17-september-2025"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Charlie_Kirk"
+            },
+            {
+              "type": "url",
+              "url": "https://www.daysoftheyear.com/days/sept/17/2025/"
+            },
+            {
+              "type": "url",
+              "url": "https://time-and-calendar.com/what-day-of-the-week/2025/9/17"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_09199fe78caf05af0068c9fb63fd7881978358bb80840a1356",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_09199fe78caf05af0068c9fb653c1481979cffcf75db207f7d",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "sources": [
+            {
+              "type": "url",
+              "url": "https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_09199fe78caf05af0068c9fb6606208197aaa1d84f0740e313",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_09199fe78caf05af0068c9fb66d2b08197989895187fdc61c8",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "sources": [
+            {
+              "type": "url",
+              "url": "https://www.theguardian.com/us-news/2025/sep/16/charlie-kirk-shooter-charged"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_09199fe78caf05af0068c9fb6781748197acbc1739e1f42464",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_09199fe78caf05af0068c9fb67f50881979977974efb314adf",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "query": "Who is the president of the United States September 2025 Reuters",
+          "sources": [
+            {
+              "type": "url",
+              "url": "https://www.reuters.com/sustainability/boards-policy-regulation/trump-says-us-will-announce-buyer-tiktok-2025-09-16/"
+            },
+            {
+              "type": "url",
+              "url": "https://www.washingtonpost.com/politics/2025/09/16/trump-uk-state-visit-king-charles/"
+            },
+            {
+              "type": "url",
+              "url": "https://www.reuters.com/world/us/kamala-harris-calls-biden-2024-candidacy-reckless-new-book-says-2025-09-10/"
+            },
+            {
+              "type": "url",
+              "url": "https://apnews.com/article/473ca75fb9fb5fa157a788bcf3ecc941"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Presidency_of_Joe_Biden"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Second_inauguration_of_Donald_Trump"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Joe_Biden"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Second_presidency_of_Donald_Trump"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Russell_Vought"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Donald_Trump"
+            },
+            {
+              "type": "url",
+              "url": "https://news.gallup.com/poll/642911/say-neither-biden-nor-trump-good-president.aspx"
+            },
+            {
+              "type": "url",
+              "url": "https://www.bbc.com/news/articles/cde7ng85jwgo"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_09199fe78caf05af0068c9fb6975c48197a9d9e6bfaef4df8f",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_09199fe78caf05af0068c9fb6ae800819781911fb036795b6f",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "sources": [
+            {
+              "type": "url",
+              "url": "https://www.reuters.com/sustainability/boards-policy-regulation/trump-says-us-will-announce-buyer-tiktok-2025-09-16/"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_09199fe78caf05af0068c9fb6bc39c8197a3127d7127302f1f",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_09199fe78caf05af0068c9fb6ea4f48197bdba27d2a0bbfee5",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "query": "September 17 2025 day of the week site:timeanddate.com",
+          "sources": [
+            {
+              "type": "url",
+              "url": "https://navbharattimes.indiatimes.com/astro/religion-rituals/panchang/aaj-ka-panchang-17-september-2025-today-panchang-wednesday-indira-ekadashi-katha-2025-shradh-today-know-rahukal-and-puja-shubh-muhurat/articleshow/123927008.cms"
+            },
+            {
+              "type": "url",
+              "url": "https://m.economictimes.com/news/new-updates/indira-ekadashi-2025-significance-date-and-spiritual-benefits-of-the-sacred-fast/articleshow/123924700.cms"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/World_Patient_Safety_Day"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Constitution_Day_and_Citizenship_Day"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Constitution_Week"
+            },
+            {
+              "type": "url",
+              "url": "https://www.timeanddate.com/calendar/weekday-wednesday-17"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/September_17"
+            },
+            {
+              "type": "url",
+              "url": "https://en.wikipedia.org/wiki/Wrestlepalooza_%282025%29"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_09199fe78caf05af0068c9fb7035508197976e76fb7ace74b7",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_09199fe78caf05af0068c9fb70e97481978294549486db4305",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "sources": [
+            {
+              "type": "url",
+              "url": "https://www.timeanddate.com/calendar/weekday-wednesday-17"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_09199fe78caf05af0068c9fb7205bc8197a3d5abe28fc4b7ef",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "ws_09199fe78caf05af0068c9fb7770c88197867c13062c656026",
+        "type": "web_search_call",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "query": "weather: Portland, OR",
+          "sources": [
+            {
+              "type": "api",
+              "name": "oai-weather"
+            }
+          ]
+        }
+      },
+      {
+        "id": "rs_09199fe78caf05af0068c9fb78bde48197a59383c65c43c3c8",
+        "type": "reasoning",
+        "summary": []
+      },
+      {
+        "id": "msg_09199fe78caf05af0068c9fb8b13188197b283b2169faea0aa",
+        "type": "message",
+        "status": "completed",
+        "content": [
+          {
+            "type": "output_text",
+            "annotations": [
+              {
+                "type": "url_citation",
+                "end_index": 312,
+                "start_index": 179,
+                "title": "TikTok lives: US, China in deal for app to keep operating in US | Reuters",
+                "url": "https://www.reuters.com/sustainability/boards-policy-regulation/trump-says-us-will-announce-buyer-tiktok-2025-09-16/"
+              },
+              {
+                "type": "url_citation",
+                "end_index": 692,
+                "start_index": 614,
+                "title": "Months and Years having Wednesday the 17th",
+                "url": "https://www.timeanddate.com/calendar/weekday-wednesday-17"
+              },
+              {
+                "type": "url_citation",
+                "end_index": 1226,
+                "start_index": 1086,
+                "title": "Prosecutors to seek death penalty for suspect in Charlie Kirk assassination | Reuters",
+                "url": "https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/"
+              }
+            ],
+            "logprobs": [],
+            "text": "Here are the latest updates based on reliable sources:\n\n- Who is the president? Donald Trump is the current president (the 47th U.S. president), in office since January 20, 2025. ([reuters.com](https://www.reuters.com/sustainability/boards-policy-regulation/trump-says-us-will-announce-buyer-tiktok-2025-09-16/))\n\n- What is tomorrow’s weather in Portland, Oregon? Portland tomorrow (Sept 18, 2025) is forecast to be mostly sunny with a high around 80°F (about 26°C) and a overnight low near 58–60°F (14–16°C). No rain is indicated in the forecast. \n\n- What day is it today? Today is Wednesday, September 17, 2025. ([timeanddate.com](https://www.timeanddate.com/calendar/weekday-wednesday-17))\n\n- What happened to Charlie Kirk? Charlie Kirk, the Turning Point USA founder, was shot and killed on September 10, 2025, at Utah Valley University in Orem, Utah. Tyler Robinson, 22, has been charged with aggravated murder and related offenses; prosecutors say they will seek the death penalty if convicted. The case is in Utah County court with a next hearing planned for September 29, 2025. ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/))\n\nIf you’d like, I can pull in more details or provide links to official court filings and local forecasts."
+          }
+        ],
+        "role": "assistant"
+      }
+    ],
+    "parallel_tool_calls": true,
+    "previous_response_id": null,
+    "prompt_cache_key": null,
+    "reasoning": {
+      "effort": "high",
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "store": true,
+    "temperature": 1.0,
+    "text": {
+      "format": {
+        "type": "text"
+      },
+      "verbosity": "medium"
+    },
+    "tool_choice": "auto",
+    "tools": [
+      {
+        "type": "web_search",
+        "filters": null,
+        "search_context_size": "medium",
+        "user_location": {
+          "type": "approximate",
+          "city": null,
+          "country": "US",
+          "region": null,
+          "timezone": null
+        }
+      }
+    ],
+    "top_logprobs": 0,
+    "top_p": 1.0,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 189265,
+      "input_tokens_details": {
+        "cached_tokens": 125824
+      },
+      "output_tokens": 6837,
+      "output_tokens_details": {
+        "reasoning_tokens": 6528
+      },
+      "total_tokens": 196102
+    },
+    "user": null,
+    "metadata": {}
+  },
+  "web_search": [
+    {
+      "id": "ws_09199fe78caf05af0068c9fb61e804819799d80e3809ff11ca",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "query": "Who is the president of the United States September 2025",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.theguardian.com/us-news/2025/sep/16/charlie-kirk-shooter-charged"
+          },
+          {
+            "type": "url",
+            "url": "https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/"
+          },
+          {
+            "type": "url",
+            "url": "https://apnews.com/article/5b21388dd7c84f887df0a8c01cb4bf2c"
+          },
+          {
+            "type": "url",
+            "url": "https://weather.com/weather/today/l/45.4978%2C-122.6937"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Killing_of_Charlie_Kirk"
+          },
+          {
+            "type": "url",
+            "url": "https://calculat.io/en/date/what-day-of-the-week-is/17-september-2025"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Charlie_Kirk"
+          },
+          {
+            "type": "url",
+            "url": "https://www.daysoftheyear.com/days/sept/17/2025/"
+          },
+          {
+            "type": "url",
+            "url": "https://time-and-calendar.com/what-day-of-the-week/2025/9/17"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_09199fe78caf05af0068c9fb653c1481979cffcf75db207f7d",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_09199fe78caf05af0068c9fb66d2b08197989895187fdc61c8",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.theguardian.com/us-news/2025/sep/16/charlie-kirk-shooter-charged"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_09199fe78caf05af0068c9fb67f50881979977974efb314adf",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "query": "Who is the president of the United States September 2025 Reuters",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.reuters.com/sustainability/boards-policy-regulation/trump-says-us-will-announce-buyer-tiktok-2025-09-16/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.washingtonpost.com/politics/2025/09/16/trump-uk-state-visit-king-charles/"
+          },
+          {
+            "type": "url",
+            "url": "https://www.reuters.com/world/us/kamala-harris-calls-biden-2024-candidacy-reckless-new-book-says-2025-09-10/"
+          },
+          {
+            "type": "url",
+            "url": "https://apnews.com/article/473ca75fb9fb5fa157a788bcf3ecc941"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Presidency_of_Joe_Biden"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Second_inauguration_of_Donald_Trump"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Joe_Biden"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Second_presidency_of_Donald_Trump"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Russell_Vought"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Donald_Trump"
+          },
+          {
+            "type": "url",
+            "url": "https://news.gallup.com/poll/642911/say-neither-biden-nor-trump-good-president.aspx"
+          },
+          {
+            "type": "url",
+            "url": "https://www.bbc.com/news/articles/cde7ng85jwgo"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_09199fe78caf05af0068c9fb6ae800819781911fb036795b6f",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.reuters.com/sustainability/boards-policy-regulation/trump-says-us-will-announce-buyer-tiktok-2025-09-16/"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_09199fe78caf05af0068c9fb6ea4f48197bdba27d2a0bbfee5",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "query": "September 17 2025 day of the week site:timeanddate.com",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://navbharattimes.indiatimes.com/astro/religion-rituals/panchang/aaj-ka-panchang-17-september-2025-today-panchang-wednesday-indira-ekadashi-katha-2025-shradh-today-know-rahukal-and-puja-shubh-muhurat/articleshow/123927008.cms"
+          },
+          {
+            "type": "url",
+            "url": "https://m.economictimes.com/news/new-updates/indira-ekadashi-2025-significance-date-and-spiritual-benefits-of-the-sacred-fast/articleshow/123924700.cms"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/World_Patient_Safety_Day"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Constitution_Day_and_Citizenship_Day"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Constitution_Week"
+          },
+          {
+            "type": "url",
+            "url": "https://www.timeanddate.com/calendar/weekday-wednesday-17"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/September_17"
+          },
+          {
+            "type": "url",
+            "url": "https://en.wikipedia.org/wiki/Wrestlepalooza_%282025%29"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_09199fe78caf05af0068c9fb70e97481978294549486db4305",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "sources": [
+          {
+            "type": "url",
+            "url": "https://www.timeanddate.com/calendar/weekday-wednesday-17"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ws_09199fe78caf05af0068c9fb7770c88197867c13062c656026",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "query": "weather: Portland, OR",
+        "sources": [
+          {
+            "type": "api",
+            "name": "oai-weather"
+          }
+        ]
+      }
+    }
+  ],
+  "reasoning": "high",
+  "human_text": "Here are the latest updates based on reliable sources:\n\n- Who is the president? Donald Trump is the current president (the 47th U.S. president), in office since January 20, 2025. ([reuters.com](https://www.reuters.com/sustainability/boards-policy-regulation/trump-says-us-will-announce-buyer-tiktok-2025-09-16/))\n\n- What is tomorrow’s weather in Portland, Oregon? Portland tomorrow (Sept 18, 2025) is forecast to be mostly sunny with a high around 80°F (about 26°C) and a overnight low near 58–60°F (14–16°C). No rain is indicated in the forecast. \n\n- What day is it today? Today is Wednesday, September 17, 2025. ([timeanddate.com](https://www.timeanddate.com/calendar/weekday-wednesday-17))\n\n- What happened to Charlie Kirk? Charlie Kirk, the Turning Point USA founder, was shot and killed on September 10, 2025, at Utah Valley University in Orem, Utah. Tyler Robinson, 22, has been charged with aggravated murder and related offenses; prosecutors say they will seek the death penalty if convicted. The case is in Utah County court with a next hearing planned for September 29, 2025. ([reuters.com](https://www.reuters.com/world/us/charlie-kirks-accused-assassin-faces-initial-court-hearing-formal-charges-utah-2025-09-16/))\n\nIf you’d like, I can pull in more details or provide links to official court filings and local forecasts.",
+  "usage": {
+    "input_tokens": 189265,
+    "input_tokens_details": {
+      "cached_tokens": 125824
+    },
+    "output_tokens": 6837,
+    "output_tokens_details": {
+      "reasoning_tokens": 6528
+    },
+    "total_tokens": 196102
+  }
+}
