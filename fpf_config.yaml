@@ -14,8 +14,8 @@ prompt_template: null
 
 # Web search/tooling tuning (enable flag removed — web_search enforced in code)
 web_search:
-  # tuning: max_results, search_prompt, filters may be specified but disabling is ignored
-  max_results: 1
+  # tuning: search_context_size, search_prompt, filters may be specified but disabling is ignored
+  search_context_size: "low"
   search_prompt: "Perform a focused web search for up-to-date information relevant to the user's request. Summarize the most relevant findings and include citation links."
 
 # Include extra fields in Responses API to capture web_search sources

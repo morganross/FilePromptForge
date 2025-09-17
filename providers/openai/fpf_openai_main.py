@@ -150,9 +150,16 @@ def build_payload(prompt: str, cfg: Dict) -> Tuple[Dict, Optional[Dict]]:
     # but including them inside the `tools` block has caused API errors (unknown_parameter).
     # Keep the tools block minimal and let provider adapters map tuning into supported fields.
     web_search_cfg = cfg.get("web_search", {}) or {}
-    ws_tool: Dict[str, Any] = {"type": "web_search"}
-    # Provider-specific tuning should not inject unknown params into the tools array here.
-    # If/when a provider supports extra tool fields, map them in the provider adapter implementation.
+    # NOTE: The web_search tool in the Responses API uses "web_search_preview"
+    ws_tool: Dict[str, Any] = {"type": "web_search_preview"}
+
+    # As of Sept 2025, the web_search tool only supports `search_context_size` for certain models.
+    if model_to_use.startswith("gpt-5"):
+        if "search_context_size" in web_search_cfg:
+            ws_tool["search_context_size"] = web_search_cfg["search_context_size"]
+    
+    if "user_location" in web_search_cfg:
+        ws_tool["user_location"] = web_search_cfg["user_location"]
 
     # Always attach the tools array and allow the model to choose tool usage.
     payload["tools"] = [ws_tool]
