@@ -33,7 +33,7 @@ PROJECT_ROOT = SCRIPT_DIR
 if str(PROJECT_ROOT.parent) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT.parent))
 
-from filepromptforge.file_handler import run as run_handler  # type: ignore
+from file_handler import run as run_handler  # use local module in same directory
 
 LOG_FILENAME = SCRIPT_DIR / "logs" / "fpf_run.log"
 # Ensure logs directory exists so the rotating file handler can write there

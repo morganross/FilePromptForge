@@ -71,8 +71,8 @@ def _http_post_json(url: str, payload: Dict, headers: Dict, timeout: int = 120) 
 def _load_provider_module(provider_name: str = "openai"):
     """Import the provider module. Raise RuntimeError if not found."""
     try:
-        # Construct the module name dynamically.
-        module_name = f"filepromptforge.providers.{provider_name}.fpf_{provider_name}_main"
+        # Construct the module name dynamically (import within this package root).
+        module_name = f"providers.{provider_name}.fpf_{provider_name}_main"
         mod = importlib.import_module(module_name)
         LOG.info("Successfully loaded provider module: %s", module_name)
         return mod
@@ -190,10 +190,10 @@ def run(file_a: Optional[str] = None,
     """
     # Import helpers lazily to avoid circular imports
     try:
-        from filepromptforge.fpf.fpf_main import compose_input, load_config, load_env_file
+        from fpf.fpf_main import compose_input, load_config, load_env_file
     except Exception:
         # fallback to top-level helpers if present
-        from filepromptforge.fpf_main import compose_input, load_config, load_env_file  # type: ignore
+        from fpf_main import compose_input, load_config, load_env_file  # type: ignore
 
     cfg = load_config(config_path or str(Path(__file__).parent / "fpf_config.yaml"))
     
