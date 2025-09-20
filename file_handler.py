@@ -18,6 +18,8 @@ import logging
 from typing import Dict, Optional, Tuple, Any, List
 from pathlib import Path
 
+from pricing.pricing_loader import load_pricing_index, find_pricing, calc_cost
+
 LOG = logging.getLogger("file_handler")
 
 
@@ -29,11 +31,11 @@ def _sanitize_filename(name: str) -> str:
     return re.sub(r'[\\/*?:"<>|]', "", name)
 
 
-def _http_post_json(url: str, payload: Dict, headers: Dict, timeout: int = 120) -> Dict:
+def _http_post_json(url: str, payload: Dict, headers: Dict, timeout: int = 300) -> Dict:
     """POST JSON and return parsed JSON response. Uses urllib (no extra deps).
 
     Enhancements:
-    - Increased default timeout to 120s to accommodate longer reasoning/tool runs.
+    - Increased default timeout to 300s to accommodate longer reasoning/tool runs.
     - Added debug logging of request metadata (not payload contents) to assist troubleshooting.
     - Logs and raises detailed errors on HTTP failures.
     """
@@ -357,6 +359,68 @@ def run(file_a: Optional[str] = None,
         except Exception:
             human_text = None
 
+        # Standardize usage across providers (OpenAI/Gemini) and compute cost
+        def _std_usage(rj: dict) -> dict:
+            # OpenAI-style (Responses API and Chat Completions)
+            try:
+                u = rj.get("usage") or {}
+                # Responses API fields
+                it = u.get("input_tokens")
+                ot = u.get("output_tokens")
+                tt = u.get("total_tokens")
+                if any(isinstance(x, int) for x in (it, ot, tt)):
+                    it_i = int(it or 0)
+                    ot_i = int(ot or 0)
+                    return {"prompt_tokens": it_i, "completion_tokens": ot_i, "total_tokens": int(tt or (it_i + ot_i))}
+                # Legacy Chat Completions fields
+                pt = u.get("prompt_tokens")
+                ct = u.get("completion_tokens")
+                if isinstance(pt, int) or isinstance(ct, int):
+                    pt_i = int(pt or 0)
+                    ct_i = int(ct or 0)
+                    return {"prompt_tokens": pt_i, "completion_tokens": ct_i, "total_tokens": pt_i + ct_i}
+            except Exception:
+                pass
+            # Google Gemini-style
+            try:
+                um = rj.get("usageMetadata") or {}
+                pt = um.get("promptTokenCount")
+                ct = um.get("candidatesTokenCount")
+                tt = um.get("totalTokenCount")
+                if any(isinstance(x, int) for x in (pt, ct, tt)):
+                    if pt is None or ct is None:
+                        pts = 0
+                        cts = 0
+                        for c in (rj.get("candidates") or []):
+                            m = c.get("usageMetadata") or {}
+                            pts += int(m.get("promptTokenCount") or 0)
+                            cts += int(m.get("candidatesTokenCount") or 0)
+                        pt = int(pt or pts)
+                        ct = int(ct or cts)
+                    return {
+                        "prompt_tokens": int(pt or 0),
+                        "completion_tokens": int(ct or 0),
+                        "total_tokens": int(tt or (int(pt or 0) + int(ct or 0))),
+                    }
+            except Exception:
+                pass
+            return {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
+
+        usage_std = _std_usage(raw_json)
+
+        # Price lookup and cost computation
+        try:
+            pricing_path = str(base_dir / "pricing" / "pricing_index.json")
+            pricing_list = load_pricing_index(pricing_path)
+            model_cfg = cfg.get("model") or ""
+            model_slug = model_cfg if "/" in str(model_cfg) else f"{provider_name}/{model_cfg}"
+            rec = find_pricing(pricing_list, model_slug)
+            cost = calc_cost(usage_std.get("prompt_tokens", 0), usage_std.get("completion_tokens", 0), rec)
+            total_cost_usd = cost.get("total_cost_usd")
+        except Exception:
+            cost = {"reason": "cost_calc_failed"}
+            total_cost_usd = None
+
         consolidated = {
             "run_id": run_id,
             "started_at": started_iso,
@@ -368,7 +432,9 @@ def run(file_a: Optional[str] = None,
             "web_search": websearch_entries,
             "reasoning": reasoning_text,
             "human_text": human_text,
-            "usage": raw_json.get("usage"),
+            "usage": usage_std,
+            "cost": cost,
+            "total_cost_usd": total_cost_usd,
         }
 
         logs_dir = base_dir / "logs"

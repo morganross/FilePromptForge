@@ -1,5 +1,7 @@
 """
-filepromptforge package initializer.
-Creates a minimal package so submodules can be imported during local runs.
+FilePromptForge package initializer.
+
+Ensures API_Cost_Multiplier.FilePromptForge is an importable package so
+submodules (e.g., pricing) can be executed with `python -m ...`.
 """
-__all__ = ["fpf", "providers", "test", "google"]
+__all__ = ["pricing"]

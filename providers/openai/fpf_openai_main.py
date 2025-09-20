@@ -275,8 +275,47 @@ def parse_response(raw_json: Dict) -> str:
                     if "text" in ch and isinstance(ch["text"], str):
                         return ch["text"]
 
-        import json as _json
-        return _json.dumps(raw_json, indent=2, ensure_ascii=False)
+        # Fallback to Markdown summary instead of dumping raw JSON
+        status = raw_json.get("status") if isinstance(raw_json, dict) else None
+        incomplete_reason = ((raw_json.get("incomplete_details") or {}).get("reason")) if isinstance(raw_json, dict) else None
+        r_model = raw_json.get("model") if isinstance(raw_json, dict) else None
+        u = (raw_json.get("usage") or {}) if isinstance(raw_json, dict) else {}
+        it = u.get("input_tokens") or u.get("prompt_tokens")
+        ot = u.get("output_tokens") or u.get("completion_tokens")
+        tt = u.get("total_tokens")
+
+        # Try to include any available reasoning text
+        try:
+            reasoning_text = extract_reasoning(raw_json)
+        except Exception:
+            reasoning_text = None
+
+        lines: List[str] = []
+        lines.append("# Response")
+        if r_model:
+            lines.append(f"- Model: {r_model}")
+        if status:
+            lines.append(f"- Status: {status}")
+        if incomplete_reason:
+            lines.append(f"- Incomplete: {incomplete_reason}")
+
+        if any(isinstance(x, int) for x in (it, ot, tt)):
+            lines.append("## Usage")
+            if isinstance(it, int):
+                lines.append(f"- Input tokens: {it}")
+            if isinstance(ot, int):
+                lines.append(f"- Output tokens: {ot}")
+            if isinstance(tt, int):
+                lines.append(f"- Total tokens: {tt}")
+
+        if reasoning_text and isinstance(reasoning_text, str) and reasoning_text.strip():
+            lines.append("## Reasoning")
+            lines.append(reasoning_text.strip())
+
+        # If no content was extractable, emit a minimal stub
+        if len(lines) <= 1:
+            return "No assistant text was returned. See logs for details."
+        return "\n".join(lines)
     except Exception as e:
         import logging, json as _json
         logging.getLogger("fpf_openai_main").exception("Exception while parsing provider response: %s", e)
