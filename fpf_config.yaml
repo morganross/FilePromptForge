@@ -18,6 +18,6 @@ include:
 - web_search_call.action.sources
 reasoning:
   effort: low
-max_completion_tokens: 500000
+max_completion_tokens: 50000
 grounding:
   max_results: 1

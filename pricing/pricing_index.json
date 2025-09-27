@@ -1061,5 +1061,48 @@
         "internal_reasoning": "0"
       }
     }
+  },
+  {
+    "provider": "openai",
+    "model": "openai/o3-deep-research",
+    "input_price_per_million_usd": 10.0,
+    "output_price_per_million_usd": 40.0,
+    "unit": "per_million_tokens",
+    "last_updated": "2025-09-27",
+    "source": "openai",
+    "source_url": "https://platform.openai.com/docs/models/o3-deep-research",
+    "metadata": {
+      "context_length": 200000,
+      "raw_pricing": {
+        "prompt": "0.00001",
+        "completion": "0.00004",
+        "request": "0",
+        "image": "0",
+        "web_search": "0.01",
+        "internal_reasoning": "0"
+      }
+    }
+  },
+  {
+    "provider": "openai",
+    "model": "openai/o4-mini-deep-research",
+    "input_price_per_million_usd": 1.1,
+    "output_price_per_million_usd": 4.4,
+    "unit": "per_million_tokens",
+    "last_updated": "2025-09-27",
+    "source": "openai",
+    "source_url": "https://platform.openai.com/docs/models/o4-mini-deep-research",
+    "metadata": {
+      "context_length": 200000,
+      "raw_pricing": {
+        "prompt": "0.0000011",
+        "completion": "0.0000044",
+        "request": "0",
+        "image": "0.0008415",
+        "web_search": "0.01",
+        "internal_reasoning": "0",
+        "input_cache_read": "0.000000275"
+      }
+    }
   }
 ]

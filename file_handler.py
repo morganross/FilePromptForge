@@ -297,7 +297,7 @@ def run(file_a: Optional[str] = None,
 
     import time
     start_ts = time.time()
-    raw_json = _http_post_json(provider_url, payload_body, headers, timeout=1800 if provider_name == "openaidp" else 600)
+    raw_json = _http_post_json(provider_url, payload_body, headers, timeout=7200 if provider_name == "openaidp" else 600)
     elapsed = time.time() - start_ts
     try:
         if isinstance(raw_json, dict):
