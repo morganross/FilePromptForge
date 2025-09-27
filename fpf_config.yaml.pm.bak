@@ -4,7 +4,7 @@ provider_urls:
   openai: https://api.openai.com/v1/responses
   google: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent
 test:
-  out: test/output/<file_b_stem>.<model_name>.fpf.response.txt
+  out: test/output/<file_b_stem>.<model_name>.fpf.response.md
   file_a: test/input/sample_utf8.txt
   file_b: test/prompts/standard_prompt.txt
 prompt_template: null
@@ -16,7 +16,7 @@ web_search:
 include:
 - web_search_call.action.sources
 reasoning:
-  effort: medium
-max_completion_tokens: 500
+  effort: low
+max_completion_tokens: 50000
 grounding:
-  max_results: 30
+  max_results: 1

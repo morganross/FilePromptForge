@@ -31,7 +31,7 @@ def _sanitize_filename(name: str) -> str:
     return re.sub(r'[\\/*?:"<>|]', "", name)
 
 
-def _http_post_json(url: str, payload: Dict, headers: Dict, timeout: int = 300) -> Dict:
+def _http_post_json(url: str, payload: Dict, headers: Dict, timeout: int = 600) -> Dict:
     """POST JSON and return parsed JSON response. Uses urllib (no extra deps).
 
     Enhancements:
@@ -192,15 +192,26 @@ def run(file_a: Optional[str] = None,
     """
     # Import helpers lazily to avoid circular imports
     try:
-        from fpf.fpf_main import compose_input, load_config, load_env_file
-    except Exception:
-        # fallback to top-level helpers if present
-        from fpf_main import compose_input, load_config, load_env_file  # type: ignore
+        from .helpers import compose_input, load_config, load_env_file  # preferred relative import
+    except ImportError:
+        try:
+            from helpers import compose_input, load_config, load_env_file  # type: ignore
+        except ImportError:
+            # Legacy fallback for older layouts
+            from fpf_main import compose_input, load_config, load_env_file  # type: ignore
 
     cfg = load_config(config_path or str(Path(__file__).parent / "fpf_config.yaml"))
     
     # Determine the provider and load the correct API key.
-    provider_name = provider or cfg.get("provider", "openai")
+    # Normalize provider, and auto-route deep-research models to 'openaidp'
+    provider_name = (provider or cfg.get("provider", "openai")).lower()
+    try:
+        _sel_model = (model or cfg.get("model") or "").lower()
+        _norm_model = _sel_model.split(":", 1)[0]
+        if _norm_model.startswith("o3-deep-research") or _norm_model.startswith("o4-mini-deep-research"):
+            provider_name = "openaidp"
+    except Exception:
+        pass
     api_key_name = f"{provider_name.upper()}_API_KEY"
     
     repo_env = Path(__file__).resolve().parent / ".env"
@@ -208,7 +219,7 @@ def run(file_a: Optional[str] = None,
     
     if api_key_value is None or api_key_value == "":
         # Fallback for backward compatibility with OPENAI_API_KEY
-        if provider_name == "openai":
+        if provider_name in ("openai", "openaidp"):
             api_key_value = _read_key_from_env_file(repo_env, "OPENAI_API_KEY")
 
     if api_key_value is None or api_key_value == "":
@@ -286,7 +297,7 @@ def run(file_a: Optional[str] = None,
 
     import time
     start_ts = time.time()
-    raw_json = _http_post_json(provider_url, payload_body, headers)
+    raw_json = _http_post_json(provider_url, payload_body, headers, timeout=1800 if provider_name == "openaidp" else 600)
     elapsed = time.time() - start_ts
     try:
         if isinstance(raw_json, dict):
@@ -296,20 +307,27 @@ def run(file_a: Optional[str] = None,
     except Exception:
         LOG.debug("Completed HTTP POST in %.2fs but failed to inspect response for logging", elapsed)
 
-    # decide out_path, with support for placeholders
+    # decide out_path, with support for placeholders and stable run_id
     model_name_sanitized = _sanitize_filename(cfg.get("model"))
     b_path = Path(file_b)
     file_b_stem = b_path.stem
+    # generate a short run_id early so filenames and logs share the same id
+    try:
+        import uuid as _uuid
+    except Exception:
+        _uuid = None
+    run_id = (_uuid.uuid4().hex[:8] if _uuid else "runid")
 
     if out_path:
         # if out_path is from config, it might have placeholders
         out_path = out_path.replace("<model_name>", model_name_sanitized)
         out_path = out_path.replace("<file_b_stem>", file_b_stem)
+        out_path = out_path.replace("<run_id>", run_id)
     else:
-        # default path construction
-        out_name = f"{file_b_stem}.{model_name_sanitized}.fpf.response.txt"
+        # default path construction with run_id
+        out_name = f"{file_b_stem}.{model_name_sanitized}.{run_id}.fpf.response.txt"
         out_path = str(b_path.parent / out_name)
-    
+
     final_out_path = Path(out_path)
     # create parent directory if it does not exist
     final_out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -349,7 +367,7 @@ def run(file_a: Optional[str] = None,
     try:
         import uuid as _uuid
         import datetime as _dt
-        run_id = _uuid.uuid4().hex[:8]
+        # run_id was generated earlier for filename/log correlation
         started_iso = _dt.datetime.fromtimestamp(start_ts).isoformat()
         finished_iso = _dt.datetime.now().isoformat()
 
@@ -413,7 +431,8 @@ def run(file_a: Optional[str] = None,
             pricing_path = str(base_dir / "pricing" / "pricing_index.json")
             pricing_list = load_pricing_index(pricing_path)
             model_cfg = cfg.get("model") or ""
-            model_slug = model_cfg if "/" in str(model_cfg) else f"{provider_name}/{model_cfg}"
+            canonical_provider = "openai" if provider_name in ("openaidp",) else provider_name
+            model_slug = model_cfg if "/" in str(model_cfg) else f"{canonical_provider}/{model_cfg}"
             rec = find_pricing(pricing_list, model_slug)
             cost = calc_cost(usage_std.get("prompt_tokens", 0), usage_std.get("completion_tokens", 0), rec)
             total_cost_usd = cost.get("total_cost_usd")

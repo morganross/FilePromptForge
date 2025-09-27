@@ -35,6 +35,11 @@ if str(PROJECT_ROOT.parent) not in sys.path:
 
 from file_handler import run as run_handler  # use local module in same directory
 
+try:
+    from .helpers import load_config, load_env_file
+except ImportError:
+    from helpers import load_config, load_env_file  # type: ignore
+
 LOG_FILENAME = SCRIPT_DIR / "logs" / "fpf_run.log"
 # Ensure logs directory exists so the rotating file handler can write there
 if not LOG_FILENAME.parent.exists():
