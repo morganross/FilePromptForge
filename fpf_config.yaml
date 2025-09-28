@@ -1,5 +1,5 @@
-provider: openaidp
-model: o4-mini-deep-research
+provider: google
+model: gemini-1.5-flash
 provider_urls:
   openai: https://api.openai.com/v1/responses
   openaidp: https://api.openai.com/v1/responses
