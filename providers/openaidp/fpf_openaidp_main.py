@@ -273,3 +273,123 @@ def parse_response(raw_json: Dict) -> str:
         except Exception:
             logging.getLogger("fpf_openaidp_main").debug("Failed to serialize raw provider response for logging")
         raise RuntimeError("Failed to parse deep-research provider response") from e
+
+
+# --- Background execution for DP models (OpenAI Responses background mode) ---
+
+from typing import Dict
+
+def execute_dp_background(provider_url: str, payload: Dict, headers: Dict, timeout: int = 7200) -> Dict:
+    """
+    Submit a deep-research request with background=True and poll the Responses API
+    until completion. Returns the final response JSON dict.
+
+    Console prints are always-on and redact secrets; long JSON is truncated.
+    """
+    import urllib.request
+    import urllib.error
+    import json as _json
+    import time as _time
+
+    def _redact_headers(h: dict) -> dict:
+        try:
+            red = {}
+            for k, v in (h or {}).items():
+                lk = str(k).lower()
+                if lk in ("authorization", "x-api-key", "x-goog-api-key", "api-key"):
+                    red[k] = "***REDACTED***"
+                else:
+                    red[k] = v
+            return red
+        except Exception:
+            return {}
+
+    def _truncate(s: str, n: int = 2000) -> str:
+        try:
+            if s is None:
+                return ""
+            s = str(s)
+            return s if len(s) <= n else s[:n] + "…"
+        except Exception:
+            return ""
+
+    # 1) Submit with background=True
+    body = dict(payload or {})
+    body["background"] = True
+    data = _json.dumps(body).encode("utf-8")
+    hdrs = {"Content-Type": "application/json"}
+    if headers:
+        hdrs.update(headers)
+
+    try:
+        print(f"[FPF DP][REQ] POST {provider_url} headers={_redact_headers(hdrs)} payload_bytes={len(data)} preview={_truncate(_json.dumps(body))}", flush=True)
+    except Exception:
+        pass
+
+    req = urllib.request.Request(provider_url, data=data, headers=hdrs, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            raw = resp.read().decode("utf-8")
+            status_code = getattr(resp, "status", resp.getcode() if hasattr(resp, "getcode") else "unknown")
+            try:
+                print(f"[FPF DP][RESP] {provider_url} status={status_code} bytes={len(raw)} preview={_truncate(raw)}", flush=True)
+            except Exception:
+                pass
+            submit_json = _json.loads(raw)
+    except urllib.error.HTTPError as he:
+        try:
+            msg = he.read().decode("utf-8", errors="ignore")
+        except Exception:
+            msg = ""
+        print(f"[FPF DP][ERR] {provider_url} status={getattr(he,'code','?')} reason={getattr(he,'reason','?')} body={_truncate(msg)}", flush=True)
+        raise
+    except Exception as e:
+        print(f"[FPF DP][ERR] {provider_url} error={e}", flush=True)
+        raise
+
+    # Expect an id to poll
+    response_id = submit_json.get("id")
+    if not response_id:
+        raise RuntimeError("Background submit did not return an 'id' to poll")
+
+    print(f"[FPF DP][SUBMIT] response_id={response_id}", flush=True)
+
+    # 2) Poll status until completed/failed/timeout
+    poll_url = provider_url.rstrip("/") + "/" + response_id
+    start_ts = _time.time()
+    polling_interval = 15
+    max_polls = int((timeout // polling_interval) if timeout and timeout > 0 else 120)
+
+    for i in range(max_polls):
+        try:
+            get_req = urllib.request.Request(poll_url, headers=_redact_headers(hdrs), method="GET")
+            # Re-apply Authorization header (redacted above for print, but real header must be present)
+            # Use original hdrs for the actual request
+            get_req = urllib.request.Request(poll_url, headers=hdrs, method="GET")
+            with urllib.request.urlopen(get_req, timeout=polling_interval + 10) as r:
+                raw_status = r.read().decode("utf-8")
+                status_json = _json.loads(raw_status)
+        except urllib.error.HTTPError as he:
+            try:
+                msg = he.read().decode("utf-8", errors="ignore")
+            except Exception:
+                msg = ""
+            print(f"[FPF DP][POLL ERR] id={response_id} status={getattr(he,'code','?')} reason={getattr(he,'reason','?')} body={_truncate(msg)}", flush=True)
+            raise
+        except Exception as e:
+            print(f"[FPF DP][POLL ERR] id={response_id} error={e}", flush=True)
+            raise
+
+        status = status_json.get("status")
+        elapsed = _time.time() - start_ts
+        print(f"[FPF DP][POLL] id={response_id} status={status} elapsed={elapsed:.1f}s", flush=True)
+
+        if status == "completed":
+            print(f"[FPF DP][COMPLETE] id={response_id} elapsed={elapsed:.1f}s", flush=True)
+            return status_json
+        if status in ("failed", "cancelled", "canceled"):
+            raise RuntimeError(f"Background DP task {status} (id={response_id})")
+
+        _time.sleep(polling_interval)
+
+    raise RuntimeError(f"Background DP task timed out after {int(elapsed)}s (id={response_id})")

@@ -22,6 +22,28 @@ from pricing.pricing_loader import load_pricing_index, find_pricing, calc_cost
 
 LOG = logging.getLogger("file_handler")
 
+# Always-on console redaction/truncation helpers
+def _redact_headers(h: dict) -> dict:
+    try:
+        red = {}
+        for k, v in (h or {}).items():
+            if str(k).lower() in ("authorization", "x-api-key", "x-goog-api-key", "api-key"):
+                red[k] = "***REDACTED***"
+            else:
+                red[k] = v
+        return red
+    except Exception:
+        return {}
+
+def _truncate(s: str, n: int = 2000) -> str:
+    try:
+        if s is None:
+            return ""
+        s = str(s)
+        return s if len(s) <= n else s[:n] + "…"
+    except Exception:
+        return ""
+
 
 def _sanitize_filename(name: str) -> str:
     """Sanitize a string to be a valid filename."""
@@ -54,18 +76,38 @@ def _http_post_json(url: str, payload: Dict, headers: Dict, timeout: int = 600) 
         pass
 
     req = urllib.request.Request(url, data=body, headers=hdrs, method="POST")
+    # Always-on console request summary (redacted, truncated)
+    try:
+        print(f"[FPF API][REQ] POST {url} headers={_redact_headers(hdrs)} payload_bytes={len(body)} preview={_truncate(json.dumps(payload))}", flush=True)
+    except Exception:
+        pass
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             raw = resp.read().decode("utf-8")
+            # Always-on console response summary (truncated)
+            try:
+                status_code = getattr(resp, "status", resp.getcode() if hasattr(resp, "getcode") else "unknown")
+                print(f"[FPF API][RESP] {url} status={status_code} bytes={len(raw)} preview={_truncate(raw)}", flush=True)
+            except Exception:
+                pass
             return json.loads(raw)
     except urllib.error.HTTPError as he:
         try:
             msg = he.read().decode("utf-8", errors="ignore")
         except Exception:
             msg = ""
+        # Always-on console error summary (truncated)
+        try:
+            print(f"[FPF API][ERR] {url} status={getattr(he,'code','?')} reason={getattr(he,'reason','?')} body={_truncate(msg)}", flush=True)
+        except Exception:
+            pass
         LOG.exception("HTTPError during POST %s: %s %s", url, he, msg)
         raise RuntimeError(f"HTTP error {he.code}: {he.reason} - {msg}") from he
     except Exception as e:
+        try:
+            print(f"[FPF API][ERR] {url} error={e}", flush=True)
+        except Exception:
+            pass
         LOG.exception("HTTP request failed for %s: %s", url, e)
         raise RuntimeError(f"HTTP request failed: {e}") from e
 
@@ -297,7 +339,11 @@ def run(file_a: Optional[str] = None,
 
     import time
     start_ts = time.time()
-    raw_json = _http_post_json(provider_url, payload_body, headers, timeout=7200 if provider_name == "openaidp" else 600)
+    # For OpenAI DP (openaidp), submit in background mode and poll until completion.
+    if provider_name == "openaidp" and hasattr(provider, "execute_dp_background"):
+        raw_json = provider.execute_dp_background(provider_url, payload_body, headers, timeout=7200)
+    else:
+        raw_json = _http_post_json(provider_url, payload_body, headers, timeout=600)
     elapsed = time.time() - start_ts
     try:
         if isinstance(raw_json, dict):
