@@ -3,9 +3,9 @@ grounding:
 include:
 - web_search_call.action.sources
 max_completion_tokens: 50000
-model: o4-mini-deep-research
+model: gemini-1.5-flash
 prompt_template: null
-provider: openaidp
+provider: google
 provider_urls:
   google: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent
   openai: https://api.openai.com/v1/responses
