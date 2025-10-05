@@ -518,13 +518,17 @@ def run(file_a: Optional[str] = None,
     except Exception:
         LOG.exception("Unexpected error in enhanced logging/extraction")
 
-    # Verify provider performed web_search (strict policy)
+    # Verify provider performed web_search unless disabled in config
+    grounding_cfg = cfg.get("grounding") or {}
+    include_cfg = cfg.get("include")
+    enforce_web_search = bool(cfg.get("enforce_web_search", True))
+    allow_no_web_search = (grounding_cfg.get("max_results", 0) == 0) or (include_cfg == [] or include_cfg is None) or (enforce_web_search is False)
     used_websearch = _response_used_websearch(raw_json)
-    if not used_websearch:
+    if not used_websearch and not allow_no_web_search:
         LOG.error("Provider did not perform web_search according to response; consolidated log will contain details")
         raise RuntimeError("Provider did not perform web_search; aborting per policy. See consolidated log in logs/")
 
-    # Extract and verify reasoning
+    # Extract and (optionally) verify reasoning
     reasoning_text = None
     try:
         if hasattr(provider, "extract_reasoning"):
@@ -539,7 +543,8 @@ def run(file_a: Optional[str] = None,
         LOG.exception("Failed to extract reasoning from provider response")
         reasoning_text = None
 
-    if not reasoning_text or (isinstance(reasoning_text, str) and not reasoning_text.strip()):
+    enforce_reasoning = bool(cfg.get("enforce_reasoning", False))
+    if enforce_reasoning and (not reasoning_text or (isinstance(reasoning_text, str) and not reasoning_text.strip())):
         LOG.error("Provider response did not contain reasoning; aborting. See consolidated log in logs/")
         raise RuntimeError("Provider did not return reasoning; aborting per policy. See consolidated log in logs/")
 

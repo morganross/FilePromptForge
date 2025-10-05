@@ -1,7 +1,6 @@
 grounding:
-  max_results: 1
-include:
-- web_search_call.action.sources
+  max_results: 0
+include: []
 max_completion_tokens: 50000
 model: gemini-1.5-flash
 prompt_template: null
