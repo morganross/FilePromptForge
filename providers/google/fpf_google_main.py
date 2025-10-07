@@ -74,6 +74,10 @@ def build_payload(prompt: str, cfg: Dict) -> Tuple[Dict, Optional[Dict]]:
     if "top_p" in cfg and cfg["top_p"] is not None:
         generation_config["topP"] = float(cfg["top_p"])
 
+    # Enforce JSON-only responses when configured
+    if cfg.get("json") is True:
+        generation_config["responseMimeType"] = "application/json"
+
     if generation_config:
         payload["generationConfig"] = generation_config
 

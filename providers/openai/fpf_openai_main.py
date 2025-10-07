@@ -173,6 +173,10 @@ def build_payload(prompt: str, cfg: Dict) -> Tuple[Dict, Optional[Dict]]:
     if instructions:
         payload["instructions"] = instructions
 
+    # Enforce JSON-only responses when configured
+    if cfg.get("json") is True:
+        payload["response_format"] = {"type": "json_object"}
+
     return payload, None
 
 

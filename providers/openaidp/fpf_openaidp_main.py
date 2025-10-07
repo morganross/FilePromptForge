@@ -124,6 +124,10 @@ def build_payload(prompt: str, cfg: Dict) -> Tuple[Dict, Optional[Dict]]:
     if instructions:
         payload["instructions"] = instructions
 
+    # Enforce JSON-only responses when configured
+    if cfg.get("json") is True:
+        payload["response_format"] = {"type": "json_object"}
+
     # No special headers required here; file_handler sets Authorization or provider-specific headers
     return payload, None
 
