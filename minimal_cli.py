@@ -125,24 +125,27 @@ class APIClient:
         Returns: (text, metadata_dict)
         On error: raise the caught exception to caller so caller can write error metadata.
         """
+        messages_input = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
+
         if self.grounding_enabled:
-            combined = f"[SYSTEM]\n{system_prompt}\n\n[USER]\n{user_prompt}"
+            # Use responses.create for grounded calls (as explicitly chosen).
+            # Rely on LiteLLM to map "web_search_preview" tool if model supports it.
             resp = self.client.responses.create(
                 model=self.model,
-                input=combined,
-                tools=[{"type": "web_search"}],
+                input=messages_input, # Use 'input' parameter which can take messages
+                tools=[{"type": "web_search_preview"}], # Explicitly ask for web search
                 tool_choice="auto",
                 temperature=self.temperature,
-                max_output_tokens=self.max_tokens
+                max_output_tokens=self.max_tokens # Responses API uses max_output_tokens
             )
         else:
-            messages = [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ]
+            # Non-grounded calls still use chat.completions
             resp = self.client.chat.completions.create(
                 model=self.model,
-                messages=messages,
+                messages=messages_input,
                 temperature=self.temperature,
                 max_tokens=self.max_tokens
             )

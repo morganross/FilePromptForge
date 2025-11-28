@@ -2,42 +2,58 @@
 """
 Grounding helpers for FilePromptForge.
 
-This module intentionally keeps logic minimal. It provides:
-- canonicalize_provider_response(resp, provider, model) -> dict
-- build_error_metadata(exc, provider, model) -> dict
+Enhancements:
+- Aggregate text across multiple possible response shapes (Responses API and Chat Completions).
+- Add raw_response_excerpt in metadata to assist debugging (first ~12KB of the provider/proxy object).
+- More accurate 'method' labeling: "provider-tool" only if we have evidence of sources/citations; else "no-tool".
+  (We keep 'sources' minimal; proxy-specific mappers should populate citations where possible.)
 
-No fallbacks are performed anywhere.
+NOTE: This stays provider-agnostic. No provider/model branching here.
 """
 
 from typing import Any, Dict, List
 from datetime import datetime
+
+RAW_EXCERPT_LIMIT = 12_000
 
 
 def _now_iso() -> str:
     return datetime.utcnow().isoformat() + "Z"
 
 
-def _extract_text_from_responses(resp: Any) -> str:
+def _safe_str(obj: Any, limit: int = RAW_EXCERPT_LIMIT) -> str:
     """
-    Best-effort text extraction for OpenAI Responses API objects.
-    Keeps this intentionally small:
-      1) try resp.output_text
-      2) try resp.output (collect any textual content-like fields)
+    Best-effort stringification of the SDK/proxy response object without raising.
+    Truncates to avoid massive logs.
     """
+    try:
+        s = str(obj)
+    except Exception:
+        s = "<unprintable response object>"
+    if s is None:
+        s = ""
+    return s[:limit]
+
+
+def _collect_text_chunks_from_responses(resp: Any) -> List[str]:
+    """
+    Best-effort text aggregation for OpenAI Responses API transformed objects.
+    We try multiple shapes in order, without returning early, to avoid missing segments.
+    """
+    chunks: List[str] = []
+
     # 1) Convenience property present in newer SDKs
     try:
         txt = getattr(resp, "output_text", None)
         if isinstance(txt, str) and txt.strip():
-            return txt.strip()
+            chunks.append(txt.strip())
     except Exception:
         pass
 
-    # 2) Fallback: scan 'output' structure if present
+    # 2) Scan 'output' structure if present
     try:
         output = getattr(resp, "output", None)
-        chunks: List[str] = []
         if output:
-            # output can be a list of message-like items, each with 'content'
             for item in output:
                 # item.content may be a list (parts), or a string
                 content = getattr(item, "content", None)
@@ -46,26 +62,33 @@ def _extract_text_from_responses(resp: Any) -> str:
                         # part may be an object with 'text' or a dict
                         if hasattr(part, "text"):
                             t = getattr(part, "text", "") or ""
-                            if t:
-                                chunks.append(str(t))
+                            if isinstance(t, str) and t.strip():
+                                chunks.append(t.strip())
                         elif isinstance(part, dict):
                             t = part.get("text") or part.get("content") or ""
-                            if t:
-                                chunks.append(str(t))
-                elif isinstance(content, str):
-                    chunks.append(content)
-        if chunks:
-            return "\n".join(chunks).strip()
+                            if isinstance(t, str) and t.strip():
+                                chunks.append(t.strip())
+                elif isinstance(content, str) and content.strip():
+                    chunks.append(content.strip())
     except Exception:
         pass
 
-    return ""
+    # 3) Some mappers might expose a top-level 'content' (string) on the response
+    try:
+        cont = getattr(resp, "content", None)
+        if isinstance(cont, str) and cont.strip():
+            chunks.append(cont.strip())
+    except Exception:
+        pass
+
+    return chunks
 
 
-def _extract_text_from_chat(resp: Any) -> str:
+def _collect_text_chunks_from_chat(resp: Any) -> List[str]:
     """
-    Best-effort text extraction for Chat Completions objects.
+    Best-effort text aggregation for Chat Completions objects.
     """
+    chunks: List[str] = []
     try:
         choices = getattr(resp, "choices", []) or []
         if choices:
@@ -74,20 +97,68 @@ def _extract_text_from_chat(resp: Any) -> str:
             if msg is not None:
                 if hasattr(msg, "content"):
                     content = msg.content or ""
-                    return (content or "").strip()
+                    if isinstance(content, str) and content.strip():
+                        chunks.append(content.strip())
                 elif isinstance(msg, dict):
                     content = msg.get("content", "") or ""
-                    return (content or "").strip()
-            # older fields
+                    if isinstance(content, str) and content.strip():
+                        chunks.append(content.strip())
+            # Older fields
             if hasattr(c0, "content"):
                 content = getattr(c0, "content") or ""
-                return (content or "").strip()
+                if isinstance(content, str) and content.strip():
+                    chunks.append(content.strip())
             if hasattr(c0, "text"):
                 content = getattr(c0, "text") or ""
-                return (content or "").strip()
+                if isinstance(content, str) and content.strip():
+                    chunks.append(content.strip())
     except Exception:
         pass
-    return ""
+    return chunks
+
+
+def _aggregate_text(resp: Any) -> str:
+    """
+    Aggregate all discovered text chunks from possible response shapes.
+    De-duplicate while preserving order.
+    """
+    chunks: List[str] = []
+    seen = set()
+
+    for t in _collect_text_chunks_from_responses(resp):
+        if t not in seen:
+            chunks.append(t)
+            seen.add(t)
+
+    for t in _collect_text_chunks_from_chat(resp):
+        if t not in seen:
+            chunks.append(t)
+            seen.add(t)
+
+    # Join with double newline to maintain separation without fusing sentences.
+    return "\n\n".join(chunks).strip()
+
+
+def _extract_sources(resp: Any) -> List[Dict[str, str]]:
+    """
+    Placeholder for citations/sources extraction.
+    If LiteLLM or provider returns structured citations, map them here.
+    For now, keep this minimal and return empty to avoid false claims.
+    """
+    sources: List[Dict[str, str]] = []
+    # Example future parsing (pseudo):
+    # try:
+    #     tool_output = getattr(resp, "tool_output", None) or {}
+    #     cites = tool_output.get("citations", [])
+    #     for c in cites:
+    #         sources.append({
+    #             "title": c.get("title", ""),
+    #             "url": c.get("url", ""),
+    #             "snippet": c.get("snippet", "")
+    #         })
+    # except Exception:
+    #     pass
+    return sources
 
 
 def canonicalize_provider_response(resp: Any, provider: str, model: str) -> Dict[str, Any]:
@@ -97,26 +168,30 @@ def canonicalize_provider_response(resp: Any, provider: str, model: str) -> Dict
       "text": str,
       "provider": provider,
       "model": model,
-      "method": "provider-tool",
-      "sources": [],          # kept minimal
-      "tool_details": {},     # kept minimal
+      "method": "provider-tool" | "no-tool",
+      "sources": [ {title, url, snippet} ],
+      "tool_details": {},
+      "raw_response_excerpt": str,
       "timestamp": "...Z"
     }
     """
-    text = _extract_text_from_responses(resp)
-    if not text:
-        # Allow chat completions shape (in case caller still uses chat API)
-        text = _extract_text_from_chat(resp)
+    text = _aggregate_text(resp)
+    sources = _extract_sources(resp)
 
-    return {
+    # Determine method based on evidence of citations/tool output.
+    method = "provider-tool" if (sources and len(sources) > 0) else "no-tool"
+
+    meta = {
         "text": text or "",
         "provider": provider,
         "model": model,
-        "method": "provider-tool",
-        "sources": [],
+        "method": method,
+        "sources": sources,
         "tool_details": {},
+        "raw_response_excerpt": _safe_str(resp),
         "timestamp": _now_iso(),
     }
+    return meta
 
 
 def build_error_metadata(exc: Exception, provider: str, model: str) -> Dict[str, Any]:
