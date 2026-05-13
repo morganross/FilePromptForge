@@ -19,7 +19,12 @@ import time
 from typing import Dict, Optional, Tuple, Any, List
 from pathlib import Path
 
-from pricing.pricing_loader import load_pricing_index, find_pricing, calc_cost
+# Use relative import since pricing is a subdirectory
+try:
+    from .pricing.pricing_loader import load_pricing_index, find_pricing, calc_cost
+except ImportError:
+    # Fallback for when running as main module
+    from pricing.pricing_loader import load_pricing_index, find_pricing, calc_cost
 
 LOG = logging.getLogger("file_handler")
 

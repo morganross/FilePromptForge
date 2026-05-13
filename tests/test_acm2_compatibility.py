@@ -30,11 +30,10 @@ def test_run_signature():
 
 def test_validation_error_attributes():
     """Verify ValidationError has required attributes"""
-    assert hasattr(ValidationError, "missing_grounding")
-    assert hasattr(ValidationError, "missing_reasoning")
-    
-    # Create instance and check
+    # Create instance and check - attributes are instance attributes, not class attributes
     err = ValidationError("test", missing_grounding=True, missing_reasoning=False)
+    assert hasattr(err, "missing_grounding"), "Instance should have missing_grounding"
+    assert hasattr(err, "missing_reasoning"), "Instance should have missing_reasoning"
     assert err.missing_grounding == True
     assert err.missing_reasoning == False
     assert err.category == "validation_grounding"
@@ -59,11 +58,12 @@ def test_cli_help():
     """Test that CLI help works"""
     import subprocess
     
+    # Need to install package first or run from correct directory
     result = subprocess.run(
-        [sys.executable, "-m", "FilePromptForge.fpf_main", "--help"],
+        [sys.executable, "FilePromptForge/fpf_main.py", "--help"],
         capture_output=True,
         text=True,
-        cwd=str(Path(__file__).parent)
+        cwd=str(Path(__file__).parent.parent)
     )
     
     assert result.returncode == 0, f"CLI help failed: {result.stderr}"
