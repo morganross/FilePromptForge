@@ -1,0 +1,51 @@
+{
+  "_comment": "Authoritative web search / grounding pricing from provider documentation. Source: /opt/acm2/docs/WEB_SEARCH_BILLING_GUIDE.md. This supplements pricing_index.json (OpenRouter) which lacks native web search costs.",
+  "_version": "2026-02-15",
+  "_sources": {
+    "google": "https://ai.google.dev/gemini-api/docs/pricing",
+    "openai": "https://developers.openai.com/api/docs/pricing",
+    "anthropic": "https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/web-search#pricing"
+  },
+  "google": {
+    "_doc": "Google has TWO billing models: per-grounded-prompt (2.5 and older) vs per-query (3.x). Prices are per-unit, NOT per-1k.",
+    "per_grounded_prompt": {
+      "price_per_unit_usd": 0.035,
+      "applies_to": ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"],
+      "model_patterns": ["gemini-2.*", "gemini-1.*"],
+      "notes": "Flat fee per API request that returns grounding supports. Multiple queries per prompt still = 1 billable unit."
+    },
+    "per_query": {
+      "price_per_unit_usd": 0.014,
+      "applies_to": ["gemini-3.1-pro-preview", "gemini-3-pro-preview", "gemini-3-flash-preview", "deep-research-pro-preview-12-2025"],
+      "model_patterns": ["gemini-3*", "deep-research*"],
+      "notes": "Each individual search query is billed separately. 5,000 free queries/month. Deep Research query count is estimated at 160/task."
+    }
+  },
+  "anthropic": {
+    "_doc": "Anthropic charges $10 per 1,000 web searches ($0.01/search). Failed searches are not billed. Search content tokens are included in input_tokens at the model input rate.",
+    "web_search": {
+      "per_1k_searches_usd": 10.0,
+      "per_search_usd": 0.01,
+      "search_content_tokens_billed": true,
+      "applies_to": ["claude-sonnet-4-6", "claude-opus-4-6", "claude-sonnet-4-5", "claude-opus-4-5", "claude-haiku-4-5"],
+      "notes": "Each server_tool_use.web_search_requests = 1 billable search. Search content tokens billed at model input rate. Failed searches are NOT billed."
+    }
+  },
+  "openai": {
+    "_doc": "OpenAI charges per tool call + search content tokens at model input rate. The per-call fee varies by tool type and model category.",
+    "web_search": {
+      "per_1k_calls_usd": 10.0,
+      "per_call_usd": 0.01,
+      "search_content_tokens_billed": true,
+      "applies_to": ["gpt-5", "gpt-5-mini", "gpt-5-nano", "gpt-4.1", "gpt-4.1-mini", "o3", "o3-pro", "o4-mini"],
+      "notes": "Each web_search_call output item = 1 billable tool call. search content tokens billed at model input rate."
+    },
+    "web_search_preview_non_reasoning": {
+      "per_1k_calls_usd": 25.0,
+      "per_call_usd": 0.025,
+      "search_content_tokens_billed": false,
+      "applies_to": ["gpt-4o-search-preview", "gpt-4o-mini-search-preview"],
+      "notes": "Higher per-call rate but search content tokens are NOT charged."
+    }
+  }
+}
