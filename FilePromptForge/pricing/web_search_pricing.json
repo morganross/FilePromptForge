@@ -4,7 +4,18 @@
   "_sources": {
     "google": "https://ai.google.dev/gemini-api/docs/pricing",
     "openai": "https://developers.openai.com/api/docs/pricing",
-    "anthropic": "https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/web-search#pricing"
+    "anthropic": "https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/web-search#pricing",
+    "searchbox": "internal_acm_searchbox_floor"
+  },
+  "searchbox": {
+    "_doc": "APICostX Searchbox floor pricing. Each AIQ Searchbox web-search request is at least 0.001 cent, which is $0.00001 USD per search.",
+    "web_search": {
+      "per_search_usd": 0.00001,
+      "per_call_usd": 0.00001,
+      "billable_unit": "per_search",
+      "search_content_tokens_billed": false,
+      "notes": "Internal Searchbox floor price; richer Searchbox usage metadata may raise the final search cost in a later implementation. The floor prevents AIQ Searchbox calls from being recorded as unknown or free."
+    }
   },
   "google": {
     "_doc": "Google has TWO billing models: per-grounded-prompt (2.5 and older) vs per-query (3.x). Prices are per-unit, NOT per-1k.",

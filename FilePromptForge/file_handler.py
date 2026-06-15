@@ -790,6 +790,7 @@ def run(file_a: Optional[str] = None,
             user_uuid=os.environ.get("FPF_USER_UUID"),
             document_id=os.environ.get("FPF_DOCUMENT_ID"),
             iteration=int(os.environ.get("FPF_ITERATION", "1")),
+            pricing_path=os.environ.get("FPF_PRICING_PATH"),
         )
         
         metering_event = metering_builder.build_event(

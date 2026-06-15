@@ -742,6 +742,33 @@ def detect_grounding(raw_json: Dict[str, Any], provider: Optional[Any] = None) -
     ctx_provider = _get_context_as_dict().get("provider", "").lower()
     provider_name = getattr(provider, "__name__", "") if provider is not None else ""
     provider_name = str(provider_name).lower()
+
+    validation = raw_json.get("codexexec_validation") if isinstance(raw_json.get("codexexec_validation"), dict) else None
+    if validation:
+        validation_grounding = validation.get("grounding_detected")
+        if validation_grounding is None:
+            validation_grounding = validation.get("grounding_present")
+        if validation_grounding is None:
+            validation_grounding = validation.get("grounding_verified")
+        if validation_grounding is not None:
+            is_grounded = bool(validation_grounding)
+            _log_validation_detail(
+                "grounding",
+                "codexexec.validation",
+                is_grounded,
+                {
+                    "provider": "codexexec",
+                    "grounding_detected": validation.get("grounding_detected"),
+                    "grounding_present": validation.get("grounding_present"),
+                    "grounding_verified": validation.get("grounding_verified"),
+                },
+            )
+            if is_grounded:
+                LOG.info("=== GROUNDING DETECTION END: TRUE (CodexExec validation proof) ===")
+            else:
+                LOG.info("=== GROUNDING DETECTION END: FALSE (CodexExec validation proof) ===")
+            return is_grounded
+
     
     if not isinstance(raw_json, dict):
         _log_validation_detail("grounding", "type_check", False, {"type": str(type(raw_json)), "reason": "not a dict"})
@@ -1226,6 +1253,48 @@ def detect_reasoning(raw_json: Dict[str, Any], provider: Optional[Any] = None) -
     provider_name = provider.__name__ if provider and hasattr(provider, '__name__') else str(type(provider))
     ctx_provider = _get_context_as_dict().get("provider", "").lower()
     _log_validation_detail("reasoning", "provider", None, {"provider": provider_name, "has_extract_reasoning": hasattr(provider, "extract_reasoning") if provider else False})
+
+    validation = raw_json.get("codexexec_validation") if isinstance(raw_json.get("codexexec_validation"), dict) else {}
+    usage = raw_json.get("usage") if isinstance(raw_json.get("usage"), dict) else {}
+    output_details = usage.get("output_tokens_details") if isinstance(usage.get("output_tokens_details"), dict) else {}
+    completion_details = usage.get("completion_tokens_details") if isinstance(usage.get("completion_tokens_details"), dict) else {}
+    try:
+        codexexec_reasoning_tokens = max(
+            int(usage.get("reasoning_tokens") or 0),
+            int(output_details.get("reasoning_tokens") or 0),
+            int(completion_details.get("reasoning_tokens") or 0),
+            int(validation.get("reasoning_output_tokens") or 0),
+        )
+    except Exception:
+        codexexec_reasoning_tokens = 0
+    if validation:
+        codexexec_reasoning_present = validation.get("reasoning_detected")
+        if codexexec_reasoning_present is None:
+            codexexec_reasoning_present = validation.get("reasoning_present")
+        if codexexec_reasoning_present is None:
+            codexexec_reasoning_present = validation.get("reasoning_verified")
+        if codexexec_reasoning_present is None:
+            codexexec_reasoning_present = validation.get("reasoning")
+        codexexec_passed = bool(codexexec_reasoning_present) or codexexec_reasoning_tokens > 0
+        _log_validation_detail(
+            "reasoning",
+            "codexexec.validation",
+            codexexec_passed,
+            {
+                "reasoning_detected": validation.get("reasoning_detected"),
+                "reasoning_present": validation.get("reasoning_present"),
+                "reasoning_verified": validation.get("reasoning_verified"),
+                "reasoning_output_tokens": validation.get("reasoning_output_tokens"),
+                "usage_reasoning_tokens": usage.get("reasoning_tokens"),
+                "output_details_reasoning_tokens": output_details.get("reasoning_tokens"),
+                "completion_details_reasoning_tokens": completion_details.get("reasoning_tokens"),
+            },
+        )
+        if codexexec_passed:
+            LOG.info("=== REASONING DETECTION END: TRUE (CodexExec validation proof) ===")
+        else:
+            LOG.info("=== REASONING DETECTION END: FALSE (CodexExec validation present without reasoning proof) ===")
+        return codexexec_passed
 
     if ctx_provider == "openrouter" or "openrouter" in str(provider_name).lower():
         reasoning_summary = _collect_openrouter_reasoning_evidence(raw_json, provider=provider)

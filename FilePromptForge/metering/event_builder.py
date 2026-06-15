@@ -321,7 +321,7 @@ class MeteringEventBuilder:
             notes.append("anthropic_cache_tokens_input_priced")
             if _as_nonnegative_int(provider_specific.get("reasoning_tokens")) > 0:
                 notes.append("anthropic_reasoning_count_audit_only_output_tokens_used")
-        elif provider in {"openai", "openaidp", "openrouter", "perplexity"}:
+        elif provider in {"openai", "openaidp", "openrouter", "perplexity", "codexexecapi"}:
             notes.append(f"{provider}_top_level_input_output_used")
             if _as_nonnegative_int(provider_specific.get("reasoning_tokens")) > 0:
                 notes.append("reasoning_tokens_audit_only_output_tokens_used")
@@ -439,7 +439,7 @@ class MeteringEventBuilder:
                          result.get("tokens", {}).get("total", 0))
                 _log_exit("_extract_metering", {"provider": "googledp", "total_tokens": result.get("tokens", {}).get("total", 0)})
                 return result
-            elif self.provider in ("openai", "openaidp"):
+            elif self.provider in ("openai", "openaidp", "codexexecapi"):
                 from metering.openai_extractor import extract_openai_metering
                 result = extract_openai_metering(response, self.model)
                 LOG.debug("[METERING-BUILDER] OpenAI extraction complete: tokens=%s",
@@ -635,6 +635,11 @@ class MeteringEventBuilder:
                 # Native Perplexity search/citation charges come from usage.cost; avoid double-counting here.
                 tool_cost = _quantize(0)
                 LOG.info("[METERING-BUILDER] Perplexity search costs are included in authoritative usage.cost, tool_cost=$0 until override")
+            
+            elif self.provider == "codexexecapi":
+                # CodexExecAPI uses ChatGPT/Codex quota, not ACM API-credit pricing.
+                # Keep usage exact, but leave dollar cost unknown until an explicit pricing policy exists.
+                LOG.info("[METERING-BUILDER] CodexExecAPI web search uses Codex quota; tool cost recorded as unknown")
             
             else:
                 LOG.warning("[METERING-BUILDER] Web search used by unknown provider %s — recorded as unknown", self.provider)
@@ -955,6 +960,7 @@ def build_metering_event(
             logical_task_id=logical_task_id,
             document_id=document_id,
             iteration=iteration,
+            pricing_path=os.environ.get("FPF_PRICING_PATH"),
         )
         result = builder.build_event(response, latency_ms, status, error)
         LOG.info("[METERING-BUILDER] <<<<<<< build_metering_event returning: attempt=%s cost=$%s",
