@@ -23,7 +23,14 @@ LOG = logging.getLogger("fpf_codexexecapi_main")
 
 REQUIRES_GROUNDING = True
 REQUIRES_REASONING = True
-SUPPORTED_MODELS = {"gpt-5.5", "gpt-5.4", "gpt-5.4-mini"}
+SUPPORTED_MODELS = {
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "gpt-5.5",
+    "gpt-5.4",
+    "gpt-5.4-mini",
+}
 
 
 def _normalize_model(model: str) -> str:
@@ -97,7 +104,7 @@ def build_payload(prompt: str, cfg: Dict[str, Any]) -> Tuple[Dict[str, Any], Opt
     reasoning_effort = (
         (cfg.get("reasoning") or {}).get("effort")
         or cfg.get("reasoning_effort")
-        or "high"
+        or "medium"
     )
     web_search_cfg = cfg.get("web_search") if isinstance(cfg.get("web_search"), dict) else {}
     search_context_size = (
@@ -112,6 +119,7 @@ def build_payload(prompt: str, cfg: Dict[str, Any]) -> Tuple[Dict[str, Any], Opt
         "stream": False,
         "tools": [{"type": "web_search"}],
         "tool_choice": "auto",
+        "reasoning_effort": reasoning_effort,
         "reasoning": {"effort": reasoning_effort},
         "codexexec": {
             "require_grounding": True,
