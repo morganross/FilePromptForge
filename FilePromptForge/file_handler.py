@@ -475,6 +475,14 @@ def _resolve_timeout(cfg: dict, provider_name: str) -> Optional[int]:
     return _prov_timeout or _timeout_cfg or None
 
 
+def _uses_cliproxy_anthropic(cfg: dict, provider_name: str) -> bool:
+    if provider_name != "anthropic":
+        return False
+    provider_urls = cfg.get("provider_urls") or {}
+    url = str(provider_urls.get("anthropic") or cfg.get("provider_url") or "").strip().lower()
+    return "searchbox.internal.apicostx.com:8317" in url or "10.0.1.209:8317" in url
+
+
 def _validate_run_inputs(file_a: Optional[str], file_b: Optional[str], out_path: Optional[str], env_file: Path, provider: str, model: str, timeout: Optional[int]) -> None:
     """Fail fast on missing inputs or obviously bad configuration."""
     if not file_a or not Path(file_a).is_file():
@@ -556,12 +564,17 @@ def run(file_a: Optional[str] = None,
     env_file = Path(env_path) if env_path else Path(__file__).resolve().parent.parent / ".env"
     selected_model = model or cfg.get("model")
     _validate_run_inputs(file_a, file_b, out_path, env_file, provider_name, selected_model, timeout)
-    LOG.info(f"Attempting to load API key '{api_key_name}' from {env_file}")
-    api_key_value = _read_key_from_env_file(env_file, api_key_name)
-
-    if api_key_value:
-        LOG.info(f"Successfully loaded API key '{api_key_name}' (Length: {len(api_key_value)})")
+    anthropic_via_cliproxy = _uses_cliproxy_anthropic(cfg, provider_name)
+    if anthropic_via_cliproxy:
+        api_key_value = "cliproxy-placeholder"
+        LOG.info("Using CLIProxyAPI Anthropic route; caller key is discarded")
     else:
+        LOG.info(f"Attempting to load API key '{api_key_name}' from {env_file}")
+        api_key_value = _read_key_from_env_file(env_file, api_key_name)
+
+    if api_key_value and not anthropic_via_cliproxy:
+        LOG.info(f"Successfully loaded API key '{api_key_name}' (Length: {len(api_key_value)})")
+    elif not anthropic_via_cliproxy:
         LOG.warning(f"Failed to load API key '{api_key_name}' from {env_file}")
         # Fallback: googledp can use GOOGLE_API_KEY
         if provider_name == "googledp":
