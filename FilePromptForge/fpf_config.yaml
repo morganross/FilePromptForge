@@ -16,7 +16,7 @@ prompt_template: null
 provider: openai
 provider_urls:
   google: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent
-  openai: https://api.openai.com/v1/responses
+  openai: http://searchbox.internal.apicostx.com:8317/v1/responses
   perplexity: https://api.perplexity.ai/v1/async/sonar
   tavily: https://api.tavily.com/research
   openaidp: https://api.openai.com/v1/responses
