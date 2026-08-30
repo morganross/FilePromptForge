@@ -18,6 +18,7 @@ import logging
 import time
 from typing import Dict, Optional, Tuple, Any, List
 from pathlib import Path
+from urllib.parse import quote, urlsplit, urlunsplit
 
 # Use relative import since pricing is a subdirectory
 try:
@@ -57,6 +58,58 @@ def _sanitize_filename(name: str) -> str:
         return "unknown"
     # remove chars that are problematic for filenames
     return re.sub(r'[\\/*?:"<>|]', "", name)
+
+
+_DEFAULT_GOOGLE_GENERATIVE_ORIGIN = "https://generativelanguage.googleapis.com"
+
+
+def _build_google_generate_content_url(configured_url: Optional[str], model: str) -> str:
+    """Build a model-specific Gemini generateContent URL from a configured origin or template."""
+    normalized_model = str(model or "").strip()
+    if not normalized_model:
+        raise RuntimeError("Google provider requires cfg['model'] to be set")
+
+    encoded_model = quote(normalized_model, safe="-._")
+    configured = str(configured_url or _DEFAULT_GOOGLE_GENERATIVE_ORIGIN).strip()
+
+    if "{model}" in configured:
+        candidate = configured.replace("{model}", encoded_model)
+        parsed_candidate = urlsplit(candidate)
+        if parsed_candidate.scheme not in ("http", "https") or not parsed_candidate.netloc:
+            raise RuntimeError(f"Invalid Google provider URL template: {configured}")
+        return candidate
+
+    parsed = urlsplit(configured)
+    if parsed.scheme not in ("http", "https") or not parsed.netloc:
+        raise RuntimeError(f"Invalid Google provider URL: {configured}")
+    if parsed.query or parsed.fragment:
+        raise RuntimeError("Google provider origin cannot contain a query or fragment")
+
+    path_prefix = parsed.path.rstrip("/")
+    models_marker = "/v1beta/models"
+    if models_marker in path_prefix:
+        path_prefix = path_prefix.split(models_marker, 1)[0]
+    elif path_prefix.endswith("/v1beta"):
+        path_prefix = path_prefix[: -len("/v1beta")]
+
+    path = f"{path_prefix}/v1beta/models/{encoded_model}:generateContent"
+    return urlunsplit((parsed.scheme, parsed.netloc, path, "", ""))
+
+
+def _select_google_provider_origin(cfg: Dict[str, Any], provider_urls: Dict[str, Any], model: str) -> Optional[str]:
+    """Select direct Google or the configured Antigravity gateway for one explicit model."""
+    configured_models = cfg.get("google_antigravity_models") or []
+    if not isinstance(configured_models, list):
+        raise RuntimeError("google_antigravity_models must be a list")
+
+    antigravity_models = {str(item).strip() for item in configured_models if str(item).strip()}
+    if model not in antigravity_models:
+        return provider_urls.get("google")
+
+    antigravity_origin = provider_urls.get("google_antigravity")
+    if not antigravity_origin:
+        raise RuntimeError("provider_urls.google_antigravity is required for Antigravity models")
+    return antigravity_origin
 
 
 def _is_openrouter_free_model(provider_name: str, model: Any) -> bool:
@@ -620,22 +673,12 @@ def run(file_a: Optional[str] = None,
     if provider_name == "googledp":
         provider_url = "https://generativelanguage.googleapis.com/v1beta/interactions"
 
-    # Dynamically compute Google Gemini endpoint from cfg["model"] to avoid endpoint–model drift
+    # Dynamically compute the Google Gemini endpoint from cfg["model"], while honoring
+    # the configured origin so private compatibility gateways can be selected by config.
     elif provider_name == "google":
-        try:
-            norm_model = (cfg.get("model") or "").split(":", 1)[0]
-            if not norm_model:
-                raise RuntimeError("Google provider requires cfg['model'] to be set")
-            computed_url = f"https://generativelanguage.googleapis.com/v1beta/models/{norm_model}:generateContent"
-            if provider_url and provider_url != computed_url:
-                try:
-                    LOG.warning("Overriding configured provider_url for Google to match model: %s -> %s", provider_url, computed_url)
-                except Exception:
-                    pass
-            provider_url = computed_url
-        except Exception as e:
-            # Fall through to existing checks; will raise if provider_url remains missing
-            LOG.debug("Failed to compute dynamic Google endpoint from model: %s", e)
+        norm_model = (cfg.get("model") or "").split(":", 1)[0]
+        selected_origin = _select_google_provider_origin(cfg, provider_urls, norm_model)
+        provider_url = _build_google_generate_content_url(selected_origin, norm_model)
 
     if not provider_url:
         raise RuntimeError(f"provider_url for '{provider_name}' not configured in config")
