@@ -17,6 +17,7 @@ Writes the result to pricing_index.json in this package.
 Environment variables:
 - OPENROUTER_API_KEY (optional): If set, sent as Authorization: Bearer <key>.
 - PRICING_OUTPUT_PATH (optional): If set, path where pricing_index.json will be written.
+- FPF_PRICING_PATH (optional): Used as the output path when PRICING_OUTPUT_PATH is not set.
 
 Usage:
 - As a module:
@@ -215,7 +216,7 @@ def refresh_pricing(
 
 def main() -> None:
     api_key = os.getenv("OPENROUTER_API_KEY")
-    out = os.getenv("PRICING_OUTPUT_PATH")  # optional override
+    out = os.getenv("PRICING_OUTPUT_PATH") or os.getenv("FPF_PRICING_PATH")  # optional override
 
     try:
         path = refresh_pricing(api_key=api_key, output_path=out)
