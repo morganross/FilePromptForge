@@ -5,11 +5,11 @@
 <h1 align="center">FilePromptForge</h1>
 
 <p align="center">
-  <strong>Forge source files and instructions into grounded, reasoning-aware documents.</strong>
+  <strong>One consistent interface for reasoning and mandatory web grounding across LLM providers.</strong>
 </p>
 
 <p align="center">
-  A provider-flexible Python CLI with retries, response checks, metering, and deep-research support.
+  Normalize single-shot LLM requests, then generate or evaluate large batches of reports unattended.
 </p>
 
 <p align="center">
@@ -24,31 +24,48 @@
 
 ## What it does
 
-FilePromptForge (FPF) combines an instruction file with a source document,
-routes the resulting prompt through a selected LLM provider, checks the
-provider response for the guarantees required by that route, and writes a
-document plus metering information.
+FilePromptForge (FPF) is normalization middleware for the parts of LLM APIs
+that are least consistent: reasoning and grounded web search. It gives an
+application one set of controls while translating each request into the
+payload expected by the chosen provider and model. It also normalizes the
+useful parts of the response, including generated text, citations, usage, and
+cost data.
+
+That translation matters because a provider can use different parameters,
+tool definitions, response fields, and capability rules from one model family
+to the next. General-purpose LLM gateways smooth over ordinary text generation,
+but reasoning and search still require model-aware handling. FPF concentrates
+that knowledge in one place and makes grounding a requirement: a route must
+invoke the appropriate search capability and return the expected evidence.
+An ungrounded answer is a failed run, not an acceptable fallback.
+
+FPF packages the normalization layer in a file-oriented processor. Each job
+combines instructions and source material into a single LLM request; the job
+runner can schedule many such jobs, recover from transient provider failures,
+and produce reports or evaluations without supervision.
 
 | Built for | What FPF provides |
 |---|---|
-| Grounded generation | Provider-side web search and source evidence |
-| Deliberate output | Provider-native reasoning controls |
-| Long-running research | Background polling for deep-research routes |
-| Operational resilience | Classified errors, bounded retries, and resumable scheduling |
-| Cost visibility | Provider-specific usage extraction and pricing records |
-| Multiple providers | One file-oriented interface across eight adapters |
+| Request normalization | A stable set of inputs translated into provider- and model-specific payloads |
+| Reasoning | Common controls mapped to native effort, budget, and thinking parameters |
+| Mandatory grounding | Provider-native search is required and responses without the expected evidence are rejected |
+| Response normalization | Consistent text, citation, usage, and metering output |
+| Batch processing | Unattended generation or evaluation of large report collections |
+| Provider resilience | Classified errors, bounded retries, timeouts, and resumable scheduling |
+| Deep research | Background submission and polling for long-running research APIs |
 
 ## Pipeline
 
 ```mermaid
 flowchart LR
-    A[Instruction file] --> C[Prompt composition]
-    B[Source document] --> C
-    C --> D[Provider adapter]
-    D --> E[Web search + reasoning]
-    E --> F[Response checks]
-    F --> G[Generated document]
-    F --> H[Usage + metering]
+    A[Instructions + source files] --> B[Job runner]
+    B --> C[Reasoning + grounding normalization]
+    C --> D[Provider and model adapter]
+    D --> E[LLM API]
+    E --> F[Grounding enforcement + normalized response]
+    F --> G[Report or evaluation]
+    F --> H[Citations + usage + cost]
+    B -. schedules .-> C
 ```
 
 ## Providers
@@ -94,9 +111,10 @@ fpf --file-a document.txt --file-b instructions.txt --out result.md \
   --provider openai --model gpt-5.6-sol
 ```
 
-FPF reads the instruction file first and then the source document. Run
-`fpf --help` for configuration paths, token limits, timeouts, retries, JSON
-output, reasoning effort, and logging controls.
+FPF reads the instruction file first and then the source document. A run can
+generate a new report or use the instructions to evaluate the supplied
+material. Run `fpf --help` for configuration paths, token limits, timeouts,
+retries, JSON output, reasoning effort, and logging controls.
 
 ## Configuration and data locations
 
@@ -132,9 +150,10 @@ macOS.
 
 ## Project status
 
-FPF is a public beta. The core behavior originated in a larger production
-integration and is being separated into a portable package without removing
-its provider-specific reliability machinery.
+FPF is a public beta. Its core behavior originated in a larger production
+integration and is now packaged as a portable, public-facing normalization
+layer and batch processor without removing its provider-specific reliability
+machinery.
 
 - [Installation](docs/installation.md)
 - [Configuration](docs/configuration.md)

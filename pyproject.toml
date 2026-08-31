@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "filepromptforge"
 version = "0.1.0"
-description = "FilePromptForge - LLM-powered document generation with mandatory grounding and reasoning"
+description = "Normalize reasoning and mandatory web grounding across LLM providers and process report batches unattended"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
