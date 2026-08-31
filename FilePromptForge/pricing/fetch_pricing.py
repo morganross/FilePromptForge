@@ -12,7 +12,7 @@ Scope filtering:
 - Include the existing paid scope: OpenAI models, Anthropic Claude models, and Google Gemini 2.5 models
 - Always include zero-priced OpenRouter models so the UI can display explicit $0 pricing
 
-Writes the result to pricing_index.json in this package.
+Writes the result to the user cache directory unless an output path is supplied.
 
 Environment variables:
 - OPENROUTER_API_KEY (optional): If set, sent as Authorization: Bearer <key>.
@@ -36,6 +36,11 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import requests
+
+try:
+    from ..paths import default_pricing_index
+except ImportError:
+    from paths import default_pricing_index
 
 OPENROUTER_MODELS_URL = "https://openrouter.ai/api/v1/models"
 
@@ -192,7 +197,7 @@ def write_pricing_index(
     pricing: List[Dict[str, Any]], output_path: Optional[Path] = None
 ) -> Path:
     if output_path is None:
-        output_path = Path(__file__).parent / "pricing_index.json"
+        output_path = default_pricing_index()
     tmp = output_path.with_suffix(".json.tmp")
     output_path.parent.mkdir(parents=True, exist_ok=True)
 

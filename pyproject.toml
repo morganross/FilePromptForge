@@ -1,14 +1,15 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+requires = ["setuptools>=77.0.3", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "filepromptforge"
-version = "2.0.0"
+version = "0.1.0"
 description = "FilePromptForge - LLM-powered document generation with mandatory grounding and reasoning"
 readme = "README.md"
 requires-python = ">=3.11"
-license = {text = "MIT"}
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [
     {name = "Morgan Ross", email = "morganross@rossmorr.com"},
 ]
@@ -16,35 +17,32 @@ maintainers = [
     {name = "Morgan Ross", email = "morganross@rossmorr.com"},
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 keywords = ["llm", "openai", "gemini", "anthropic", "grounding", "reasoning", "web-search"]
 
 dependencies = [
-    "openai>=1.0.0",
-    "google-generativeai>=0.3.0",
-    "anthropic>=0.8.0",
     "pyyaml>=6.0",
-    "python-dotenv>=1.0.0",
     "requests>=2.28.0",
+    "platformdirs>=4.0.0",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0",
     "pytest-asyncio>=0.21",
+    "build>=1.2",
     "black>=23.0",
     "ruff>=0.1.0",
 ]
-perplexity = ["httpx>=0.24.0"]
-tavily = ["tavily-python>=0.2.0"]
 
 [project.scripts]
 fpf = "FilePromptForge.fpf_main:main"
@@ -52,7 +50,11 @@ fpf-cli = "FilePromptForge.fpf_main:main"
 
 [tool.setuptools]
 package-dir = {"" = "."}
-packages = ["FilePromptForge"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["FilePromptForge*"]
+namespaces = true
 
 [tool.setuptools.package-data]
 "FilePromptForge" = [
@@ -61,6 +63,12 @@ packages = ["FilePromptForge"]
     "pricing/*.json",
     "test/**/*",
 ]
+
+[project.urls]
+Homepage = "https://github.com/morganross/FilePromptForge"
+Repository = "https://github.com/morganross/FilePromptForge"
+Issues = "https://github.com/morganross/FilePromptForge/issues"
+Changelog = "https://github.com/morganross/FilePromptForge/blob/master/CHANGELOG.md"
 
 [tool.black]
 line-length = 100

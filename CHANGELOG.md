@@ -1,4 +1,19 @@
-# Changelog#
+# Changelog
+
+## [0.1.0] - Unreleased
+
+### Public beta
+
+- Repaired standards-based wheel packaging and package discovery.
+- Changed shipped defaults to public provider endpoints.
+- Moved mutable credentials, logs, and refreshed pricing outside the installed
+  package.
+- Added a one-command isolated test runner and GitHub CI.
+- Added MIT licensing and public contribution/security documentation.
+- Preserved provider adapters, retries, validation, metering, examples, and the
+  complete test suite.
+
+---
 
 ## [2.0.0] - 2026-05-13#
 

@@ -1,7 +1,5 @@
-"""
-FilePromptForge package initializer.
+"""FilePromptForge public package."""
 
-Ensures API_Cost_Multiplier.FilePromptForge is an importable package so
-submodules (e.g., pricing) can be executed with `python -m ...`.
-"""
-__all__ = ["pricing"]
+__version__ = "0.1.0"
+
+__all__ = ["__version__"]

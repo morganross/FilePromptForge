@@ -20,6 +20,11 @@ from typing import Dict, Optional, Tuple, Any, List
 from pathlib import Path
 from urllib.parse import quote, urlsplit, urlunsplit
 
+try:
+    from .paths import default_env_file, default_pricing_index, log_dir
+except ImportError:
+    from paths import default_env_file, default_pricing_index, log_dir
+
 # Use relative import since pricing is a subdirectory
 try:
     from .pricing.pricing_loader import load_pricing_index, find_pricing, calc_cost
@@ -273,7 +278,8 @@ def _load_provider_module(provider_name: str = "openai"):
     for attempt in range(1, max_retries + 1):
         try:
             # Construct the module name dynamically (import within this package root).
-            module_name = f"providers.{provider_name}.fpf_{provider_name}_main"
+            package_prefix = f"{__package__}." if __package__ else ""
+            module_name = f"{package_prefix}providers.{provider_name}.fpf_{provider_name}_main"
             if attempt > 1:
                 LOG.info(f"Retry loading provider module: {module_name} (Attempt {attempt}/{max_retries})")
 
@@ -537,7 +543,7 @@ def run(file_a: Optional[str] = None,
         pass
     api_key_name = f"{provider_name.upper()}_API_KEY"
 
-    env_file = Path(env_path) if env_path else Path(__file__).resolve().parent.parent / ".env"
+    env_file = Path(env_path) if env_path else default_env_file()
     selected_model = model or cfg.get("model")
     _validate_run_inputs(file_a, file_b, out_path, env_file, provider_name, selected_model, timeout)
     LOG.info(f"Attempting to load API key '{api_key_name}' from {env_file}")
@@ -679,8 +685,9 @@ def run(file_a: Optional[str] = None,
         LOG.info("Set 'x-goog-api-key' header for %s provider (Key Length: %d)", provider_name, len(api_key))
     elif provider_name == "anthropic":
         # Anthropic uses x-api-key plus required version header
-        headers["x-api-key"] = api_key
-        LOG.info("Set 'x-api-key' header for Anthropic provider (Key Length: %d)", len(api_key))
+        if api_key:
+            headers["x-api-key"] = api_key
+            LOG.info("Set 'x-api-key' header for Anthropic provider (Key Length: %d)", len(api_key))
         if "anthropic-version" not in headers:
             headers["anthropic-version"] = cfg.get("anthropic_version") or "2023-06-01"
         if cfg.get("anthropic_beta") and "anthropic-beta" not in headers:
@@ -712,7 +719,7 @@ def run(file_a: Optional[str] = None,
             run_id=run_id,
             provider=provider_name,
             model=cfg.get("model") or "unknown",
-            log_dir=Path(__file__).resolve().parent / "logs" / "validation"
+            log_dir=log_dir() / "validation"
         )
     except Exception as ex:
         LOG.warning("Failed to set validation context for run %s: %s", run_id, ex)
@@ -731,7 +738,7 @@ def run(file_a: Optional[str] = None,
 
     openrouter_free_payload_log_context = None
     if _is_openrouter_free_model(provider_name, cfg.get("model")):
-        logs_root = Path(os.environ.get("FPF_LOG_DIR") or (Path(__file__).resolve().parent / "logs"))
+        logs_root = Path(os.environ.get("FPF_LOG_DIR") or log_dir())
         run_group_id = os.environ.get("FPF_RUN_GROUP_ID")
         logs_dir = (logs_root / run_group_id) if run_group_id else logs_root
         openrouter_free_payload_log_context = {
@@ -937,7 +944,7 @@ def run(file_a: Optional[str] = None,
 
         # Price lookup and cost computation
         try:
-            pricing_path = str(base_dir / "pricing" / "pricing_index.json")
+            pricing_path = str(default_pricing_index())
             pricing_list = load_pricing_index(pricing_path)
             model_cfg = cfg.get("model") or ""
             canonical_provider = "openai" if provider_name in ("openaidp",) else provider_name
@@ -969,7 +976,7 @@ def run(file_a: Optional[str] = None,
             "total_cost_usd": total_cost_usd,
         }
 
-        logs_root = Path(os.environ.get("FPF_LOG_DIR") or (base_dir / "logs"))
+        logs_root = Path(os.environ.get("FPF_LOG_DIR") or log_dir())
         logs_dir = (logs_root / run_group_id) if run_group_id else logs_root
         if not logs_dir.exists():
             logs_dir.mkdir(parents=True, exist_ok=True)

@@ -104,8 +104,7 @@ def execute_and_verify(provider_url: str, payload: dict, headers: dict, verify_h
         fpf_log_output = os.getenv("FPF_LOG_OUTPUT", "console").lower()
         verbose = fpf_log_output in ("console", "both")
     
-    # Import this module directly rather than using sys.modules which fails in subprocess context
-    import providers.tavily.fpf_tavily_main as provider_module
+    provider_module = sys.modules[__name__]
     
     def _emit_status(msg: str):
         """Emit status update to stdout for ACM subprocess reader when verbose enabled."""

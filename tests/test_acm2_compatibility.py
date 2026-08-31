@@ -1,11 +1,8 @@
 """Tests to ensure acm2 compatibility is maintained"""
 
-import sys
 import inspect
 from pathlib import Path
-
-# Add parent to path for imports
-sys.path.insert(0, str(Path(__file__).parent))
+import sys
 
 from FilePromptForge.file_handler import run
 from FilePromptForge.grounding_enforcer import ValidationError
@@ -58,9 +55,8 @@ def test_cli_help():
     """Test that CLI help works"""
     import subprocess
     
-    # Need to install package first or run from correct directory
     result = subprocess.run(
-        [sys.executable, "FilePromptForge/fpf_main.py", "--help"],
+        [sys.executable, "-m", "FilePromptForge", "--help"],
         capture_output=True,
         text=True,
         cwd=str(Path(__file__).parent.parent)

@@ -10,17 +10,11 @@ import os
 from pathlib import Path
 from typing import Optional
 
+from .file_handler import run as run_handler
+from .paths import default_env_file, default_log_file
+
 SCRIPT_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = SCRIPT_DIR
-
-if str(PROJECT_ROOT.parent) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT.parent))
-
-from file_handler import run as run_handler
-
-LOG_FILENAME = SCRIPT_DIR / "logs" / f"fpf_run_{os.getpid()}.log"
-if not LOG_FILENAME.parent.exists():
-    LOG_FILENAME.parent.mkdir(parents=True, exist_ok=True)
+LOG_FILENAME = default_log_file(os.getpid())
 
 import yaml
 
@@ -94,13 +88,13 @@ def main(argv: Optional[list[str]] = None) -> int:
     
     log.info("Starting FPF runner")
     
-    config_path = args.config or str(PROJECT_ROOT / "fpf_config.yaml")
+    config_path = args.config or str(SCRIPT_DIR / "fpf_config.yaml")
     cfg = load_config(config_path)
 
     file_a = args.file_a
     file_b = args.file_b
     config = config_path
-    env = args.env or str(PROJECT_ROOT / ".env")
+    env = args.env or str(default_env_file())
     out = args.out
 
     model = args.model

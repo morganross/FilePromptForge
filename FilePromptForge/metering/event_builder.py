@@ -26,6 +26,11 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 from uuid import uuid4
 
+try:
+    from ..paths import default_pricing_index
+except ImportError:
+    from paths import default_pricing_index
+
 LOG = logging.getLogger(__name__)
 
 # ============================================================================
@@ -152,8 +157,7 @@ class MeteringEventBuilder:
         
         if not self._pricing_path:
             # Default path
-            base_dir = Path(__file__).parent.parent
-            self._pricing_path = str(base_dir / "pricing" / "pricing_index.json")
+            self._pricing_path = str(default_pricing_index())
             LOG.debug("[METERING-BUILDER] Using default pricing path: %s", self._pricing_path)
         
         try:
