@@ -9,7 +9,7 @@ and output (completion), without converting to per-token. If only per-1k pricing
 is provided, it is scaled by 1,000 to produce per-million.
 
 Scope filtering:
-- Include the existing paid scope: OpenAI models and Google Gemini 2.5 models
+- Include the existing paid scope: OpenAI models, Anthropic Claude models, and Google Gemini 2.5 models
 - Always include zero-priced OpenRouter models so the UI can display explicit $0 pricing
 
 Writes the result to pricing_index.json in this package.
@@ -64,7 +64,7 @@ def _is_zero_priced(pricing: Dict[str, Any]) -> bool:
 
 
 def _include_model(provider: str, model_id: str, pricing: Dict[str, Any]) -> bool:
-    if provider == "openai":
+    if provider in {"openai", "anthropic"}:
         return True
     if provider == "google" and model_id.startswith("google/gemini-2.5"):
         return True
@@ -152,6 +152,41 @@ def normalize_openrouter_response(data: Dict[str, Any]) -> List[Dict[str, Any]]:
     return out
 
 
+def _pricing_record_key(record: Dict[str, Any]) -> str:
+    provider = str(record.get("provider") or "").strip().lower()
+    model = str(record.get("model") or "").strip().lower()
+    if "/" in model:
+        model = model.rsplit("/", 1)[-1]
+    return f"{provider}:{model}"
+
+
+def _merge_provider_native_records(
+    fetched: List[Dict[str, Any]], output_path: Optional[Path]
+) -> List[Dict[str, Any]]:
+    """Refresh OpenRouter records without deleting manually sourced provider prices."""
+    if output_path is None or not output_path.is_file():
+        return fetched
+
+    try:
+        existing = json.loads(output_path.read_text(encoding="utf-8"))
+    except Exception:
+        return fetched
+    if not isinstance(existing, list):
+        return fetched
+
+    merged = {_pricing_record_key(record): record for record in fetched if isinstance(record, dict)}
+    for record in existing:
+        if not isinstance(record, dict):
+            continue
+        source = str(record.get("source") or "").strip().lower()
+        if source in {"openrouter", "openrouter_live_models_api"}:
+            continue
+        key = _pricing_record_key(record)
+        if key != ":":
+            merged[key] = record
+    return list(merged.values())
+
+
 def write_pricing_index(
     pricing: List[Dict[str, Any]], output_path: Optional[Path] = None
 ) -> Path:
@@ -172,7 +207,9 @@ def refresh_pricing(
 ) -> Path:
     data = fetch_openrouter_models(api_key=api_key, timeout=timeout)
     normalized = normalize_openrouter_response(data)
-    path = write_pricing_index(normalized, Path(output_path) if output_path else None)
+    destination = Path(output_path) if output_path else None
+    normalized = _merge_provider_native_records(normalized, destination)
+    path = write_pricing_index(normalized, destination)
     return path
 
 

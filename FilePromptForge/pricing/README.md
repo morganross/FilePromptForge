@@ -40,6 +40,6 @@ Files to be added next:
 
 Notes:
 - Store all pricing as USD per 1,000,000 tokens to avoid unit ambiguity.
-- Scope: Include only OpenAI and Google Gemini 2.5 models.
+- Scope: Include OpenAI, Anthropic Claude, and Google Gemini 2.5 models, plus zero-priced OpenRouter models. Existing provider-native records are preserved when refreshing an existing index.
 - Keep a last_refreshed timestamp and optionally a version/hash for provenance.
 - Consider provider-specific nuances (rounded billing increments, context vs. output multipliers) as metadata if needed.
