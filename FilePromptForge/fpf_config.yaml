@@ -15,8 +15,7 @@ model: gpt-5
 prompt_template: null
 provider: openai
 provider_urls:
-  google: https://generativelanguage.googleapis.com
-  google_antigravity: http://searchbox.internal.apicostx.com:8317
+  google: http://searchbox.internal.apicostx.com:8317
   openai: http://searchbox.internal.apicostx.com:8317/v1/responses
   perplexity: https://api.perplexity.ai/v1/async/sonar
   tavily: https://api.tavily.com/research
@@ -32,12 +31,6 @@ providers:
     timeout_seconds: 3600
   googledp:
     timeout_seconds: 3600
-google_antigravity_models:
-  - gemini-3.1-pro-preview
-  - gemini-3-flash-preview
-  - gemini-3.1-flash-lite
-  - gemini-3.6-flash
-  - gemini-3.7-flash
 runs: []
 test:
   file_a: test/input/sample_utf8.txt

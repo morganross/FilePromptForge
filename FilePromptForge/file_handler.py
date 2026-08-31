@@ -96,22 +96,6 @@ def _build_google_generate_content_url(configured_url: Optional[str], model: str
     return urlunsplit((parsed.scheme, parsed.netloc, path, "", ""))
 
 
-def _select_google_provider_origin(cfg: Dict[str, Any], provider_urls: Dict[str, Any], model: str) -> Optional[str]:
-    """Select direct Google or the configured Antigravity gateway for one explicit model."""
-    configured_models = cfg.get("google_antigravity_models") or []
-    if not isinstance(configured_models, list):
-        raise RuntimeError("google_antigravity_models must be a list")
-
-    antigravity_models = {str(item).strip() for item in configured_models if str(item).strip()}
-    if model not in antigravity_models:
-        return provider_urls.get("google")
-
-    antigravity_origin = provider_urls.get("google_antigravity")
-    if not antigravity_origin:
-        raise RuntimeError("provider_urls.google_antigravity is required for Antigravity models")
-    return antigravity_origin
-
-
 def _is_openrouter_free_model(provider_name: str, model: Any) -> bool:
     if provider_name != "openrouter":
         return False
@@ -475,14 +459,6 @@ def _resolve_timeout(cfg: dict, provider_name: str) -> Optional[int]:
     return _prov_timeout or _timeout_cfg or None
 
 
-def _uses_cliproxy_anthropic(cfg: dict, provider_name: str) -> bool:
-    if provider_name != "anthropic":
-        return False
-    provider_urls = cfg.get("provider_urls") or {}
-    url = str(provider_urls.get("anthropic") or cfg.get("provider_url") or "").strip().lower()
-    return "searchbox.internal.apicostx.com:8317" in url or "10.0.1.209:8317" in url
-
-
 def _validate_run_inputs(file_a: Optional[str], file_b: Optional[str], out_path: Optional[str], env_file: Path, provider: str, model: str, timeout: Optional[int]) -> None:
     """Fail fast on missing inputs or obviously bad configuration."""
     if not file_a or not Path(file_a).is_file():
@@ -564,17 +540,12 @@ def run(file_a: Optional[str] = None,
     env_file = Path(env_path) if env_path else Path(__file__).resolve().parent.parent / ".env"
     selected_model = model or cfg.get("model")
     _validate_run_inputs(file_a, file_b, out_path, env_file, provider_name, selected_model, timeout)
-    anthropic_via_cliproxy = _uses_cliproxy_anthropic(cfg, provider_name)
-    if anthropic_via_cliproxy:
-        api_key_value = "cliproxy-placeholder"
-        LOG.info("Using CLIProxyAPI Anthropic route; caller key is discarded")
-    else:
-        LOG.info(f"Attempting to load API key '{api_key_name}' from {env_file}")
-        api_key_value = _read_key_from_env_file(env_file, api_key_name)
+    LOG.info(f"Attempting to load API key '{api_key_name}' from {env_file}")
+    api_key_value = _read_key_from_env_file(env_file, api_key_name)
 
-    if api_key_value and not anthropic_via_cliproxy:
+    if api_key_value:
         LOG.info(f"Successfully loaded API key '{api_key_name}' (Length: {len(api_key_value)})")
-    elif not anthropic_via_cliproxy:
+    else:
         LOG.warning(f"Failed to load API key '{api_key_name}' from {env_file}")
         # Fallback: googledp can use GOOGLE_API_KEY
         if provider_name == "googledp":
@@ -690,7 +661,7 @@ def run(file_a: Optional[str] = None,
     # the configured origin so private compatibility gateways can be selected by config.
     elif provider_name == "google":
         norm_model = (cfg.get("model") or "").split(":", 1)[0]
-        selected_origin = _select_google_provider_origin(cfg, provider_urls, norm_model)
+        selected_origin = provider_urls.get("google")
         provider_url = _build_google_generate_content_url(selected_origin, norm_model)
 
     if not provider_url:

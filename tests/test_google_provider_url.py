@@ -2,7 +2,6 @@ import pytest
 
 from FilePromptForge.file_handler import (
     _build_google_generate_content_url,
-    _select_google_provider_origin,
 )
 
 
@@ -49,32 +48,3 @@ def test_build_google_generate_content_url_rejects_invalid_origins(configured: s
 def test_build_google_generate_content_url_requires_model() -> None:
     with pytest.raises(RuntimeError, match="requires cfg\\['model'\\]"):
         _build_google_generate_content_url("http://gateway.internal", "")
-
-
-def test_select_google_provider_origin_preserves_direct_google_models() -> None:
-    cfg = {"google_antigravity_models": ["gemini-3.1-pro-preview"]}
-    urls = {
-        "google": "https://generativelanguage.googleapis.com",
-        "google_antigravity": "http://searchbox.internal:8317",
-    }
-
-    assert _select_google_provider_origin(cfg, urls, "gemini-2.5-pro") == urls["google"]
-    assert _select_google_provider_origin(cfg, urls, "gemini-3.1-pro-preview") == urls["google_antigravity"]
-
-
-def test_select_google_provider_origin_requires_gateway_for_listed_model() -> None:
-    with pytest.raises(RuntimeError, match="provider_urls.google_antigravity"):
-        _select_google_provider_origin(
-            {"google_antigravity_models": ["gemini-3.1-pro-preview"]},
-            {"google": "https://generativelanguage.googleapis.com"},
-            "gemini-3.1-pro-preview",
-        )
-
-
-def test_select_google_provider_origin_rejects_non_list_model_config() -> None:
-    with pytest.raises(RuntimeError, match="must be a list"):
-        _select_google_provider_origin(
-            {"google_antigravity_models": "gemini-3.1-pro-preview"},
-            {"google": "https://generativelanguage.googleapis.com"},
-            "gemini-3.1-pro-preview",
-        )
