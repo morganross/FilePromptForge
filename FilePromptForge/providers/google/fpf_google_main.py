@@ -161,9 +161,9 @@ def build_payload(prompt: str, cfg: Dict) -> Tuple[Dict, Optional[Dict]]:
         # Default to high reasoning if not specified, and ensure thoughts are included.
         tc = generation_config.get("thinkingConfig", {})
         
-        # Respect configured effort if present (low/high), default to high
+        # Respect Gemini 3 thinking levels exactly, default to high
         configured_effort = (cfg.get("reasoning") or {}).get("effort")
-        if configured_effort and str(configured_effort).lower() in ("low", "high"):
+        if configured_effort and str(configured_effort).lower() in ("low", "medium", "high"):
             tc["thinkingLevel"] = str(configured_effort).lower()
         else:
             # Map thinking_budget_tokens to thinkingLevel if provided
