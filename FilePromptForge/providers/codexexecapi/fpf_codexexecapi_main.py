@@ -63,15 +63,12 @@ def _resolve_provider_url() -> str:
 
 
 def _extract_bearer_token(headers: Optional[Dict[str, Any]]) -> str:
+    """The token comes only from the Authorization header FPF builds from CODEXEXECAPI_API_KEY."""
     auth = str((headers or {}).get("Authorization") or "").strip()
-    if auth.lower().startswith("bearer "):
-        token = auth[7:].strip()
-        if token:
-            return token
-    token = str(os.getenv("CODEX_EXEC_API_TOKEN") or os.getenv("CODEXEXECAPI_API_KEY") or "").strip()
-    if token:
-        return token
-    raise RuntimeError("CODEX_EXEC_API_TOKEN is required for CodexExecAPI provider")
+    token = auth[7:].strip() if auth.lower().startswith("bearer ") else ""
+    if not token:
+        raise RuntimeError("CodexExecAPI provider requires an Authorization: Bearer header")
+    return token
 
 
 def _is_transient_error(exc: Exception) -> bool:

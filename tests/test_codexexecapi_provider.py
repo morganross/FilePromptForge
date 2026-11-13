@@ -32,3 +32,13 @@ def test_codexexecapi_address_comes_only_from_the_environment(monkeypatch) -> No
 
     monkeypatch.setenv("CODEX_EXEC_API_URL", "http://cliproxy.invalid:8317")
     assert provider._resolve_provider_url() == "http://cliproxy.invalid:8317/v1/chat/completions"
+
+
+def test_codexexecapi_token_comes_only_from_the_authorization_header(monkeypatch) -> None:
+    import pytest
+
+    monkeypatch.setenv("CODEX_EXEC_API_TOKEN", "from-environment")
+    monkeypatch.setenv("CODEXEXECAPI_API_KEY", "from-environment")
+    with pytest.raises(RuntimeError, match="Authorization: Bearer"):
+        provider._extract_bearer_token({})
+    assert provider._extract_bearer_token({"Authorization": "Bearer from-header"}) == "from-header"
