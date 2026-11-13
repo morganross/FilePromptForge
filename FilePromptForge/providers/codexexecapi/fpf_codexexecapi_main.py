@@ -47,17 +47,19 @@ def _normalize_model(model: str) -> str:
     return raw
 
 
-def _resolve_provider_url(provider_url: str) -> str:
+def _resolve_provider_url() -> str:
+    """The CodexExecAPI address comes only from CODEX_EXEC_API_URL.
+
+    fpf_config.yaml provider_urls is not consulted for this provider.
+    """
     base = str(os.getenv("CODEX_EXEC_API_URL") or "").strip().rstrip("/")
-    if base:
-        if base.endswith("/v1/chat/completions"):
-            return base
-        if base.endswith("/v1"):
-            return base + "/chat/completions"
-        return base + "/v1/chat/completions"
-    if provider_url:
-        return provider_url
-    raise RuntimeError("CODEX_EXEC_API_URL is required for CodexExecAPI provider")
+    if not base:
+        raise RuntimeError("CODEX_EXEC_API_URL is required for CodexExecAPI provider")
+    if base.endswith("/v1/chat/completions"):
+        return base
+    if base.endswith("/v1"):
+        return base + "/chat/completions"
+    return base + "/v1/chat/completions"
 
 
 def _extract_bearer_token(headers: Optional[Dict[str, Any]]) -> str:
@@ -233,7 +235,7 @@ def execute_and_verify(
     max_retries: int = 3,
     retry_delay: float = 1.0,
 ) -> Dict[str, Any]:
-    url = _resolve_provider_url(provider_url)
+    url = _resolve_provider_url()
     token = _extract_bearer_token(headers)
     body = json.dumps(payload).encode("utf-8")
     hdrs = {"Content-Type": "application/json", "Authorization": f"Bearer {token}"}
