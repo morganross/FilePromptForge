@@ -48,3 +48,10 @@ def test_build_google_generate_content_url_rejects_invalid_origins(configured: s
 def test_build_google_generate_content_url_requires_model() -> None:
     with pytest.raises(RuntimeError, match="requires cfg\\['model'\\]"):
         _build_google_generate_content_url("http://gateway.internal", "")
+
+
+def test_build_google_generate_content_url_requires_a_configured_origin() -> None:
+    import pytest
+
+    with pytest.raises(RuntimeError, match="provider_urls.google is not configured"):
+        _build_google_generate_content_url(None, "gemini-3-flash")

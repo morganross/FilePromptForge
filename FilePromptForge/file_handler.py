@@ -65,9 +65,6 @@ def _sanitize_filename(name: str) -> str:
     return re.sub(r'[\\/*?:"<>|]', "", name)
 
 
-_DEFAULT_GOOGLE_GENERATIVE_ORIGIN = "https://generativelanguage.googleapis.com"
-
-
 def _build_google_generate_content_url(configured_url: Optional[str], model: str) -> str:
     """Build a model-specific Gemini generateContent URL from a configured origin or template."""
     normalized_model = str(model or "").strip()
@@ -75,7 +72,9 @@ def _build_google_generate_content_url(configured_url: Optional[str], model: str
         raise RuntimeError("Google provider requires cfg['model'] to be set")
 
     encoded_model = quote(normalized_model, safe="-._")
-    configured = str(configured_url or _DEFAULT_GOOGLE_GENERATIVE_ORIGIN).strip()
+    configured = str(configured_url or "").strip()
+    if not configured:
+        raise RuntimeError("provider_urls.google is not configured")
 
     if "{model}" in configured:
         candidate = configured.replace("{model}", encoded_model)
@@ -655,12 +654,14 @@ def run(file_a: Optional[str] = None,
 
     provider_urls = cfg.get("provider_urls", {})
     provider_url = provider_urls.get(provider_name)
-    if not provider_url:
-        # Fallback for backward compatibility
-        provider_url = cfg.get("provider_url")
+
+    # The CodexExecAPI provider takes its address only from CODEX_EXEC_API_URL;
+    # provider_urls is not consulted for it.
+    if provider_name == "codexexecapi":
+        provider_url = ""
 
     # googledp uses the Interactions API, not generateContent
-    if provider_name == "googledp":
+    elif provider_name == "googledp":
         provider_url = "https://generativelanguage.googleapis.com/v1beta/interactions"
 
     # Dynamically compute the Google Gemini endpoint from cfg["model"], while honoring
@@ -670,7 +671,7 @@ def run(file_a: Optional[str] = None,
         selected_origin = provider_urls.get("google")
         provider_url = _build_google_generate_content_url(selected_origin, norm_model)
 
-    if not provider_url:
+    if not provider_url and provider_name != "codexexecapi":
         raise RuntimeError(f"provider_url for '{provider_name}' not configured in config")
 
     # build headers
