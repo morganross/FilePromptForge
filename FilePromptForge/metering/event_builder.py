@@ -380,6 +380,11 @@ class MeteringEventBuilder:
             _log_exit("_calculate_token_cost", result)
             return result
         
+        # Long-prompt tariffs apply to the entire request, including its output.
+        # Keep ACM's established input/output bucket accounting.
+        for tier in (rec.get("metadata") or {}).get("pricing_tiers") or []:
+            if input_tokens >= tier["minimum_input_tokens"]:
+                rec = {**rec, **tier}
         input_price = rec.get("input_price_per_million_usd")
         output_price = rec.get("output_price_per_million_usd")
         input_price_decimal = _as_nonnegative_decimal(input_price)

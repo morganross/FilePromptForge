@@ -130,6 +130,15 @@ def build_payload(prompt: str, cfg: Dict) -> Tuple[Dict, Optional[Dict]]:
         if k in sampling:
             payload[k] = sampling[k]
 
+    if model_to_use.startswith(("claude-fable-5", "claude-opus-5", "claude-sonnet-5", "claude-haiku-5")):
+        payload["thinking"] = {"type": "adaptive"}
+        payload["service_tier"] = "standard_only"
+        for name in ("temperature", "top_p", "top_k"):
+            payload.pop(name, None)
+        effort = (cfg.get("reasoning") or {}).get("effort")
+        if effort:
+            payload["output_config"] = {"effort": effort}
+
     # Allow system prompt passthrough when provided
     if cfg.get("system"):
         payload["system"] = cfg.get("system")

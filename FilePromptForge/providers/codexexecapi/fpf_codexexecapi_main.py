@@ -23,17 +23,14 @@ LOG = logging.getLogger("fpf_codexexecapi_main")
 
 REQUIRES_GROUNDING = True
 REQUIRES_REASONING = True
+# The models the live CLIProxyAPI serves and that pass FPF's grounding and reasoning checks
+# through it. gpt-5.5, gpt-5.4 and gpt-5.4-mini are not served (the proxy sent those requests
+# to api.openai.com); Claude Haiku 5.5 is served but returns no grounding evidence.
 SUPPORTED_MODELS = {
     "gpt-5.6-sol",
     "gpt-5.6-terra",
     "gpt-5.6-luna",
-    "gpt-5.5",
-    "gpt-5.4",
-    "gpt-5.4-mini",
-    # Served by the live CLIProxyAPI: GPT-6 Luna, Claude Haiku 5.5 and Gemini 3.8 Flash
-    # (Antigravity id).
     "gpt-6-luna",
-    "claude-haiku-5-5",
     "gemini-3.8-flash-high",
 }
 

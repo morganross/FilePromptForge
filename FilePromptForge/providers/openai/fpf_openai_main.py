@@ -83,8 +83,14 @@ def _attach_reasoning_for_model(payload: Dict[str, Any], cfg: Dict, model: str) 
     # - gpt-5* and o1/o3/o4 series generally support `effort`
     # - gpt-4.1/gpt-4o-mini and some older models may not support effort
     # - If the model appears to be GPT-5 or o-series, use `effort`; otherwise prefer max_tokens when possible.
-    if norm.startswith("gpt-5") or norm.startswith("o1") or norm.startswith("o3") or norm.startswith("o4"):
+    if norm.startswith(("gpt-5", "gpt-6-", "gpt-6.1-", "o1", "o3", "o4")):
         # models that support `effort`
+        if norm.startswith(("gpt-6-", "gpt-6.1-")):
+            allowed = {"none", "low", "medium", "high", "xhigh", "max"}
+            if norm in {"gpt-6-astra", "gpt-6.1-sol"}:
+                allowed.remove("none")
+            if effort_level not in allowed:
+                raise RuntimeError(f"Unsupported reasoning effort {effort_level!r} for {norm}; allowed: {sorted(allowed)}")
         payload["reasoning"] = {"effort": effort_level}
         return
 
@@ -123,6 +129,9 @@ def build_payload(prompt: str, cfg: Dict) -> Tuple[Dict, Optional[Dict]]:
     # Merge sampling / token params
     sampling = _translate_sampling(cfg, model_to_use)
     payload.update(sampling)
+    if model_to_use.startswith(("gpt-6-", "gpt-6.1-")):
+        payload.pop("top_p", None)
+        payload["service_tier"] = "default"
 
     # Enforce provider-side web_search
     web_search_cfg = cfg.get("web_search", {}) or {}
