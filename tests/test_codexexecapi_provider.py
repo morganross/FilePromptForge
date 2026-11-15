@@ -42,3 +42,15 @@ def test_codexexecapi_token_comes_only_from_the_authorization_header(monkeypatch
     with pytest.raises(RuntimeError, match="Authorization: Bearer"):
         provider._extract_bearer_token({})
     assert provider._extract_bearer_token({"Authorization": "Bearer from-header"}) == "from-header"
+
+
+@pytest.mark.parametrize("model", ["gpt-6-luna", "claude-haiku-5-5", "gemini-3.8-flash-high"])
+def test_codexexecapi_supports_the_models_cliproxy_serves(model: str) -> None:
+    payload, _ = provider.build_payload("Research this topic", {"model": f"codexexecapi:{model}"})
+
+    assert payload["model"] == model
+
+
+def test_codexexecapi_still_refuses_a_model_it_does_not_list() -> None:
+    with pytest.raises(RuntimeError, match="is not supported"):
+        provider.build_payload("Research this topic", {"model": "gpt-4o"})

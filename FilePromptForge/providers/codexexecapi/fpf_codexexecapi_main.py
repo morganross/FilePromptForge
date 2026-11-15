@@ -30,6 +30,11 @@ SUPPORTED_MODELS = {
     "gpt-5.5",
     "gpt-5.4",
     "gpt-5.4-mini",
+    # Served by the live CLIProxyAPI: GPT-6 Luna, Claude Haiku 5.5 and Gemini 3.8 Flash
+    # (Antigravity id).
+    "gpt-6-luna",
+    "claude-haiku-5-5",
+    "gemini-3.8-flash-high",
 }
 
 
